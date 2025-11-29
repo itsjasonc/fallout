@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Disc Golf Course Generator (5×30)</title>
+<style>
+  :root{
+    --cell-size: 36px;
+    --gap: 4px;
+    --bg: #0f172a;
+    --panel: #0b1220;
+    --muted: #93c5fd;
+    --fairway: #e6f6d9;
+    --tree: #1f6f33;
+    --water: #4ea8ff;
+    --brush: #d3b57a;
+    --tee: #ffb703;
+    --basket: #ff0054;
+    --text: #e6eef8;
+    --card: #0b1220;
+  }
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,#071023 0%, #071833 100%);color:var(--text);font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+  .app{max-width:980px;margin:18px auto;padding:14px;background:rgba(255,255,255,0.02);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.6);}
+  header{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+  h1{font-size:18px;margin:0}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-left:auto}
+  select, button{background:var(--card);color:var(--text);border:1px solid rgba(255,255,255,0.04);padding:8px 10px;border-radius:8px;font-size:14px}
+  button {cursor:pointer}
+  .board-wrap{overflow:auto;border-radius:10px;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));}
+  .grid{
+    display:grid;
+    grid-template-rows: repeat(7, var(--cell-size));
+    grid-template-columns: repeat(30, var(--cell-size));
+    gap: var(--gap);
+    align-items:center;
+    white-space:nowrap;
+    padding:8px;
+    width:max-content;
+  }
+  .cell{
+    width:var(--cell-size);height:var(--cell-size);display:flex;align-items:center;justify-content:center;border-radius:6px;
+    font-weight:600;font-size:13px;color:#062024;box-shadow: inset 0 -2px 0 rgba(0,0,0,0.08);
+  }
+  .cell.fairway{background:var(--fairway);}
+  .cell.tree{background:var(--tree); color: #e6f6d9;}
+  .cell.water{background:var(--water); color:#042a3b;}
+  .cell.brush{background:var(--brush); color:#2b1600;}
+  .cell.tee{background:var(--tee); color:#061020; font-weight:800;}
+  .cell.basket{background:var(--basket); color:#fff; font-weight:800;}
+  .legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .legend .item{display:flex;gap:8px;align-items:center;background:rgba(255,255,255,0.02);padding:6px 8px;border-radius:8px;font-size:13px}
+  .swatch{width:18px;height:18px;border-radius:4px;box-shadow:inset 0 -1px rgba(0,0,0,0.1)}
+  .meta{margin-top:8px;font-size:13px;color:var(--muted);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .export-area{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  textarea{width:100%;min-height:120px;border-radius:8px;padding:10px;background:#071525;color:var(--text);border:1px solid rgba(255,255,255,0.03);font-family:monospace;font-size:12px}
+  .small{font-size:12px;color:#9fc8ff}
+  @media (max-width:640px){
+    :root{--cell-size:30px}
+    .app{margin:6px;padding:10px}
+    h1{font-size:16px}
+  }
+  /* Label layout container */
+.labeled-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* top-left corner (empty) */
+.labeled-grid .corner {
+  width: calc(var(--cell-size));
+  height: calc(var(--cell-size));
+}
+
+/* column labels row (numbers) */
+.col-labels {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  display: grid;
+  align-items: center;
+  justify-items: stretch;
+  /* templates set from JS so they exactly match the grid */
+  column-gap: var(--gap);
+  overflow: hidden;
+}
+
+/* row labels column (letters) */
+.row-labels {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  display: grid;
+  align-items: stretch;
+  justify-items: center;
+  row-gap: var(--gap);
+  overflow: hidden;
+  width: calc(var(--cell-size));
+  box-sizing: border-box;
+}
+
+/* Ensure the main grid uses gaps consistently */
+.grid {
+  /* keep your existing grid-template-columns but JS will re-set it to match too */
+  column-gap: var(--gap);
+  row-gap: var(--gap);
+  width: 100%;
+}
+.col-label, .row-label {
+  font-size: 13px;
+  color: var(--muted);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:var(--cell-size);
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+
+</style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Disc Golf — Course Grid Generator (5×30)</h1>
+      <div class="controls">
+        <label class="small">Biome:
+          <select id="biomeSelect">
+            <option value="forest">Forest (40% fairway, 30% tree, 10% water, 20% brush)</option>
+            <option value="meadow">Open Meadow (70/10/5/15)</option>
+            <option value="swamp">Swamp (50/10/30/10)</option>
+            <option value="hills">Hills (60/20/5/15)</option>
+            <option value="desert">Desert (65/5/5/25)</option>
+            <option value="custom">Custom...</option>
+          </select>
+        </label>
+
+        <label class="small">Custom % (F/T/W/B):
+          <input id="customInput" style="width:140px;padding:6px;border-radius:8px" placeholder="55,15,15,15" />
+        </label>
+
+        <button id="genBtn">Generate Hole</button>
+        <button id="regenBtn">Regenerate Water</button>
+        <button id="exportBtn">Export ASCII</button>
+        <label class="small"><input type="checkbox" id="coordsChk" /> Show coords</label>
+		
+		<button id="genDiscBtn">Generate Random Disc</button>
+
+      </div>
+	  	  <div id="discInfo" class="small" style="margin-left:8px;"></div>
+	  
+    </header>
+
+    <div class="board-wrap">
+  <div class="labeled-grid">
+    <div class="corner"></div> <!-- empty top-left corner -->
+
+    <!-- Column labels -->
+    <div id="colLabels" class="col-labels"></div>
+
+    <!-- Row labels + actual grid -->
+    <div id="rowLabels" class="row-labels"></div>
+    <div id="grid" class="grid"></div>
+  </div>
+</div>
+
+
+
+    <div class="legend">
+      <div class="item"><span class="swatch" style="background:var(--fairway)"></span> Fairway (.)</div>
+      <div class="item"><span class="swatch" style="background:var(--tree)"></span> Tree (T)</div>
+      <div class="item"><span class="swatch" style="background:var(--water)"></span> Water (W)</div>
+      <div class="item"><span class="swatch" style="background:var(--brush)"></span> Brush (B)</div>
+      <div class="item"><span class="swatch" style="background:var(--tee)"></span> Tee (S)</div>
+      <div class="item"><span class="swatch" style="background:var(--basket)"></span> Basket (🛒)</div>
+    </div>
+
+    <div class="meta">
+      <div id="info">Ready — select biome and press Generate Hole.</div>
+    </div>
+
+    <div class="export-area">
+      <textarea id="ascii" placeholder="Press Export ASCII to get a text map..."></textarea>
+
+    </div>
+  </div>
+  
+
+<script>
+(function(){
+  const ROWS = 7, COLS = 30;
+  const gridEl = document.getElementById('grid');
+  const biomeSelect = document.getElementById('biomeSelect');
+  const customInput = document.getElementById('customInput');
+  const genBtn = document.getElementById('genBtn');
+  const regenBtn = document.getElementById('regenBtn');
+  const exportBtn = document.getElementById('exportBtn');
+  const asciiArea = document.getElementById('ascii');
+  const coordsChk = document.getElementById('coordsChk');
+  const info = document.getElementById('info');
+  
+  // === Random Disc Generator ===
+function randomDisc() {
+  const discTypes = ['Driver', 'Midrange', 'Putter'];
+  const effectsTable = [
+    {name: 'Accurate', desc: 'roll 1 additional die'},
+    {name: 'Control', desc: 'can change roll by +/- 1'},
+    {name: 'Tight', desc: 'turn happens every square'},
+    {name: 'Bounce', desc: 'Spends 1 movement to skid across each water tile'},
+    {name: 'Loose', desc: 'turn happens every 3 squares'},
+    {name: 'Power', desc: '+1/2/4 to roll, roll 1 less die'},
+    {name: 'Threading', desc: 'spends 3 movement to pass through tree'},
+    {name: 'Rugged', desc: 'Ignores brush penalty'},
+	{name: 'Gliding', desc: 'fade happens every 2 squares'},
+	{name: 'Precise', desc: '-4 to roll, can change roll by +/- 2'}
+	
+  ];
+
+  const type = discTypes[Math.floor(Math.random() * discTypes.length)];
+
+  let turn = 0, fade = 0;
+  if(type === 'Driver'){
+    turn = 2 + Math.floor(Math.random() * 3); // 2-4
+    fade = 2 + Math.floor(Math.random() * 3);
+  } else if(type === 'Midrange'){
+    turn = 1 + Math.floor(Math.random() * 2); // 1-2
+    fade = 1 + Math.floor(Math.random() * 2);
+  }
+
+  const numEffects = Math.floor(Math.random() * 3);
+  const chosenEffects = [];
+  const effectsCopy = [...effectsTable];
+  for(let i=0;i<numEffects;i++){
+    if(effectsCopy.length === 0) break;
+    const idx = Math.floor(Math.random() * effectsCopy.length);
+    chosenEffects.push(effectsCopy[idx]);
+    effectsCopy.splice(idx,1);
+  }
+
+  return {type, turn, fade, effects: chosenEffects};
+}
+
+
+  // Biome probability presets
+  const BIOMES = {
+    forest: {name:'Forest', probs: {fairway:40, tree:30, water:10, brush:20}},
+    meadow: {name:'Open Meadow', probs: {fairway:70, tree:10, water:5, brush:15}},
+    swamp:  {name:'Swamp', probs: {fairway:50, tree:10, water:30, brush:10}},
+    hills:  {name:'Hills', probs: {fairway:60, tree:20, water:5, brush:15}},
+    desert: {name:'Desert', probs: {fairway:65, tree:5, water:5, brush:25}}
+  };
+
+  // grid model
+  let grid = []; // rows x cols of tile ids: '.', 'T','W','B', 'S','BASKET'
+  let tee = {r:2, c:0}; // Row 3 col1 (0-based)
+  let basket = {r:2, c: 18}; // will set random 17..19 later (0-based 17..19)
+
+  // Utility RNG
+  function randInt(max){ return Math.floor(Math.random()*max); }
+  function rndChance(p){ return Math.random() < p/100; }
+
+  // create empty grid
+  function makeEmpty(){
+    grid = Array.from({length:ROWS}, ()=> Array.from({length:COLS}, ()=>'.'));
+  }
+
+  // populate initial tiles according to probs
+  function populate(probs){
+    // expects probs object {fairway, tree, water, brush} percentages summing ~100
+    for(let r=0;r<ROWS;r++){
+      for(let c=0;c<COLS;c++){
+        grid[r][c] = chooseTile(probs);
+      }
+    }
+    // place tee (always Row3 Col1): override whatever is there
+    tee = {r: Math.floor(ROWS/2), c: 0};
+    grid[tee.r][tee.c] = 'S';
+    // basket random between columns 18..20 (1-based); convert to 0-based 17..19
+    const basketCol = 17 + randInt(3);
+    basket = {r: Math.floor(ROWS/2), c: basketCol};
+    grid[basket.r][basket.c] = '🛒';
+  }
+
+  function chooseTile(probs){
+    const roll = Math.random()*100;
+    let cumulative = 0;
+    cumulative += probs.fairway; if(roll < cumulative) return '.';
+    cumulative += probs.tree; if(roll < cumulative) return 'T';
+    cumulative += probs.water; if(roll < cumulative) return 'W';
+    cumulative += probs.brush; if(roll < cumulative) return 'B';
+    return '.';
+  }
+
+  // water spread BFS: 20% chance to convert orthogonal neighbors; recursive
+  function spreadWater(){
+    // build initial queue of water seeds
+    const q = [];
+    for(let r=0;r<ROWS;r++){
+      for(let c=0;c<COLS;c++){
+        if(grid[r][c] === 'W'){
+          q.push({r,c});
+        }
+      }
+    }
+    const inQueue = Array.from({length:ROWS}, ()=> Array.from({length:COLS}, ()=>false));
+    q.forEach(p => inQueue[p.r][p.c] = true);
+    // BFS-like expansion; but ensure we attempt each neighbor once per discovered water
+    for(let i=0;i<q.length;i++){
+      const {r,c} = q[i];
+      const nbs = [[r-1,c],[r+1,c],[r,c-1],[r,c+1]];
+      for(const [nr,nc] of nbs){
+        if(nr<0||nr>=ROWS||nc<0||nc>=COLS) continue;
+        if(grid[nr][nc] === 'W') continue; // already water
+        if(Math.random() < 0.2){
+          grid[nr][nc] = 'W';
+          if(!inQueue[nr][nc]){
+            q.push({r:nr,c:nc});
+            inQueue[nr][nc] = true;
+          }
+        }
+      }
+    }
+    // ensure tee & basket remain
+    grid[tee.r][tee.c] = 'S';
+    grid[basket.r][basket.c] = '🛒';
+  }
+
+  // render grid to DOM
+  function render(){
+  renderLabels();
+    gridEl.innerHTML = '';
+    for(let r=0;r<ROWS;r++){
+      for(let c=0;c<COLS;c++){
+        const tile = grid[r][c];
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        let label = '';
+        switch(tile){
+          case '.': cell.classList.add('fairway'); label='.'; break;
+          case 'T': cell.classList.add('tree'); label='T'; break;
+          case 'W': cell.classList.add('water'); label='W'; break;
+          case 'B': cell.classList.add('brush'); label='B'; break;
+          case 'S': cell.classList.add('tee'); label='S'; break;
+          case '🛒': cell.classList.add('basket'); label='🛒'; break;
+          default: cell.classList.add('fairway'); label = tile;
+        }
+        if(coordsChk.checked){
+          cell.title = `r${r+1} c${c+1}`;
+        } else {
+          cell.title = '';
+        }
+        cell.textContent = label;
+        // small click info
+        cell.addEventListener('click', ()=> {
+          alert(`Tile r${r+1}, c${c+1}: ${tileDescription(tile)}`);
+        });
+        gridEl.appendChild(cell);
+      }
+    }
+    info.textContent = `Tee: (r${tee.r+1},c${tee.c+1})  Basket: (r${basket.r+1},c${basket.c+1}) — Biome: ${biomeSelect.value}`;
+  }
+function renderLabels() {
+  const colLabels = document.getElementById("colLabels");
+  const rowLabels = document.getElementById("rowLabels");
+  if(!colLabels || !rowLabels) return;
+
+  // Set the same grid template for columns and rows as the main grid,
+  // using CSS variable --cell-size and --gap so CSS and JS stay in sync.
+  colLabels.style.gridTemplateColumns = `repeat(${COLS}, var(--cell-size))`;
+  colLabels.style.columnGap = getComputedStyle(document.documentElement).getPropertyValue('--gap');
+
+  rowLabels.style.gridTemplateRows = `repeat(${ROWS}, var(--cell-size))`;
+  rowLabels.style.rowGap = getComputedStyle(document.documentElement).getPropertyValue('--gap');
+
+  // build column labels (1..COLS)
+  colLabels.innerHTML = '';
+  for (let c = 1; c <= COLS; c++) {
+    const el = document.createElement('div');
+    el.className = 'col-label';
+    el.textContent = c;
+    colLabels.appendChild(el);
+  }
+
+  // build row labels A.. (A + ROWS - 1)
+  rowLabels.innerHTML = '';
+  for (let r = 0; r < ROWS; r++) {
+    const el = document.createElement('div');
+    el.className = 'row-label';
+    el.textContent = String.fromCharCode(65 + r); // A, B, C...
+    rowLabels.appendChild(el);
+  }
+
+  // Make sure the main grid uses the same columns template too (keeps everything identical)
+  gridEl.style.gridTemplateColumns = `repeat(${COLS}, var(--cell-size))`;
+  gridEl.style.columnGap = getComputedStyle(document.documentElement).getPropertyValue('--gap');
+  gridEl.style.rowGap = getComputedStyle(document.documentElement).getPropertyValue('--gap');
+}
+
+
+  function tileDescription(t){
+    switch(t){
+      case '.': return 'Fairway — no effect';
+      case 'T': return 'Tree (solid) — stops disc';
+      case 'W': return 'Water — landing penalty';
+      case 'B': return 'Brush — next throw -1 die';
+      case 'S': return 'Tee (start)';
+      case '🛒': return 'Basket';
+      default: return t;
+    }
+  }
+
+  function exportASCII(){
+    // produce rows as strings
+    const lines = [];
+    for(let r=0;r<ROWS;r++){
+      const row = grid[r].map(x=> x === '🛒' ? '🛒' : (x==='S' ? 'S' : x)).join(' ');
+      lines.push(`Row ${r+1}: ` + row);
+    }
+    asciiArea.value = lines.join('\n');
+  }
+
+  // parse custom input "x,y,z,w"
+  function parseCustom(str){
+    const parts = str.split(',').map(s=>parseInt(s.trim(),10)).filter(n=>!isNaN(n));
+    if(parts.length===4){
+      const sum = parts.reduce((a,b)=>a+b,0);
+      if(sum>0){
+        const [f,t,w,b] = parts.map(n => Math.max(0, Math.round(n)));
+        return {fairway:f, tree:t, water:w, brush:b};
+      }
+    }
+    return null;
+  }
+
+  // wire events
+  genBtn.addEventListener('click', ()=> {
+    // determine biome probs
+    let probs = null;
+    if(biomeSelect.value === 'custom'){
+      const parsed = parseCustom(customInput.value || '');
+      if(!parsed){ alert('Enter custom percentages like: 55,15,15,15'); return; }
+      probs = parsed;
+    } else {
+      probs = BIOMES[biomeSelect.value].probs;
+    }
+    makeEmpty();
+    populate(probs);
+    spreadWater();
+    render();
+    exportASCII();
+  });
+
+  regenBtn.addEventListener('click', ()=>{
+    // regen water only: convert some non-water to water based on adjacency and re-run spread
+    spreadWater();
+    render();
+    exportASCII();
+  });
+
+  exportBtn.addEventListener('click', exportASCII);
+
+  coordsChk.addEventListener('change', ()=> render());
+
+  // initial auto-generate
+  (function init(){
+    // default biome forest
+    makeEmpty();
+    populate(BIOMES['forest'].probs);
+    spreadWater();
+    render();
+    exportASCII();
+  })();
+  // inside the main IIFE, after other const definitions:
+const genDiscBtn = document.getElementById('genDiscBtn');
+const discInfo = document.getElementById('discInfo');
+
+genDiscBtn.addEventListener('click', ()=>{
+  const disc = randomDisc();
+  let html = `<strong>${disc.type}</strong>`;
+  if(disc.type !== 'Putter'){
+    html += ` — Turn: ${disc.turn}, Fade: ${disc.fade}`;
+  }
+  if(disc.effects.length){
+    html += `<br>Effects:<ul style="margin:4px 0 0 16px;padding:0;list-style:disc;">`;
+    disc.effects.forEach(e => {
+      html += `<li><strong>${e.name}</strong>: ${e.desc}</li>`;
+    });
+    html += `</ul>`;
+  }
+  discInfo.innerHTML = html;
+});
+
+
+
+})();
+const genDiscBtn = document.getElementById('genDiscBtn');
+const discInfo = document.getElementById('discInfo');
+
+
+
+</script>
+</body>
+</html>
