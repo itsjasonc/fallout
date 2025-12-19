@@ -221,7 +221,7 @@ const zoneTable = {
   53: "Airport: Generates an adjacent Subway. Contains 1 flare for each Subway.",
   54: "Resort: Generates adjacent irradiated lake island (+3 to scavenging).",
   55: "Subway: Generates another Subway 5 hexes away. You can fast travel between cleared Subways.",
-  56: "Stadium: Contains a wandering duelist that will 1v1 for a random loot prize.",
+  56: "Stadium: No battle. Contains a wandering duelist that will 1v1 for a random crit loot prize.",
 
   61: "Hospital: When you heal or remove a status, heal +10% or remove 1 extra.",
   62: "Restaurant: Can order food (1d6+10 rations) that arrives on level up.",
@@ -241,7 +241,7 @@ function generateZone() {
 }
 // === Monster Categories ===
 const monsterData = {
-  E1: { label: "Raiders", notes: "on terrain 4-5, hidden land mines. Loot: broken weapons & armor, mines, human flesh", subs: [
+  E1: { label: "Raiders", notes: "terrain 4-5, hidden land mines. Loot: broken weapons & armor, mines, human flesh", subs: [
     { name: "Scout", hp: 10, notes: "tier1 weapons, 10x mines" },          // 1-6
     { name: "Tweaker", hp: 13, notes: "tier2 weapons, 11x mines" },        // 7-8
     { name: "Scavenger", hp: 16, notes: "tier3 weapons, 12x mines" },      // 9-10
@@ -286,7 +286,7 @@ const monsterData = {
     { name: "Assaultron", hp: 26, notes: "14 E+R melee, charge 1, +1 spd" }
   ]},
 
-  E6: { label: "Synths", notes: "terrain 4-5: hidden pulse mines. Loot: armor scrap", subs: [
+  E6: { label: "Synths", notes: "terrain 4-5: hidden pulse mines. Loot: tech scrap", subs: [
     { name: "Scout", hp: 11, notes: "tier1 energy weapons + 10E mines" },
     { name: "Patroller", hp: 14, notes: "tier2 energy weapons + 11E mines" },
     { name: "Trooper", hp: 17, notes: "tier3 energy weapons + 12E mines" },
@@ -295,7 +295,7 @@ const monsterData = {
     { name: "Courser", hp: 26, notes: "tier6 energy weapons +15E mines" }
   ]},
 
-  O1: { label: "Cultist", notes: "⅓ to use random artifact, mutated weapons. Loot: broken weapons, human flesh", subs: [
+  O1: { label: "Cultist", notes: "⅓ to use random artifact, mutated weapons. Loot: broken weapons, 1D artifacts, human flesh", subs: [
     { name: "Initiate", hp: 10, notes: "tier1 weapons" },
     { name: "Acolyte", hp: 13, notes: "tier2 weapons" },
     { name: "Disciple", hp: 16, notes: "tier3 weapons" },
@@ -304,7 +304,7 @@ const monsterData = {
     { name: "Leader", hp: 25, notes: "tier6 weapons" }
   ]},
 
-  O2: { label: "Hoverbots", notes: "all hover; gain shield when ally dies. Loot: gun scraps", subs: [
+  O2: { label: "Hoverbots", notes: "all hover; gain shield when ally dies. Loot: armor scraps", subs: [
     { name: "Eyebot", hp: 9, notes: "2x4 E, mid" },
     { name: "Mr. Handy", hp: 12, notes: "2x6 P, mid" },
     { name: "Battle Drone", hp: 15, notes: "3x6 X, short" },
@@ -322,7 +322,7 @@ const monsterData = {
     { name: "Frozen One", hp: 22, notes: "18 E splash+disorient, short, aim" }
   ]},
 
-  O4: { label: "Aberrations", notes: "Xrad, half to gain rad on entry. Loot: mutant flesh", subs: [
+  O4: { label: "Aberrations", notes: "Xrad, terrain 4-5: rad pools, 1/2 to gain rad on entry. Loot: mutant flesh", subs: [
     { name: "Mutant Plant", hp: 6, notes: "7 P melee, immobile" },
     { name: "Centaur", hp: 10, notes: "8 R, short" },
     { name: "Floater", hp: 14, notes: "9 P, melee, hover, +1 spd" },
@@ -340,7 +340,7 @@ const monsterData = {
     { name: "Mastermind", hp: 27, notes: "tier6 weapons, 21 X splash melee suicider" }
   ]},
 
-  O6: { label: "Nightkin", notes: "immune to rad, ½ to be stealthed with 1D stealth boy. Loot: mutant flesh, ⅓ 1D stealth boy", subs: [
+  O6: { label: "Nightkin", notes: "Xrad, ½ to be stealthed. Shoves on 6, Loot: mutant flesh, 1D stealth boy", subs: [
     { name: "Skirmisher", hp: 12, notes: "8 P melee" },
     { name: "Brute", hp: 15, notes: "tier7x2 P melee" },
     { name: "Enforcer", hp: 18, notes: "10 P melee" },
@@ -412,4 +412,5 @@ document.getElementById("generate").addEventListener("click", () => {
 
 </body>
 </html>
+
 
