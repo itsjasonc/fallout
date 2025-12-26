@@ -263,7 +263,7 @@ const monsterData = {
     { name: "Gecko", hp: 9, notes: "6 P + bleed melee" },
     { name: "Mirelurk", hp: 12, notes: "7 P melee, 2x armor, aim head ignores armor" },
     { name: "Fire Gecko", hp: 15, notes: "8 X + burn, short" },
-    { name: "Lakelurk", hp: 18, notes: "9 E + disorient, mid" },
+    { name: "Lakelurk", hp: 18, notes: "9 E + chill, mid" },
     { name: "Cazadores", hp: 21, notes: "10 P melee + poison, fly, +1 spd" },
     { name: "Nightstalker", hp: 24, notes: "2x9 P melee + poison + bleed" }
   ]},
@@ -280,7 +280,7 @@ const monsterData = {
   E5: { label: "Robots", notes: "explode at death for 50% HP X splash. Loot: armor scraps", subs: [
     { name: "Protectron", hp: 11, notes: "8 E melee" },
     { name: "Cyberdog", hp: 14, notes: "9 P melee, +1 spd" },
-    { name: "Robobrain", hp: 17, notes: "10 E + disorient, short" },
+    { name: "Robobrain", hp: 17, notes: "10 E + chill, short" },
     { name: "Securitron", hp: 20, notes: "11 X long" },
     { name: "Sentry Bot", hp: 23, notes: "3x9 P mid" },
     { name: "Assaultron", hp: 26, notes: "14 E+R melee, charge 1, +1 spd" }
@@ -319,7 +319,7 @@ const monsterData = {
     { name: "Glowing One", hp: 13, notes: "9 R splash, melee" },
     { name: "Reaver", hp: 16, notes: "2x9 P melee, grapples on 6" },
     { name: "Molten One", hp: 19, notes: "14 X splash+burn, short, aim" },
-    { name: "Frozen One", hp: 22, notes: "18 E splash+disorient, short, aim" }
+    { name: "Frozen One", hp: 22, notes: "18 E splash+chill, short, aim" }
   ]},
 
   O4: { label: "Aberrations", notes: "Xrad, terrain 4-5: rad pools, 1/2 to gain rad on entry. Loot: mutant flesh", subs: [
@@ -412,6 +412,7 @@ document.getElementById("generate").addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
