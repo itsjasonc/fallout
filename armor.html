@@ -423,42 +423,42 @@ function generateWeapon(){
 }
 // ===== COMPLICATION GENERATOR =====
 const complications = [
-  ["+1 Thirst","END","Sweating from hot area"],
-  ["+1 Hunger","CHA","Puking from terrible smell (hunger)"],
-  ["+1 Thirst","END","Diarrhea from environmental toxins (thirst)"],
-  ["+1 Hunger","STR","Burning calories from manual labor (hunger)"],
-  ["+1 Thirst","AGI","Stuck in an overly dehumidified area (thirst)"],
-  ["+1 Hunger","CHA","Burning calories for travelling long distances (hunger)"],
+  ["Thirst","END","Sweating from hot area"],
+  ["Hunger","CHA","Puking from terrible smell (hunger)"],
+  ["Thirst","INT","Diarrhea from unidentified environmental toxins (thirst)"],
+  ["Hunger","STR","Burning calories from manual labor (hunger)"],
+  ["Thirst","AGI","Stuck in an overly dehumidified area (thirst)"],
+  ["Hunger","CHA","Burning calories for travelling long distances (hunger)"],
   ["Drop item","CHA","Loud noise jumpscare causes fumbled item"],
   ["Drop item","AGI","Slips on loose terrain or oily ground"],
   ["Drop item","STR","Player stumbles as structure crumbles"],
   ["Drop item","AGI","The player hastily retreats from defenses"],
-  ["Drop item","STR","A gust of wind blows through an open area"],
+  ["Drop item","INT","Trigger a hidden trap door"],
   ["Drop item","STR","A gas explosion destabilizes the player"],
-  ["Lose 5 HP","CHA","Witnesses a gruesomely disturbing scene"],
-  ["Lose 5 HP","CHA","Chemicals cause hallucination"],
-  ["Lose 5 HP","CHA","An explosion rattles the player"],
-  ["Lose 5 HP","CHA","Hears eerie grinding of machinery"],
-  ["Lose 5 HP","CHA","Prolonged time in a confined space"],
-  ["Lose 5 HP","CHA","Hears sounds of nearby deadly animals"],
-  ["+1 Fatigue","STR","Overexertion from lift/sprint/jump"],
-  ["+1 Fatigue","AGI","Running from defenses"],
-  ["+1 Fatigue","END","Getting lost in confusing area"],
-  ["+1 Fatigue","END","Exposure to extreme cold"],
-  ["+1 Fatigue","END","Low oxygen area"],
-  ["+1 Fatigue","STR","Exhaustion from clearing obstacles"],
-  ["+1 Rads","END","Encounter radioactive waste dump"],
-  ["+1 Rads","END","Treks through irradiated water"],
-  ["+1 Rads","AGI","Treks through radioactive plant growth"],
-  ["+1 Rads","END","A radioactive dust storm passes through"],
-  ["+1 Rads","END","Broken technology leaking radiation"],
-  ["+1 Rads","STR","Fix jammed safety system for radioactive source"],
-  ["+1 Injury","AGI","The player triggers a hidden trap"],
-  ["+1 Injury","AGI","Ignites an explosive causing explosion"],
-  ["+1 Injury","STR","Heavy objects fall on you"],
-  ["+1 Injury","STR","A muscle is strained moving something heavy"],
-  ["+1 Injury","AGI","The player loses footing from difficult terrain"],
-  ["+1 Injury","AGI","Avoid gunfire from defenses"]
+  ["Lose HP","CHA","Witnesses a gruesomely disturbing scene"],
+  ["Lose HP","INT","Chemicals cause hallucination"],
+  ["Lose HP","CHA","An explosion rattles the player"],
+  ["Lose HP","CHA","Hears eerie grinding of machinery"],
+  ["Lose HP","INT","Get lost in a confined space"],
+  ["Lose HP","CHA","Hears sounds of nearby deadly animals"],
+  ["Fatigue","STR","Overexertion from lift/sprint/jump"],
+  ["Fatigue","AGI","Running from defenses"],
+  ["Fatigue","INT","Getting lost in confusing area"],
+  ["Fatigue","END","Exposure to extreme cold"],
+  ["Fatigue","END","Low oxygen area"],
+  ["Fatigue","STR","Exhaustion from clearing obstacles"],
+  ["Rads","END","Scavenge through a radioactive waste dump"],
+  ["Rads","END","Treks through irradiated water"],
+  ["Rads","INT","Nagivate through a radioactive maze"],
+  ["Rads","END","A radioactive dust storm passes through"],
+  ["Rads","END","Broken technology leaking radiation"],
+  ["Rads","INT","Disable safety system for radioactive source"],
+  ["Injury","INT","Able to hack and disable a security turret"],
+  ["Injury","AGI","Ignites an explosive causing explosion"],
+  ["Injury","STR","Heavy objects fall on you"],
+  ["Injury","STR","A muscle is strained moving something heavy"],
+  ["Injury","AGI","The player loses footing from difficult terrain"],
+  ["Injury","AGI","Avoid gunfire from defenses"]
 ];
 
 function generateComplications() {
@@ -472,6 +472,7 @@ function generateComplications() {
 </script>
 </body>
 </html>
+
 
 
 
