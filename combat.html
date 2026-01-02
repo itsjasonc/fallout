@@ -189,46 +189,46 @@
   // === Zone Table Data ===
 const zoneTable = {
   11: "Office: Contains 2 Vending machines with 1d6 Nuka Cola / Sunset Sarsaparilla for 10c each. Autojacker to open.",
-  12: "Department Store: Scavenged stackables give +1 yield. Use Flashlight to add +2 to scavenge roll.",
+  12: "Mall: Scavenging allows choosing one of 2 loot rolls. Use Flashlight to add +2 to scavenge roll.",
   13: "Bunker: Scavenged items have +1 durability. Use Breatherator to add +2 to scavenge roll.",
-  14: "Graveyard: -1 enemy. Use Hammerator to add +2 to scavenge roll.",
-  15: "Condominium: Refresh all skill/luck/resist when sleeping here.",
-  16: "Factory: Contains a random tech, or fully repairs the same tech if you already have it.",
+  14: "Graveyard: Contains map to legendary loot 3 hexes away. Use Hammerator to add +2 to scavenge roll.",
+  15: "School: Contains 3 special rooms instead of 1, each requires a different technology.",
+  16: "Factory: Contains a random tech, use generator to add +1 durability to any tech you have",
 
-  21: "Museum: Contains 1 artifact. Use Hackerator for heavy relic worth 1d6×100c.",
+  21: "Museum: Contains 1 artifact. Use Hackerator for heavy relic worth 1d6+Lx20c.",
   22: "Prison: +1 enemy. Contains a random military equipment item.",
   23: "Park: Contains a random potted plant. Plants grown here give +100% yield if left for one level.",
-  24: "Railyard: Contains 1d3 flares (10c). Flares reduce enemies by 1 in Ruins.",
-  25: "Library: Order a random recipe that arrives on level up. Use Hackerator to order another.",
+  24: "Railyard: Contains 1d6 flares (10c). Flares reduce enemies by 1 in Ruins.",
+  25: "Library: Can order a random recipe that arrives on level up, repeatable",
   26: "Warehouse: Ship your items to any hex; they arrive on level up.",
 
-  31: "Casino: Contains a slot machine. Spend 40c to roll 1d6×10c. Crit = 120c jackpot, 1 = break.",
-  32: "Laundromat: Spend 50c to reroll armor values.",
+  31: "Casino: Contains a slot machine. Spend 40c to roll 1d6×10c. can luck/resist. Crit = 120c jackpot, 1 = break.",
+  32: "Laundromat: Spend 10c to reroll armor values.",
   33: "Workshop: Has a workbench; repairing items costs 1 less scrap.",
-  34: "Missile Silo: Spend 10 tech scrap to fire a missile at any hex (30 explosive damage).",
-  35: "Armory: Spend 10 gun scrap to upgrade a weapon with +1 damage.",
+  34: "Missile Silo: Spend 10 tech scrap to fire a missile at any hex (25 explosive damage).",
+  35: "Armory: Spend 5 gun scrap to upgrade a weapon with +1 damage.",
   36: "Bank: Deposit caps, gain 20% on level up. Withdraw at any bank.",
 
-  41: "Military Base: Scavenging weapons/armor here gives +1 to rolls.",
+  41: "Military Base: Scavenging weapons/armor here gives +1 to rolls with no penalty.",
   42: "Farm: Contains brahmin. CHA 1d6 milk (-1 thirst, -1 rad, 20c) or AGI 1d6 flesh (-1 hunger, +20% HP, 20c). Crit: 3× yield.",
-  43: "Quarry: Use explosives to excavate gemstones worth 1d6×50c (bulky).",
-  44: "Crash Site: Contains a mutator that transforms a weapon into its mutated form.",
-  45: "Campsite: Can scavenge for 1d3 flares. Crit: find 2×.",
-  46: "Foundry: Spend 10 armor scrap to add +1 to all defense values of an armor.",
+  43: "Quarry: Use autojacker to excavate heavy ore worth 1d6+L×20c.",
+  44: "Crash Site: Contains a mutator that transforms a weapon into its mutated form, powered by 1D artifact",
+  45: "Campsite: Can AGI scavenge for 1d3 flares. Crit: find 3×.",
+  46: "Foundry: Spend 5 armor scrap to add +1 to all defense values of an armor.",
 
   51: "Interchange: Generates any faction’s settlement 3 hexes away.",
   52: "Laboratory: Generates a Ruins from 5 choices 3 hexes away.",
   53: "Airport: Generates an adjacent Subway. Contains 1 flare for each Subway.",
-  54: "Resort: Generates adjacent irradiated lake island (+3 to scavenging).",
+  54: "Resort: Generates adjacent irradiated lake (+1 rads) with uninhabited island (+3 to scavenging).",
   55: "Subway: Generates another Subway 5 hexes away. You can fast travel between cleared Subways.",
-  56: "Stadium: No battle. Contains a wandering duelist that will 1v1 for a random crit loot prize.",
+  56: "Greenhouse: Can STR scavenge for a mutamelon that gives 5x -1 hunger+thirst, heavy.",
 
   61: "Hospital: When you heal or remove a status, heal +10% or remove 1 extra.",
   62: "Restaurant: Can order food (1d6+10 rations) that arrives on level up.",
-  63: "Hotel: Sleeping here grants 'Well Rested'.",
-  64: "Junkyard: Has a workbench. Scrapping gives +1 scrap.",
-  65: "Supermarket: Scavenging food/water gives +1 to rolls and yield.",
-  66: "Church: No battle. Friendly merchant with 2 bodyguards trades and has random + crit loot."
+  63: "Hotel: Sleeping here grants 'Well Rested' and refreshes all skill/luck/resist.",
+  64: "Construction Yard: Copies the effect of any ruins you have encountered.",
+  65: "Supermarket: Scavenging ammo/food/water gives +1 to rolls with no penalty.",
+  66: "Church: No battle. Friendly merchant with 2 bodyguards has random + crit loot, will duel for it."
 };
 
 // === Zone Generator Function ===
@@ -412,6 +412,7 @@ document.getElementById("generate").addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
