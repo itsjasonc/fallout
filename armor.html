@@ -328,7 +328,7 @@ function generateArmor() {
   let isHeavy = /heavy/i.test(armorText);
   if (!isHeavy && rollDie(6) <= 2) {
     isHeavy = true;
-    defValue += 1;
+    defValue += 4;
     armorText = armorText.replace(/armor:/i, "armor: <span style='color:red;font-weight:bold;'>Heavy</span> ");
   }
 
@@ -636,6 +636,7 @@ function generateMedsAndChems() {
 </script>
 </body>
 </html>
+
 
 
 
