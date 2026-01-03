@@ -322,8 +322,7 @@ function generateArmor() {
   let isHeavy = /heavy/i.test(armorText);
   if (!isHeavy && rollDie(6) <= 2) {
     isHeavy = true;
-    defValue += 4;
-    armorText = armorText.replace(/^([^:]+):/i,`<span style="color:red;font-weight:bold;">Heavy</span> $1:`);   
+    defValue += 4;	
 	armorText = armorText.replace(/\+\d+\s*def/i, `+${defValue} def`);
   }
 
@@ -347,6 +346,10 @@ if (nameMatch) {
   armorName = nameMatch[1];
   armorStats = nameMatch[2];
 }
+if (isHeavy) {
+  armorName = `<span style="color:red; font-weight:bold;">(H)</span> ${armorName}`;
+}
+	
 // Output with name on first line, stats on second
 document.getElementById("armorTitle").innerHTML = `
   <b>${armorName}</b><br>
@@ -583,6 +586,7 @@ function generateMedsAndChems() {
 </script>
 </body>
 </html>
+
 
 
 
