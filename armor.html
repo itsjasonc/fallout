@@ -460,10 +460,9 @@ const complications = [
 
 function generateComplications() {
   const c1 = complications[Math.floor(Math.random() * complications.length)];
-  const c2 = complications[Math.floor(Math.random() * complications.length)];
+  
   document.getElementById("complicationOutput").innerHTML =
-    `<b>#1:</b> ${c1[0]} | Save: ${c1[1]}<br><i>${c1[2]}</i><br><br>
-     <b>#2:</b> ${c2[0]} | Save: ${c2[1]}<br><i>${c2[2]}</i>`;
+    `<b>#1:</b> ${c1[0]} | Save: ${c1[1]}<br><i>${c1[2]}</i>`;
 }
 
 // ===== RATION GENERATOR =====
@@ -495,6 +494,7 @@ function generateRations() {
 </script>
 </body>
 </html>
+
 
 
 
