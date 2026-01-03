@@ -340,8 +340,26 @@ function generateArmor() {
 
   // Output armor text + distribution
   const distText = `(${values.join(", ")})`;
-  document.getElementById("armorTitle").innerHTML =
+	
+/*  document.getElementById("armorTitle").innerHTML =
     `${armorText} ${distText}`;
+	*/
+	// Split armor name from the rest of the text
+const nameMatch = armorText.match(/^([^:]+):\s*(.*)$/);
+
+let armorName = armorText;
+let armorStats = "";
+
+if (nameMatch) {
+  armorName = nameMatch[1];
+  armorStats = nameMatch[2];
+}
+
+// Output with name on first line, stats on second
+document.getElementById("armorTitle").innerHTML = `
+  <b>${armorName}</b><br>
+  ${armorStats} ${distText}
+`;
 }
 
 /*function generateArmor() {
@@ -618,6 +636,7 @@ function generateMedsAndChems() {
 </script>
 </body>
 </html>
+
 
 
 
