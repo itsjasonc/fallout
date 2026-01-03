@@ -354,7 +354,7 @@ if (nameMatch) {
   armorName = nameMatch[1];
   armorStats = nameMatch[2];
 }
-
+armorText = armorText.replace(/\+\d+\s*def/i, `+${defValue} def`);
 // Output with name on first line, stats on second
 document.getElementById("armorTitle").innerHTML = `
   <b>${armorName}</b><br>
@@ -636,6 +636,7 @@ function generateMedsAndChems() {
 </script>
 </body>
 </html>
+
 
 
 
