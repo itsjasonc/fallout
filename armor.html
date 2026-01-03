@@ -323,8 +323,8 @@ function generateArmor() {
   if (!isHeavy && rollDie(6) <= 2) {
     isHeavy = true;
     defValue += 4;
-    armorText = armorText.replace(/armor:/i, "armor: <span style='color:red;font-weight:bold;'>Heavy</span> ");
-    armorText = armorText.replace(/\+\d+\s*def/i, `+${defValue} def`);
+    armorText = armorText.replace(/^([^:]+):/i,`<span style="color:red;font-weight:bold;">Heavy</span> $1:`);   
+	armorText = armorText.replace(/\+\d+\s*def/i, `+${defValue} def`);
   }
 
   // Distribute DEF using existing logic
@@ -583,6 +583,7 @@ function generateMedsAndChems() {
 </script>
 </body>
 </html>
+
 
 
 
