@@ -217,7 +217,7 @@ button:hover { background:#2a6ce2; }
   <div id="ComplicationOutput" class="output"></div>
 </div>
 <div class="container">	
-<h2>🍞 Ration/Water Generator</h2>
+<h2>🍞 Scrap/Ration/Water Generator</h2>
 <button onclick="generateRations()">Generate Items</button>
 <div id="RationWaterOutput" style="margin-top: 10px;"></div>
 </div>
@@ -519,13 +519,13 @@ function generateComplications() {
 
 // ===== RATION GENERATOR =====
 function generateRations() {
-  const rationTypes = ["Clean", "Dirty", "Irradiated"];
+  const rationTypes = ["Armor/Clean", "Gun/Dirty", "Tech/Irradiated"];
   const rolls = rollDie(6) + rollDie(6);
 
   const counts = {
-    "Clean": 0,
-    "Dirty": 0,
-    "Irradiated": 0
+    "Armor/Clean": 0,
+    "Gun/Dirty": 0,
+    "Tech/Irradiated": 0
   };
 
   for (let i = 0; i < rolls; i++) {
@@ -586,6 +586,7 @@ function generateMedsAndChems() {
 </script>
 </body>
 </html>
+
 
 
 
