@@ -197,7 +197,9 @@ button:hover { background:#2a6ce2; }
   <button onclick="generateComplications()">Generate Complications</button>
   <div id="complicationOutput" class="output"></div>
 </div>
-
+<h2>Ration Generator</h2>
+<button onclick="generateRations()">Generate Rations</button>
+<div id="rationOutput" style="margin-top: 10px;"></div>
 
 <script>
 /* ---------- Integer Distributor ---------- */
@@ -463,9 +465,36 @@ function generateComplications() {
      <b>#2:</b> ${c2[0]} | Save: ${c2[1]}<br><i>${c2[2]}</i>`;
 }
 
+// ===== RATION GENERATOR =====
+function generateRations() {
+  const rationTypes = ["Clean Rations", "Dirty Rations", "Irradiated Rations"];
+  const rolls = rollDie(6) + rollDie(6);
+
+  const counts = {
+    "Clean Rations": 0,
+    "Dirty Rations": 0,
+    "Irradiated Rations": 0
+  };
+
+  for (let i = 0; i < rolls; i++) {
+    const type = rationTypes[Math.floor(Math.random() * rationTypes.length)];
+    counts[type]++;
+  }
+
+  let output = `<b>Total Rations:</b> ${rolls}<br>`;
+  for (const type in counts) {
+    if (counts[type] > 0) {
+      output += `${type}: ${counts[type]}<br>`;
+    }
+  }
+
+  document.getElementById("rationOutput").innerHTML = output;
+}
+	
 </script>
 </body>
 </html>
+
 
 
 
