@@ -266,7 +266,25 @@ function distribute(){
 window.addEventListener('load', distribute);
 
 // ===== ARMOR GENERATOR =====
-const armorTable = [
+
+	const armorTable = [
+  { roll: 2, text: "Junk armor: +9 def, 60c" },
+  { roll: 3, text: "Raider armor: +10 def, 70c" },
+  { roll: 4, text: "Leather armor: +11 def, 80c" },
+  { roll: 5, text: "Chain armor: +12 def, 90c" },
+  { roll: 6, text: "Metal armor: +13 def, 100c" },
+  { roll: 7, text: "Synth armor: +14 def, 110c" },
+  { roll: 8, text: "Mutant armor: +16 def, 120c" },
+  { roll: 9, text: "Rugged armor: +18 def, 130c" },
+  { roll: 10, text: "Combat armor: +20 def, 140c" },
+  { roll: 11, text: "Infantry armor: +22 def, 150c" },
+  { roll: 12, text: "Assault armor: +24 def, 160c" },
+  { roll: 13, text: "Ranger armor: +26 def, 170c" },
+  { roll: 14, text: "Salvaged power armor: +28 def, 180c" },
+  { roll: 15, text: "Power armor: +30 def, +190c" },
+  { roll: 16, text: "Advanced power armor: +32 def, 200c" }
+];
+/*const armorTable = [
   { roll: 2, name: "Junk armor", def: 9, cost: 50 },
   { roll: 3, name: "Raider armor", def: 10, cost: 60 },
   { roll: 4, name: "Leather armor", def: 11, cost: 70 },
@@ -283,12 +301,50 @@ const armorTable = [
   { roll: 15, name: "Power armor", def: 30, cost: 180 },
   { roll: 16, name: "Advanced Power armor", def: 32, cost: 190 }
 ];
+*/
 
 // helper for single die roll
 function rollDie(sides){ return Math.floor(Math.random() * sides) + 1; }
 
-// ===== Replace your previous generateArmor() with this version =====
 function generateArmor() {
+  const level = parseInt(document.getElementById("partyLevel").value) || 0;
+  const roll = Math.min(16, rollDie(6) + level);
+
+  const armorEntry = armorTable.find(a => a.roll === roll);
+  if (!armorEntry) return;
+
+  let armorText = armorEntry.text;
+
+  // Extract DEF value from text (number after "+X def")
+  const defMatch = armorText.match(/\+(\d+)\s*def/i);
+  if (!defMatch) {
+    console.error("No DEF value found in armor text:", armorText);
+    return;
+  }
+
+  let defValue = parseInt(defMatch[1], 10);
+
+  // Handle Heavy logic
+  let isHeavy = /heavy/i.test(armorText);
+  if (!isHeavy && rollDie(6) <= 2) {
+    isHeavy = true;
+    defValue += 1;
+    armorText = armorText.replace(/armor:/i, "armor: <span style='color:red;font-weight:bold;'>Heavy</span> ");
+  }
+
+  // Distribute DEF using existing logic
+  const values = distributeEvenly(defValue, 4);
+  if (typeof updateBars === "function") {
+    updateBars(values);
+  }
+
+  // Output armor text + distribution
+  const distText = `(${values.join(", ")})`;
+  document.getElementById("armorTitle").innerHTML =
+    `${armorText} ${distText}`;
+}
+
+/*function generateArmor() {
   const level = parseInt(document.getElementById("partyLevel").value) || 0;
   const roll = Math.min(16, rollDie(6) + level);
 
@@ -317,7 +373,7 @@ function generateArmor() {
 	// Format distribution for text output
 const distText = `(${values.join(", ")})`;
   
-}
+}*/
 
 
 function rollDice(num, sides) {
@@ -562,6 +618,7 @@ function generateMedsAndChems() {
 </script>
 </body>
 </html>
+
 
 
 
