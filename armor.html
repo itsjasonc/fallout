@@ -471,7 +471,7 @@ const complications = [
 function generateComplications() {
   const c1 = complications[Math.floor(Math.random() * complications.length)];
   
-  document.getElementById("complicationOutput").innerHTML =
+  document.getElementById("ComplicationOutput").innerHTML =
     `<b>#1:</b> ${c1[0]} | Save: ${c1[1]}<br><i>${c1[2]}</i>`;
 }
 
@@ -498,12 +498,13 @@ function generateRations() {
     }
   }
 
-  document.getElementById("rationOutput").innerHTML = output;
+  document.getElementById("RationWaterOutput").innerHTML = output;
 }
 	
 </script>
 </body>
 </html>
+
 
 
 
