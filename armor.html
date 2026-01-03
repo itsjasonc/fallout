@@ -209,20 +209,26 @@ button:hover { background:#2a6ce2; }
 <button onclick="generateWeapon()">Generate Weapon</button>
   <div id="weaponResult" class="weapon-output small"></div>
 </div>  
-  
-<h2>⚠️ Complication Generator</h2>
 <div class="container">
-  
+	<div class="generator-box">
+  <h2>Ammo Generator</h2>
+  <button onclick="generateAmmo()">Generate Ammo</button>
+  <div id="ammoOutput" class="output"></div>
+</div></div>  
+
+<div class="container">  
+	<h2>⚠️ Complications </h2>
   <button onclick="generateComplications()">Generate Complications</button>
   <div id="ComplicationOutput" class="output"></div>
 </div>
-<div class="container">	
+	
+<div class="container">		
 <h2>🍞 Scrap/Rations/Water </h2>
 <button onclick="generateRations()">Generate Items</button>
 <div id="RationWaterOutput" style="margin-top: 10px;"></div>
 </div>
 	<div class="container">
-  <h2>💉 Med & Chem Generator</h2>
+  <h2>💉 Meds & Chems </h2>
   <button onclick="generateMedsAndChems()">Generate Meds & Chems</button>
   <div id="medOutput" style="margin-top: 10px;"></div>
 </div>
@@ -582,10 +588,38 @@ function generateMedsAndChems() {
 
   document.getElementById("medOutput").innerHTML = output;
 }
-	
+const ammoTable = [
+  { type: "Small rounds", roll: "1d6+4", cost: 5 },
+  { type: "E-cell", roll: "1d6+4", cost: 5 },
+  { type: "Grenades", roll: "1d6", cost: 0 },
+  { type: "Fuel", roll: "1d6+2", cost: 15 },
+  { type: "Large rounds", roll: "1d6+2", cost: 10 },
+  { type: "MF-cell", roll: "1d6+2", cost: 10 }
+];
+
+// Simple dice roller helper
+function rollDice(diceStr) {
+  const match = diceStr.match(/(\d*)d(\d+)([+-]\d+)?/i);
+  if (!match) return 0;
+  const count = parseInt(match[1]) || 1;
+  const sides = parseInt(match[2]);
+  const modifier = parseInt(match[3]) || 0;
+  let total = 0;
+  for (let i = 0; i < count; i++) total += Math.floor(Math.random() * sides) + 1;
+  return total + modifier;
+}
+
+function generateAmmo() {
+  const selected = ammoTable[Math.floor(Math.random() * ammoTable.length)];
+  const quantity = rollDice(selected.roll);
+  const costText = selected.cost > 0 ? `${selected.cost}c each` : "";
+  document.getElementById("ammoOutput").innerHTML =
+    `${quantity} x ${selected.type} ${costText}`;
+}	
 </script>
 </body>
 </html>
+
 
 
 
