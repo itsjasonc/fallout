@@ -197,10 +197,11 @@ button:hover { background:#2a6ce2; }
   <button onclick="generateComplications()">Generate Complications</button>
   <div id="complicationOutput" class="output"></div>
 </div>
-<h2>Ration Generator</h2>
-<button onclick="generateRations()">Generate Rations</button>
+<div class="container">	
+<h2>Ration/Water Generator</h2>
+<button onclick="generateRations()">Generate Items</button>
 <div id="rationOutput" style="margin-top: 10px;"></div>
-
+</div>
 <script>
 /* ---------- Integer Distributor ---------- */
 function rollDie(sides){ return Math.floor(Math.random()*sides)+1; }
@@ -471,9 +472,9 @@ function generateRations() {
   const rolls = rollDie(6) + rollDie(6);
 
   const counts = {
-    "Clean Rations": 0,
-    "Dirty Rations": 0,
-    "Irradiated Rations": 0
+    "Clean": 0,
+    "Dirty": 0,
+    "Irradiated": 0
   };
 
   for (let i = 0; i < rolls; i++) {
@@ -494,6 +495,7 @@ function generateRations() {
 </script>
 </body>
 </html>
+
 
 
 
