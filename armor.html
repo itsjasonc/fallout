@@ -497,11 +497,11 @@ function generateWeapon(){
 // ===== COMPLICATION GENERATOR =====
 const complications = [
   ["+1/2 Thirst","END","Sweating from hot area"],
-  ["+1/2 Hunger","CHA","Puking from terrible smell (hunger)"],
-  ["+1/2 Thirst","INT","Diarrhea from unidentified environmental toxins (thirst)"],
-  ["+1/2 Hunger","STR","Burning calories from manual labor (hunger)"],
-  ["+1/2 Thirst","AGI","Stuck in an overly dehumidified area (thirst)"],
-  ["+1/2 Hunger","END","Burning calories for travelling long distances (hunger)"],
+  ["+1/2 Hunger","CHA","Puking from terrible smell"],
+  ["+1/2 Thirst","INT","Diarrhea from unidentified environmental toxins"],
+  ["+1/2 Hunger","STR","Burning calories from prolongued heavy lifting"],
+  ["+1/2 Thirst","AGI","Stuck in an overly dehumidified area"],
+  ["+1/2 Hunger","END","Burning calories for prolongued cardio"],
   ["Lose 5/10 HP","CHA","Witnesses a gruesomely disturbing scene"],
   ["Lose 5/10 HP","INT","Chemicals cause hallucination"],
   ["Lose 5/10 HP","CHA","An explosion rattles the player"],
@@ -532,7 +532,7 @@ function generateComplications() {
   const c1 = complications[Math.floor(Math.random() * complications.length)];
   
   document.getElementById("ComplicationOutput").innerHTML =
-    `<b>#1:</b> ${c1[0]} | Save: ${c1[1]}<br><i>${c1[2]}</i>`;
+    ` ${c1[0]} | Save: ${c1[1]}<br><i>${c1[2]}</i>`;
 }
 
 // ===== RATION GENERATOR =====
@@ -631,6 +631,7 @@ function generateAmmo() {
 </script>
 </body>
 </html>
+
 
 
 
