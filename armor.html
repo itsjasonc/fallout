@@ -431,7 +431,7 @@ const complications = [
   ["Thirst","INT","Diarrhea from unidentified environmental toxins (thirst)"],
   ["Hunger","STR","Burning calories from manual labor (hunger)"],
   ["Thirst","AGI","Stuck in an overly dehumidified area (thirst)"],
-  ["Hunger","CHA","Burning calories for travelling long distances (hunger)"],
+  ["Hunger","END","Burning calories for travelling long distances (hunger)"],
   ["Lose HP","CHA","Witnesses a gruesomely disturbing scene"],
   ["Lose HP","INT","Chemicals cause hallucination"],
   ["Lose HP","CHA","An explosion rattles the player"],
@@ -444,11 +444,11 @@ const complications = [
   ["Fatigue","END","Exposure to extreme cold"],
   ["Fatigue","END","Low oxygen area"],
   ["Fatigue","STR","Exhaustion from clearing obstacles"],
-  ["Rads","END","Scavenge through a radioactive waste dump"],
+  ["Rads","STR","Scavenge through heavy toxic waste barrel dump"],
   ["Rads","END","Treks through irradiated water"],
-  ["Rads","INT","Nagivate through a radioactive maze"],
-  ["Rads","END","A radioactive dust storm passes through"],
-  ["Rads","END","Scavenge through broken technology leaking radiation"],
+  ["Rads","AGI","Long winding paths full of radiation"],
+  ["Rads","CHA","Irradiated shelters full of dead families"],
+  ["Rads","END","Broken technology leaking radiation"],
   ["Rads","INT","Disable safety system for radioactive source"],
   ["Injury","INT","Able to hack and disable a security turret"],
   ["Injury","AGI","Ignites an explosive causing explosion"],
@@ -494,6 +494,7 @@ function generateRations() {
 </script>
 </body>
 </html>
+
 
 
 
