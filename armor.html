@@ -234,7 +234,46 @@ function rollDie(sides){ return Math.floor(Math.random()*sides)+1; }
 /* Keep same variable name the rest of the code expects */
 const slider = document.getElementById('evennessSlider');
 
-function distribute(){
+function generateDistribution(total) {
+  const evenness = parseFloat(slider.value) || 0;
+  const base = total / 4;
+  let parts = [];
+
+  if (evenness === 0) {
+    parts = [base, base, base, base];
+  } else {
+    let devs = Array.from({ length: 4 }, () => (Math.random() * 2 - 1) * evenness);
+    const sumDev = devs.reduce((a, b) => a + b, 0);
+    devs = devs.map(d => d - sumDev / 4);
+
+    parts = devs.map(d => base + base * d);
+
+    const factor = total / parts.reduce((a, b) => a + b, 0);
+    parts = parts.map(p => Math.round(p * factor));
+
+    let diff = total - parts.reduce((a, b) => a + b, 0);
+    for (let i = 0; i < Math.abs(diff); i++) {
+      parts[i % 4] += diff > 0 ? 1 : -1;
+    }
+  }
+
+  return parts;
+}
+	function distribute() {
+  const total = parseInt(document.getElementById('inputValue').value) || 0;
+  const parts = generateDistribution(total);
+
+  const maxVal = Math.max(...parts, 1);
+  const containerH = 120;
+
+  parts.forEach((p, i) => {
+    const bar = document.getElementById('bar' + (i + 1));
+    bar.style.height = (p / maxVal * containerH) + 'px';
+    bar.querySelector('span').textContent = p;
+  });
+}
+	/*
+	function distribute(){
   const total = parseInt(document.getElementById('inputValue').value) || 0;
   const evenness = parseFloat(slider.value); // still reads hidden slider
   const base = total / 4;
@@ -261,7 +300,8 @@ function distribute(){
     bar.querySelector('span').textContent = p;
   });
 }
-
+*/
+	
 /* initialize on load */
 window.addEventListener('load', distribute);
 
@@ -334,13 +374,13 @@ function generateArmor() {
   }
 
   // Distribute DEF using existing logic
-  const values = distributeEvenly(defValue, 4);
-  if (typeof updateBars === "function") {
+   const distribution = generateDistribution(defValue);
+	if (typeof updateBars === "function") {
     updateBars(values);
   }
 
   // Output armor text + distribution
-  const distText = `(${values.join(", ")})`;
+  const distText = `(${distribution.join(", ")})`;
 	
 /*  document.getElementById("armorTitle").innerHTML =
     `${armorText} ${distText}`;
@@ -637,6 +677,7 @@ function generateMedsAndChems() {
 </script>
 </body>
 </html>
+
 
 
 
