@@ -217,7 +217,7 @@ button:hover { background:#2a6ce2; }
   <div id="ComplicationOutput" class="output"></div>
 </div>
 <div class="container">	
-<h2>🍞 Scrap/Ration/Water Generator</h2>
+<h2>🍞 Scrap/Rations/Water </h2>
 <button onclick="generateRations()">Generate Items</button>
 <div id="RationWaterOutput" style="margin-top: 10px;"></div>
 </div>
@@ -533,7 +533,7 @@ function generateRations() {
     counts[type]++;
   }
 
-  let output = `<b>Total Rations:</b> ${rolls}<br>`;
+  let output = `<b>Total Items:</b> ${rolls}<br>`;
   for (const type in counts) {
     if (counts[type] > 0) {
       output += `${type}: ${counts[type]}<br>`;
@@ -586,6 +586,7 @@ function generateMedsAndChems() {
 </script>
 </body>
 </html>
+
 
 
 
