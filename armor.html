@@ -309,11 +309,13 @@ function generateArmor() {
   // Update armor display (bold red "Heavy" if heavy)
   const armorTitle = document.getElementById("armorTitle");
   const heavyText = armor.heavy ? "<span style='color:red; font-weight:bold;'>(H)</span> " : "";
-  armorTitle.innerHTML = `${heavyText}${armor.name} — +${armor.def} DEF (${armor.cost}c)`;
-
+  armorTitle.innerHTML =`${heavyText}${armor.name} — +${armor.def} DEF (${armor.cost}c) ${distText}`;
   // Distribute armor.def across 4 categories and update bars
   const values = distributeEvenly(armor.def, 4);
   updateBars(values);
+
+	// Format distribution for text output
+const distText = `(${values.join(", ")})`;
 }
 
 
@@ -559,6 +561,7 @@ function generateMedsAndChems() {
 </script>
 </body>
 </html>
+
 
 
 
