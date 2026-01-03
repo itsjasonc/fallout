@@ -272,35 +272,7 @@ function generateDistribution(total) {
     bar.querySelector('span').textContent = p;
   });
 }
-	/*
-	function distribute(){
-  const total = parseInt(document.getElementById('inputValue').value) || 0;
-  const evenness = parseFloat(slider.value); // still reads hidden slider
-  const base = total / 4;
-  let parts = [];
-
-  if (evenness === 0) {
-    parts = [base, base, base, base];
-  } else {
-    let devs = Array.from({length:4}, ()=> (Math.random()*2 - 1) * evenness);
-    const sumDev = devs.reduce((a,b)=>a+b, 0);
-    devs = devs.map(d => d - sumDev/4);
-    parts = devs.map(d => base + base * d);
-    const factor = total / parts.reduce((a,b)=>a+b, 0);
-    parts = parts.map(p => Math.round(p * factor));
-    let diff = total - parts.reduce((a,b)=>a+b, 0);
-    for (let i=0;i<Math.abs(diff);i++) parts[i%4] += diff>0?1:-1;
-  }
-
-  const maxVal = Math.max(...parts, 1);
-  const containerH = 120; // matches CSS .bars height
-  parts.forEach((p,i)=>{
-    const bar = document.getElementById('bar'+(i+1));
-    bar.style.height = (p/maxVal*containerH) + 'px';
-    bar.querySelector('span').textContent = p;
-  });
-}
-*/
+	
 	
 /* initialize on load */
 window.addEventListener('load', distribute);
@@ -324,24 +296,6 @@ window.addEventListener('load', distribute);
   { roll: 15, text: "Power armor: +30 def, +190c" },
   { roll: 16, text: "Advanced power armor: +32 def, 200c" }
 ];
-/*const armorTable = [
-  { roll: 2, name: "Junk armor", def: 9, cost: 50 },
-  { roll: 3, name: "Raider armor", def: 10, cost: 60 },
-  { roll: 4, name: "Leather armor", def: 11, cost: 70 },
-  { roll: 5, name: "Chain armor", def: 12, cost: 80 },
-  { roll: 6, name: "Metal armor", def: 13, cost: 90 },
-  { roll: 7, name: "Synth armor", def: 14, cost: 100 },
-  { roll: 8, name: "Mutant armor", def: 16, cost: 110 },
-  { roll: 9, name: "Rugged armor", def: 18, cost: 120 },
-  { roll: 10, name: "Combat armor", def: 20, cost: 130 },
-  { roll: 11, name: "Infantry armor", def: 22, cost: 140 },
-  { roll: 12, name: "Assault armor", def: 24, cost: 150 },
-  { roll: 13, name: "Ranger armor", def: 26, cost: 160 },
-  { roll: 14, name: "Salvaged Power armor", def: 28, cost: 170 },
-  { roll: 15, name: "Power armor", def: 30, cost: 180 },
-  { roll: 16, name: "Advanced Power armor", def: 32, cost: 190 }
-];
-*/
 
 // helper for single die roll
 function rollDie(sides){ return Math.floor(Math.random() * sides) + 1; }
@@ -382,9 +336,6 @@ function generateArmor() {
   // Output armor text + distribution
   const distText = `(${distribution.join(", ")})`;
 	
-/*  document.getElementById("armorTitle").innerHTML =
-    `${armorText} ${distText}`;
-	*/
 	// Split armor name from the rest of the text
 
 const nameMatch = armorText.match(/^([^:]+):\s*(.*)$/);
@@ -402,51 +353,6 @@ document.getElementById("armorTitle").innerHTML = `
   ${armorStats} ${distText}
 `;
 }
-
-/*function generateArmor() {
-  const level = parseInt(document.getElementById("partyLevel").value) || 0;
-  const roll = Math.min(16, rollDie(6) + level);
-
-  // clone the matched armor object so we don't mutate the table entry
-  const baseArmor = armorTable.find(a => a.roll === roll) || armorTable[0];
-  const armor = Object.assign({}, baseArmor);
-
-  // Determine heavy chance using a d6: heavy on 1 or 2 => exact 1/3 probability
-  if (!armor.heavy) {
-    const heavyRoll = rollDie(6);
-    const becomesHeavy = (heavyRoll <= 2); // 1 or 2 on a d6 -> 2/6 = 1/3
-    if (becomesHeavy) {
-      armor.heavy = true;
-      armor.def = (armor.def || 0) + 4; // add +4 DEF exactly once
-    }
-  }
-
-  // Update armor display (bold red "Heavy" if heavy)
-  const armorTitle = document.getElementById("armorTitle");
-  const heavyText = armor.heavy ? "<span style='color:red; font-weight:bold;'>(H)</span> " : "";
-  armorTitle.innerHTML = `${heavyText}${armor.name} — +${armor.def} DEF (${armor.cost}c)`;
-  // Distribute armor.def across 4 categories and update bars
-  const values = distributeEvenly(armor.def, 4);
-  updateBars(values);
-
-	// Format distribution for text output
-const distText = `(${values.join(", ")})`;
-  
-}*/
-
-
-function rollDice(num, sides) {
-  let total = 0;
-  for (let i = 0; i < num; i++) total += Math.floor(Math.random() * sides) + 1;
-  return total;
-}
-
-function distributeEvenly(total, bars) {
-  const base = Math.floor(total / bars);
-  const remainder = total % bars;
-  return Array.from({ length: bars }, (_, i) => base + (i < remainder ? 1 : 0));
-}
-
 
 /* ---------- Weapon data & generator (unchanged logic) ---------- */
 /* Note: ammo field uses "-" for no-ammo entries so indexes stay consistent */
@@ -677,6 +583,7 @@ function generateMedsAndChems() {
 </script>
 </body>
 </html>
+
 
 
 
