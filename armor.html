@@ -330,6 +330,7 @@ function generateArmor() {
     isHeavy = true;
     defValue += 4;
     armorText = armorText.replace(/armor:/i, "armor: <span style='color:red;font-weight:bold;'>Heavy</span> ");
+    armorText = armorText.replace(/\+\d+\s*def/i, `+${defValue} def`);
   }
 
   // Distribute DEF using existing logic
@@ -345,6 +346,7 @@ function generateArmor() {
     `${armorText} ${distText}`;
 	*/
 	// Split armor name from the rest of the text
+
 const nameMatch = armorText.match(/^([^:]+):\s*(.*)$/);
 
 let armorName = armorText;
@@ -354,7 +356,6 @@ if (nameMatch) {
   armorName = nameMatch[1];
   armorStats = nameMatch[2];
 }
-armorText = armorText.replace(/\+\d+\s*def/i, `+${defValue} def`);
 // Output with name on first line, stats on second
 document.getElementById("armorTitle").innerHTML = `
   <b>${armorName}</b><br>
@@ -636,6 +637,7 @@ function generateMedsAndChems() {
 </script>
 </body>
 </html>
+
 
 
 
