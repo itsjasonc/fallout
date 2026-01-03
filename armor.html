@@ -217,19 +217,22 @@ button:hover { background:#2a6ce2; }
 	</div>
 <button onclick="generateWeapon()">Generate Weapon</button>
   <div id="weaponResult" class="weapon-output small"></div>
-</div>  
-<div class="container">
-	<div class="generator-box">
-  <h2>💥 Ammo Generator</h2>
-  <button onclick="generateAmmo()">Generate Ammo</button>
-  <div id="ammoOutput" class="output"></div>
-</div></div>  
+</div> 
 
 <div class="container">  
-	<h2>⚠️ Complications </h2>
+  <h2>⚠️ Complications </h2>
   <button onclick="generateComplications()">Generate Complications</button>
   <div id="ComplicationOutput" class="output"></div>
 </div>
+	
+<div class="container">
+	<div class="generator-box">
+  	<h2>💥 Ammo Generator</h2>
+ 	 <button onclick="generateAmmo()">Generate Ammo</button>
+  	<div id="ammoOutput" class="output"></div>
+</div></div>  
+
+
 	
 <div class="container">		
 <h2>🍞 Scrap/Rations/Water </h2>
@@ -411,18 +414,18 @@ const weapons = {
        [12,"Gauss Shotgun","3x7 E","E-cell","short","INT","90c"],
        [14,"Tesla Cannon","3x8 E","E-cell","short","INT","100c"],
        [99,"Doomhammer","3x9 E","E-cell","short","INT","110c"] ],
-  O1:[ [6,"Hand Mortar","Grenade-1 X","-","long","AGI","80c"],
-       [8,"Nade Launcher","Grenade X","-","long","AGI","110c"],
-       [10,"Nade Cannon","Grenade X+1","-","long","AGI","140c"],
-       [12,"Missile Launcher","Grenade+2 X","-","long","AGI","170c"],
-       [14,"Fat Man","Grenade+3 X","-","long","AGI","200c"],
-       [99,"Ashbringer","Grenade+4 X","-","long","AGI","230c"] ],
-  O2:[ [6,"Flamer","9 X splash+burn","fuel","mid","AGI","70c"],
-       [8,"Napalmer","10 X splash+burn","fuel","mid","AGI","100c"],
-       [10,"Incinerator","11 X splash+burn","fuel","mid","AGI","130c"],
-       [12,"Liquifier","12 X splash+burn","fuel","mid","AGI","160c"],
-       [14,"Hellfire Inc","13 X splash+burn","fuel","mid","AGI","190c"],
-       [99,"Sulfuras","14 X splash+burn","fuel","short","AGI","220c"] ],
+  O1:[ [6,"Hand Mortar","10 X splash X","fuel","long","AGI","80c"],
+       [8,"Nade Launcher","11 X splash","fuel","long","AGI","110c"],
+       [10,"Nade Cannon","12 X splash","fuel","long","AGI","140c"],
+       [12,"Missile Launcher","13 X splash","fuel","long","AGI","170c"],
+       [14,"Fat Man","14 X splash","fuel","long","AGI","200c"],
+       [99,"Ashbringer","15 X splash","fuel","long","AGI","230c"] ],
+  O2:[ [6,"Flamer","10 X splash+burn","fuel","mid","AGI","70c"],
+       [8,"Napalmer","11 X splash+burn","fuel","mid","AGI","100c"],
+       [10,"Incinerator","12 X splash+burn","fuel","mid","AGI","130c"],
+       [12,"Liquifier","13 X splash+burn","fuel","mid","AGI","160c"],
+       [14,"Hellfire Inc","14 X splash+burn","fuel","mid","AGI","190c"],
+       [99,"Sulfuras","15 X splash+burn","fuel","short","AGI","220c"] ],
   O3:[ [6,"Weak Melee","7 P","-","melee","STR","30c"],
        [8,"Medium Melee","8 P","-","melee","STR","50c"],
        [10,"Strong Melee","9 P","-","melee","STR","70c"],
@@ -628,6 +631,7 @@ function generateAmmo() {
 </script>
 </body>
 </html>
+
 
 
 
