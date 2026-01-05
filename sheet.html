@@ -7,37 +7,82 @@
   <style>
     body { margin:0; font-family: monospace; background:#0b120b; color:#9fef9f; }
     .app { max-width:900px; margin:auto; padding:12px; background:#0f1f0f; box-shadow:0 0 20px #0f0; }
-    h2,h3 { color:#7cff7c; text-shadow:0 0 6px #0f0; }
+    h2,h3 { color:#7cff7c; text-shadow:0 0 6px #0f0; margin-top:16px; }
     .grid { display:grid; gap:8px; }
     .title { grid-template-columns:1fr 1fr; }
-    input, textarea { background:#081408; color:#9fef9f; border:1px solid #2cff2c; padding:6px; font-family:monospace; width:100%; box-sizing:border-box; }
+
+    input, textarea {
+      background:#081408; color:#9fef9f;
+      border:1px solid #2cff2c; padding:6px;
+      font-family:monospace; width:100%; box-sizing:border-box;
+    }
+
     .card { background:#081408; border:1px solid #2cff2c; padding:8px; }
     .center { text-align:center; }
 
-    /* Counters */
-    .counter { display:flex; align-items:center; justify-content:center; gap:6px; }
-    .counter button { background:#081408; color:#9fef9f; border:1px solid #2cff2c; padding:2px 6px; }
-    .value { font-size:26px; min-width:36px; text-align:center; }
+    /* STATS */
+    .stats { grid-template-columns: repeat(5, 1fr); }
+    .stat-box input { text-align:center; font-size:18px; }
 
-    /* Stats & Negatives – 2 rows each */
-    .stats, .negatives { grid-template-columns:repeat(3,1fr); }
+    /* ARMOR */
+    .armor { grid-template-columns: repeat(4, 1fr); }
+    .armor-box input { text-align:center; font-size:16px; }
+    .p { color:#ff5c5c; }
+    .e { color:#5ca9ff; }
+    .x { color:#ffb85c; }
+    .r { color:#6dff6d; }
 
-    /* Skill / Luck / Resist toggles */
-    .uses { grid-template-columns:repeat(3,1fr); }
-    .use-box {
-      height:44px;
+    /* HP + USES (FIXED LAYOUT) */
+    .hp-area {
+      display:grid;
+      grid-template-columns: 1fr 72px;
+      gap:8px;
+      align-items:stretch;
+    }
+
+    .hp-box {
+      position:relative;
+      height:120px;
       display:flex;
       align-items:center;
       justify-content:center;
-      font-weight:bold;
-      cursor:pointer;
-      user-select:none;
-      border:1px solid;
+      font-size:64px;
+    }
+
+    .hp-btn {
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      font-size:28px;
+      background:#081408;
+      color:#9fef9f;
+      border:1px solid #2cff2c;
+      padding:4px 12px;
+    }
+    .hp-minus { left:8px; }
+    .hp-plus { right:8px; }
+
+    .uses {
+      display:grid;
+      grid-template-rows: repeat(3, 1fr);
+      gap:6px;
+    }
+
+    .use-box {
+      display:flex; align-items:center; justify-content:center;
+      font-weight:bold; cursor:pointer; user-select:none;
+      border:1px solid; padding:6px;
     }
     .use-on { background:#0f2f0f; border-color:#2cff2c; box-shadow:0 0 8px #2cff2c; }
     .use-off { background:#2a0000; border-color:#ff3c3c; color:#ff9c9c; box-shadow:0 0 8px #ff3c3c; }
 
-    /* Inventory */
+    /* NEGATIVES */
+    .negatives { grid-template-columns: repeat(5, 1fr); }
+    .neg-card { text-align:center; }
+    .neg-value { font-size:22px; }
+    .neg-btn { padding:2px 6px; background:#081408; color:#9fef9f; border:1px solid #2cff2c; }
+
+    /* INVENTORY */
     .inventory { grid-template-columns:1fr; }
     .slot { display:flex; gap:6px; height:4.5em; }
     .slot textarea { flex:1; resize:none; font-size:clamp(10px,3vw,14px); line-height:1.2em; }
@@ -58,38 +103,41 @@
   <h3>Stats</h3>
   <div class="grid stats" id="stats"></div>
 
+  <h3>Armor</h3>
+  <div class="grid armor" id="armor"></div>
+
   <h3>Hit Points</h3>
-  <div class="card center">
-    <div class="counter">
-      <button onclick="chg('hp',-1)">−</button>
-      <div id="hp" class="value">20</div>
-      <button onclick="chg('hp',1)">+</button>
+  <div class="hp-area">
+    <div class="card hp-box">
+      <button class="hp-btn hp-minus" onclick="chgHP(-1)">−</button>
+      <div id="hp">20</div>
+      <button class="hp-btn hp-plus" onclick="chgHP(1)">+</button>
+    </div>
+    <div class="uses">
+      <div id="useSkill" class="use-box">SKILL</div>
+      <div id="useLuck" class="use-box">LUCK</div>
+      <div id="useResist" class="use-box">RESIST</div>
     </div>
   </div>
 
   <h3>Negative Status</h3>
   <div class="grid negatives" id="negatives"></div>
 
-  <h3>Skill Uses</h3>
-  <div class="grid uses">
-    <div id="useSkill" class="use-box">SKILL</div>
-    <div id="useLuck" class="use-box">LUCK</div>
-    <div id="useResist" class="use-box">RESIST</div>
-  </div>
-
   <h3>Inventory</h3>
   <div class="grid inventory" id="inventory"></div>
 </div>
 
 <script>
-const STORAGE_KEY="fallout_character_v2";
-const statNames=["Strength","Agility","Endurance","Intelligence","Charisma"];
+const STORAGE_KEY="fallout_character_v4";
+const statNames=["STR","AGI","END","INT","CHA"];
+const armorTypes=[['P','p'],['E','e'],['X','x'],['R','r']];
 const negNames=["Hunger","Thirst","Fatigue","Rads","Injury"];
 
 let state=JSON.parse(localStorage.getItem(STORAGE_KEY))||{
   name:"", skillName:"", level:"", caps:"",
   hp:20,
-  stats:Object.fromEntries(statNames.map(s=>[s,5])),
+  stats:Object.fromEntries(statNames.map(s=>[s,""])),
+  armor:{P:"",E:"",X:"",R:""},
   neg:Object.fromEntries(negNames.map(n=>[n,0])),
   inventory:Array.from({length:12},()=>({name:"",heavy:false})),
   uses:{skill:false,luck:false,resist:false}
@@ -97,35 +145,35 @@ let state=JSON.parse(localStorage.getItem(STORAGE_KEY))||{
 
 function save(){ localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); }
 
-function chg(id,delta){
-  if(id==="hp"){ state.hp=Math.max(0,state.hp+delta); document.getElementById("hp").innerText=state.hp; }
-  if(state.stats[id]!=null){ state.stats[id]=Math.max(0,state.stats[id]+delta); document.getElementById(id).innerText=state.stats[id]; }
-  if(state.neg[id]!=null){ state.neg[id]=Math.max(0,state.neg[id]+delta); document.getElementById(id).innerText=state.neg[id]; }
-  save();
-}
+function chgHP(d){ state.hp=Math.max(0,state.hp+d); hp.innerText=state.hp; save(); }
+function chgNeg(n,d){ state.neg[n]=Math.max(0,state.neg[n]+d); const el=document.getElementById(n); el.innerText=state.neg[n]; el.style.color=state.neg[n]>5?'#ff4c4c':'#9fef9f'; save(); }
 
 function init(){
-  name.value=state.name; skillName.value=state.skillName; level.value=state.level; caps.value=state.caps;
-  hp.innerText=state.hp;
-
+  name.value=state.name; skillName.value=state.skillName; level.value=state.level; caps.value=state.caps; hp.innerText=state.hp;
   name.oninput=e=>{state.name=e.target.value;save();};
   skillName.oninput=e=>{state.skillName=e.target.value;save();};
   level.oninput=e=>{state.level=e.target.value;save();};
   caps.oninput=e=>{state.caps=e.target.value;save();};
 
-  const statsDiv=document.getElementById("stats");
+  const statsDiv=document.getElementById('stats');
   statNames.forEach(s=>{
-    statsDiv.innerHTML+=`<div class='card center'><b>${s}</b><div class='counter'><button onclick="chg('${s}',-1)">−</button><div id='${s}' class='value'>${state.stats[s]}</div><button onclick="chg('${s}',1)">+</button></div></div>`;
+    statsDiv.innerHTML+=`<div class='card stat-box center'><b>${s}</b><input value='${state.stats[s]}' oninput=\"state.stats['${s}']=this.value;save();\"></div>`;
   });
 
-  const negDiv=document.getElementById("negatives");
+  const armorDiv=document.getElementById('armor');
+  armorTypes.forEach(([k,c])=>{
+    armorDiv.innerHTML+=`<div class='card armor-box center'><b class='${c}'>${k}:</b><input value='${state.armor[k]}' oninput=\"state.armor['${k}']=this.value;save();\"></div>`;
+  });
+
+  const negDiv=document.getElementById('negatives');
   negNames.forEach(n=>{
-    negDiv.innerHTML+=`<div class='card center'><b>${n}</b><div class='counter'><button onclick="chg('${n}',-1)">−</button><div id='${n}' class='value'>${state.neg[n]}</div><button onclick="chg('${n}',1)">+</button></div></div>`;
+    negDiv.innerHTML+=`<div class='card neg-card'><b>${n}</b><div id='${n}' class='neg-value'>${state.neg[n]}</div><div><button class='neg-btn' onclick=\"chgNeg('${n}',-1)\">−</button><button class='neg-btn' onclick=\"chgNeg('${n}',1)\">+</button></div></div>`;
+    if(state.neg[n]>5) document.getElementById(n).style.color='#ff4c4c';
   });
 
-  const invDiv=document.getElementById("inventory");
+  const invDiv=document.getElementById('inventory');
   state.inventory.forEach((it,i)=>{
-    invDiv.innerHTML+=`<div class='card slot'><textarea rows='3' oninput="state.inventory[${i}].name=this.value;save();">${it.name}</textarea><label><input type='checkbox' ${it.heavy?'checked':''} onchange="state.inventory[${i}].heavy=this.checked;save();">H</label></div>`;
+    invDiv.innerHTML+=`<div class='card slot'><textarea rows='3' oninput=\"state.inventory[${i}].name=this.value;save();\">${it.name}</textarea><label><input type='checkbox' ${it.heavy?'checked':''} onchange=\"state.inventory[${i}].heavy=this.checked;save();\">H</label></div>`;
   });
 
   ['skill','luck','resist'].forEach(k=>{
