@@ -189,46 +189,46 @@
   // === Zone Table Data ===
 const zoneTable = {
   11: "Office: Contains 2 Vending machines with 1d6 Nuka Cola / Sunset Sarsaparilla for 10c each. Autojacker to open.",
-  12: "Mall: Scavenging allows choosing one of 2 loot rolls. Use Flashlight to add +2 to scavenge roll.",
+  12: "Mall: Scavenging allows choosing one of 2 loot rolls, rerolls reroll both options. ",
   13: "Bunker: Scavenged items have +1 durability. Use Breatherator to add +2 to scavenge roll.",
   14: "Graveyard: Contains map to legendary loot 3 hexes away. Use Hammerator to add +2 to scavenge roll.",
   15: "School: Contains 3 special rooms instead of 1, each requires a different technology.",
-  16: "Factory: Contains a random tech, use generator to add +1 durability to any tech you have",
+  16: "Factory: Contains a random tech, Use Flashlight to add +2 to scavenge roll.",
 
-  21: "Museum: Contains 1 artifact. Use Hackerator for heavy relic worth 1d6+Lx20c.",
+  21: "Museum: Contains 1 artifact. Use Hammerator for heavy relic worth 1d6+Lx20c.",
   22: "Prison: +1 enemy. Contains a random military equipment item.",
-  23: "Park: Contains a random potted plant. Plants grown here give +100% yield if left for one level.",
-  24: "Railyard: Contains 1d6 flares (10c). Flares reduce enemies by 1 in Ruins.",
-  25: "Library: Can order a random recipe that arrives on level up, repeatable",
-  26: "Warehouse: Ship your items to any hex; they arrive on level up.",
+  23: "Park: Contains a random potted plant. Plants planted here give +100% yield if left for the whole level.",
+  24: "Railyard: Contains 1d6 flares (20c). Flares reduce enemies by 1 in Ruins.",
+  25: "Library: Can order a random recipe that arrives on level up",
+  26: "Warehouse: Ship your items to any cleared hex; Use hackerator to ship yourselves instead",
 
   31: "Casino: Contains a slot machine. Spend 40c to roll 1d6×10c. can luck/resist. Crit = 120c jackpot, 1 = break.",
-  32: "Laundromat: Spend 10c to reroll armor values.",
+  32: "Laundromat: Spend 10c to reroll armor values. Use generator to also give it +1 durability",
   33: "Workshop: Has a workbench; repairing items costs 1 less scrap.",
-  34: "Missile Silo: Spend 10 tech scrap to fire a missile at any hex (25 explosive damage).",
-  35: "Armory: Spend 5 gun scrap to upgrade a weapon with +1 damage.",
+  34: "Missile Silo: Spend 10 tech scrap to fire a nuclear missile at any hex (annihilates towns for -1 morale)",
+  35: "Armory: Spend 5 gun scrap to upgrade any gun with +1 damage.",
   36: "Bank: Deposit caps, gain 20% on level up. Withdraw at any bank.",
 
   41: "Military Base: Scavenging weapons/armor here gives +1 to rolls with no penalty.",
-  42: "Farm: Contains brahmin. CHA 1d6 milk (-1 thirst, -1 rad, 20c) or AGI 1d6 flesh (-1 hunger, +20% HP, 20c). Crit: 3× yield.",
-  43: "Quarry: Use autojacker to excavate heavy ore worth 1d6+L×20c.",
+  42: "Farm: Contains brahmin. CHA(fatigue) 1d6 milk (-1 thirst, -1 rad, 20c) or AGI(injury) 1d6 flesh (-1 hunger, +20% HP, 20c). Crit: 3× yield.",
+  43: "Quarry: Use autojacker or grenades/explosive weapons to excavate heavy ore worth 1d6+L×20c.",
   44: "Crash Site: Contains a mutator that transforms a weapon into its mutated form, powered by 1D artifact",
-  45: "Campsite: Can AGI scavenge for 1d3 flares. Crit: find 3×.",
-  46: "Foundry: Spend 5 armor scrap to add +1 to all defense values of an armor.",
+  45: "Campsite: Can AGI(rads) scavenge for 1d3 flares. Crit: find 3×.",
+  46: "Foundry: Spend 5 armor scrap to upgrade any melee/fist weapon with +1 damage",
 
   51: "Interchange: Generates any faction’s settlement 3 hexes away.",
   52: "Laboratory: Generates a Ruins from 5 choices 3 hexes away.",
   53: "Airport: Generates an adjacent Subway. Contains 1 flare for each Subway.",
-  54: "Resort: Generates adjacent irradiated lake (+1 rads) with uninhabited island (+3 to scavenging).",
+  54: "Resort: Generates adjacent irradiated lake (+1 rads each way) with uninhabited island (+3 to scavenging).",
   55: "Subway: Generates another Subway 5 hexes away. You can fast travel between cleared Subways.",
-  56: "Greenhouse: Can STR scavenge for a mutamelon that gives 5x -1 hunger+thirst, heavy.",
+  56: "Greenhouse: Can STR(injury) scavenge for a mutamelon that gives 5x -1 hunger+thirst, heavy.",
 
   61: "Hospital: When you heal or remove a status, heal +10% or remove 1 extra.",
   62: "Restaurant: Can order food (1d6+10 rations) that arrives on level up.",
   63: "Hotel: Sleeping here grants 'Well Rested' and refreshes all skill/luck/resist.",
   64: "Construction Yard: Copies the effect of any ruins you have encountered.",
   65: "Supermarket: Scavenging ammo/food/water gives +1 to rolls with no penalty.",
-  66: "Church: No battle. Friendly merchant with 2 bodyguards has random + crit loot, will duel for it."
+  66: "Church: No battle. Friendly merchant with 2 bodyguards has random loot + random crit loot."
 };
 
 // === Zone Generator Function ===
@@ -241,7 +241,7 @@ function generateZone() {
 }
 // === Monster Categories ===
 const monsterData = {
-  E1: { label: "Raiders", notes: "terrain 4-5, hidden land mines. Loot: broken weapons & armor, mines, human flesh", subs: [
+  E1: { label: "Raiders", notes: "special: hidden land mines. Loot: broken equipment, mines, human flesh", subs: [
     { name: "Scout", hp: 10, notes: "tier1 weapons, 10x mines" },          // 1-6
     { name: "Tweaker", hp: 13, notes: "tier2 weapons, 11x mines" },        // 7-8
     { name: "Scavenger", hp: 16, notes: "tier3 weapons, 12x mines" },      // 9-10
@@ -253,13 +253,13 @@ const monsterData = {
   E2: { label: "Beasts", notes: "on death: allies can immediately attack. Loot: animal flesh", subs: [
     { name: "Bloatfly", hp: 6, notes: "5 R short thrown" },
     { name: "Wild Dog", hp: 10, notes: "8 P melee, grapples on 6" },
-    { name: "Radstag", hp: 14, notes: "10 P melee, shove on 6, +1 spd, +2 dmg on sprint" },
+    { name: "Radstag", hp: 14, notes: "10 P melee, shove on 6, +1 spd, +2 dmg if moved 2 distance" },
     { name: "Yao Guai", hp: 18, notes: "2x9 P melee, +1 spd, shove on 6" },
     { name: "Deathclaw", hp: 22, notes: "2x11 P melee + bleed, +1 spd" },
-    { name: "Radragon", hp: 26, notes: "12 X+R splash + poison + burn, mid line, -1 mob" }
+    { name: "Radragon", hp: 26, notes: "12 X+R splash + poison + burn, mid, hovers, -1 mob" }
   ]},
 
-  E3: { label: "Nesters", notes: "terrain 4-5: eggs hatch into swarmers. Loot: animal flesh", subs: [
+  E3: { label: "Nesters", notes: "special: eggs, 50% to hatch into swarmers each round. Loot: animal flesh", subs: [
     { name: "Gecko", hp: 9, notes: "6 P + bleed melee" },
     { name: "Mirelurk", hp: 12, notes: "7 P melee, 2x armor, aim head ignores armor" },
     { name: "Fire Gecko", hp: 15, notes: "8 X + burn, short" },
@@ -268,7 +268,7 @@ const monsterData = {
     { name: "Nightstalker", hp: 24, notes: "2x9 P melee + poison + bleed" }
   ]},
 
-  E4: { label: "Burrowers", notes: "terrain 4-5: hidden tunnel. Loot: animal flesh", subs: [
+  E4: { label: "Burrowers", notes: "special: burrow. Loot: animal flesh", subs: [
     { name: "Radroach", hp: 8, notes: "7 P melee" },
     { name: "Molerat", hp: 11, notes: "2x6 P melee, +1 spd" },
     { name: "Radscorpion", hp: 14, notes: "10 P melee + poison" },
@@ -277,7 +277,7 @@ const monsterData = {
     { name: "Tunneler", hp: 23, notes: "13 P melee + poison + grapples on 6" }
   ]},
 
-  E5: { label: "Robots", notes: "explode at death for 50% HP X splash. Loot: armor scraps", subs: [
+  E5: { label: "Robots", notes: "explode end of turn when killed 50% HP X splash . Loot: armor scraps", subs: [
     { name: "Protectron", hp: 11, notes: "8 E melee" },
     { name: "Cyberdog", hp: 14, notes: "9 P melee, +1 spd" },
     { name: "Robobrain", hp: 17, notes: "10 E + disorient, short" },
@@ -313,25 +313,25 @@ const monsterData = {
     { name: "UFO", hp: 24, notes: "12 R splash+burn, long" }
   ]},
 
-  O3: { label: "Feral Ghouls", notes: "Xrad, +1 spd, +1 mob. Loot: mutant flesh, ½ junk item", subs: [
+  O3: { label: "Feral Ghouls", notes: "Xrad, special: hidden bear traps, +1 spd, ignore hazards, +1 mob Loot: mutant flesh, ½ junk item", subs: [
     { name: "Roamer", hp: 7, notes: "2x5 P melee, grapples on 6" },
     { name: "Stalker", hp: 10, notes: "2x7 P melee, grapples on 6" },
     { name: "Glowing One", hp: 13, notes: "9 R splash, melee" },
     { name: "Reaver", hp: 16, notes: "2x9 P melee, grapples on 6" },
-    { name: "Molten One", hp: 19, notes: "14 X splash+burn, short, aim" },
-    { name: "Frozen One", hp: 22, notes: "18 E splash+disorient, short, aim" }
+    { name: "Molten One", hp: 19, notes: "12 X splash+burn, short" },
+    { name: "Frozen One", hp: 22, notes: "14 E splash+disorient, short" }
   ]},
 
-  O4: { label: "Aberrations", notes: "Xrad, terrain 4-5: rad pools, 1/2 to gain rad on entry. Loot: mutant flesh", subs: [
+  O4: { label: "Aberrations", notes: "Xrad, special: rad pools. Loot: mutant flesh", subs: [
     { name: "Mutant Plant", hp: 6, notes: "7 P melee, immobile" },
     { name: "Centaur", hp: 10, notes: "8 R, short" },
     { name: "Floater", hp: 14, notes: "9 P, melee+disorient, hover, +1 spd" },
-    { name: "Putrid Bloat", hp: 18, notes: "10 P melee, explodes 12R splash on death end of turn" },
+    { name: "Putrid Bloat", hp: 18, notes: "10 P melee, explodes 12R splash on death" },
     { name: "Wanamingo", hp: 22, notes: "9 P+R+psn melee, +1 spd" },
-    { name: "Cybermutant", hp: 26, notes: "12 E + random ailment, long, immobile, -1 mob" }
+    { name: "Cybermutant", hp: 26, notes: "12 E + random ailment, very long, immobile, -1 mob" }
   ]},
 
-  O5: { label: "Super Mutants", notes: "immune to rad, heavy weapons only, 1 suicider. Loot: broken weapons, mutant flesh", subs: [
+  O5: { label: "Super Mutants", notes: "Xrad, special: rad pools, heavy weapons only, 1 suicider. Loot: broken weapons, mutant flesh", subs: [
     { name: "Skirmisher", hp: 12, notes: "tier1 weapons, 16 X splash melee suicider" },
     { name: "Brute", hp: 15, notes: "tier2 weapons, 17 X splash melee suicider" },
     { name: "Enforcer", hp: 18, notes: "tier3 weapons, 18 X splash melee suicider" },
@@ -340,7 +340,7 @@ const monsterData = {
     { name: "Mastermind", hp: 27, notes: "tier6 weapons, 21 X splash melee suicider" }
   ]},
 
-  O6: { label: "Nightkin", notes: "Xrad, ½ to be stealthed, Shove on a 6, Loot: mutant flesh", subs: [
+  O6: { label: "Nightkin", notes: "Xrad, special: hidden bear traps, ½ stealthed, Shove on 6, Loot: mutant flesh", subs: [
     { name: "Rogue", hp: 12, notes: "8 P melee" },
     { name: "Scoundrel", hp: 15, notes: "2x7 P melee" },
     { name: "Brigand", hp: 18, notes: "10 P melee" },
@@ -412,6 +412,7 @@ document.getElementById("generate").addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
