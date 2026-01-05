@@ -608,6 +608,18 @@ const ammoTable = [
   { type: "Large rounds", roll: "1d6+2", cost: 10 },
   { type: "MF-cell", roll: "1d6+1", cost: 15 }
 ];
+const grenadeTable = [
+  { max: 6,  name: "Scrap Grenade", dmg: "11 X splash", cost: "15c" },
+  { max: 8,  name: "Bottlecap Grenade", dmg: "12 X splash", cost: "20c" },
+  { max: 10, name: "Frag Grenade", dmg: "13 X splash", cost: "25c" },
+  { max: 12, name: "Plasma Grenade", dmg: "14 X splash", cost: "30c" },
+  { max: 14, name: "Nuka Grenade", dmg: "15 X splash", cost: "35c" },
+  { max: Infinity, name: "Mini Nuke", dmg: "16 X splash", cost: "40c" }
+];
+function rollGrenadeByLevel(level) {
+  const roll = rollDie(6) + level;
+  return grenadeTable.find(g => roll <= g.max);
+}
 
 // Simple dice roller helper
 function rollDice(diceStr) {
@@ -624,13 +636,26 @@ function rollDice(diceStr) {
 function generateAmmo() {
   const selected = ammoTable[Math.floor(Math.random() * ammoTable.length)];
   const quantity = rollDice(selected.roll);
+  const level = parseInt(document.getElementById("partyLevel").value) || 0;
+
+  // Special grenade handling
+  if (selected.type === "Grenades") {
+    const grenade = rollGrenadeByLevel(level);
+    document.getElementById("ammoOutput").innerHTML =
+      `${quantity} x ${grenade.name}<br>` +
+      `${grenade.dmg}, thrown, STR, ${grenade.cost}`;
+    return;
+  }
+  // Normal ammo output
   const costText = selected.cost > 0 ? `${selected.cost}c each` : "";
   document.getElementById("ammoOutput").innerHTML =
     `${quantity} x ${selected.type} ${costText}`;
-}	
+}
+	
 </script>
 </body>
 </html>
+
 
 
 
