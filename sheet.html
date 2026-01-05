@@ -21,33 +21,38 @@
     .card { background:#081408; border:1px solid #2cff2c; padding:8px; }
     .center { text-align:center; }
 
-    /* spacing between sections */
     .stats, .armor, .hp-area, .negatives, .inventory {
       margin:10px 0;
     }
 
-    /* STATS */
     .stats { grid-template-columns: repeat(5, 1fr); }
     .stat-box input { text-align:center; font-size:18px; }
 
-    /* ARMOR */
     .armor {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* already present */
-}
+      display:flex;
+      flex-direction:row;
+      gap:8px;
+      flex-wrap:nowrap;
+    }
 
     .armor-box {
-  width: 100%;        /* force equal width */
-  box-sizing: border-box; /* ensures borders don’t change width */
-}
+      flex:1 1 0;
+      min-width:0;
+      box-sizing:border-box;
+      padding:10px;
+      border:2px solid;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+    }
 
     .armor-label {
-  font-weight: bold;
-  margin-bottom: 6px;
-  display: block;
-  font-size: clamp(10px, 2.5vw, 16px); /* responsive scaling */
-}
-
+      font-weight:bold;
+      margin-bottom:6px;
+      display:block;
+      font-size:clamp(10px, 2.5vw, 16px);
+    }
 
     .p-theme { background:#331111; border-color:#ff5c5c; }
     .e-theme { background:#112233; border-color:#5ca9ff; }
@@ -56,19 +61,13 @@
 
     .armor-box input {
       text-align:center;
-      font-size:20px;
+      font-size:clamp(14px, 4vw, 22px);
       font-weight:bold;
       background:transparent;
       border:none;
       color:inherit;
     }
 
-    .p-theme input { color:#ff5c5c; }
-    .e-theme input { color:#5ca9ff; }
-    .x-theme input { color:#ffb85c; }
-    .r-theme input { color:#6dff6d; }
-
-    /* HP */
     .hp-area {
       display:grid;
       grid-template-columns: 1fr 72px;
@@ -78,47 +77,81 @@
     }
 
     .hp-box {
-  position: relative;
-  height: 140px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;   /* center vertically */
-  align-items: center;       /* center horizontally */
-  padding-top: 0;            /* remove old offset */
-}
-
+      position:relative;
+      height:180px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding-top:6px;
+    }
 
     .hp-title {
       font-size:20px;
       letter-spacing:2px;
-      margin-bottom:6px;
+      margin-bottom:4px;
+    }
+
+    .hp-center {
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      width:100%;
     }
 
     .hp-btn {
-  position: absolute;
-  top: 50%;                  /* center vertically */
-  transform: translateY(-50%);
-  font-size: 28px;
-  background: #081408;
-  color: #9fef9f;
-  border: 1px solid #2cff2c;
-  padding: 4px 12px;
-}
-
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      font-size:28px;
+      background:#081408;
+      color:#9fef9f;
+      border:1px solid #2cff2c;
+      padding:4px 12px;
+    }
     .hp-minus { left:8px; }
     .hp-plus { right:8px; }
 
     #hp {
-  font-size: 42px;
-  text-align: center;
-  width: 160px;
-  background: #081408;
-  border: 1px solid #2cff2c;
-  padding: 4px;
-}
+      font-size:42px;
+      text-align:center;
+      width:160px;
+      background:#081408;
+      border:1px solid #2cff2c;
+      padding:4px;
+    }
 
+    .hp-lower-row {
+      display:flex;
+      flex-direction:row;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      margin-top:6px;
+    }
 
-    /* USES */
+    .addiction-box {
+      width:110px;
+      text-align:center;
+      cursor:pointer;
+      background:#081408;
+      border-color:#2cff2c;
+      color:#9fef9f;
+      box-shadow:none;
+    }
+
+    .withdraw-box {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .withdraw-box input {
+      width:20px;
+      height:20px;
+    }
+
     .uses {
       display:grid;
       grid-template-rows: repeat(3, 1fr);
@@ -133,14 +166,12 @@
     .use-on { background:#0f2f0f; border-color:#2cff2c; box-shadow:0 0 8px #2cff2c; }
     .use-off { background:#2a0000; border-color:#ff3c3c; color:#ff9c9c; box-shadow:0 0 8px #ff3c3c; }
 
-    /* NEGATIVES */
     .negatives { grid-template-columns: repeat(5, 1fr); }
     .neg-card { text-align:center; min-width:0; padding:4px; }
     .neg-value { font-size:22px; }
     .neg-btn-row { display:flex; justify-content:center; gap:4px; }
     .neg-btn { padding:1px 4px; background:#081408; color:#9fef9f; border:1px solid #2cff2c; font-size:14px; }
 
-    /* INVENTORY */
     .inventory { grid-template-columns:1fr; }
     .slot { display:flex; flex-direction:column; gap:6px; }
 
@@ -189,7 +220,6 @@
       color: #ff3c3c;
     }
 
-    /* DROPDOWN */
     .dropdown-toggle {
       cursor:pointer;
       font-size:18px;
@@ -212,16 +242,13 @@
       background:#081408;
     }
 
-    /* when open, make it a 3-column grid like negatives */
     .dropdown-area.open {
       display:grid;
       grid-template-columns: repeat(3, 1fr);
       gap:8px;
     }
 
-    .inv-counter-card {
-      padding:4px;
-    }
+    .inv-counter-card { padding:4px; }
 
     .neg-title-input {
       width:100%;
@@ -234,21 +261,19 @@
       font-weight:bold;
     }
 
+    .inv-counter-btn-row {
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:6px;
+    }
+
     .inv-counter-value {
-  font-size:28px;       /* larger number */
-  padding:0 6px;
-  text-align:center;
-  min-width:40px;
-}
-
-.inv-counter-btn-row {
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:6px;              /* space between - value + */
-}
-
-
+      font-size:28px;
+      padding:0 6px;
+      text-align:center;
+      min-width:40px;
+    }
 
     .inv-counter-btn {
       padding:1px 4px;
@@ -258,23 +283,6 @@
       font-size:14px;
       cursor:pointer;
     }
-	
-	.armor {
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-
-  /* Never wrap to a new row */
-  flex-wrap: nowrap;
-}
-
-.armor-box {
-  flex: 1 1 0;          /* all boxes shrink evenly */
-  min-width: 0;         /* allows shrinking instead of overflowing */
-  box-sizing: border-box;
-}
-
-
   </style>
 </head>
 
@@ -291,14 +299,29 @@
 
   <div class="grid stats" id="stats"></div>
 
-  <div class="grid armor" id="armor"></div>
+  <div class="armor" id="armor"></div>
 
   <div class="hp-area">
     <div class="card hp-box">
       <div class="hp-title">HIT POINTS</div>
-      <button class="hp-btn hp-minus" onclick="chgHP(-1)">−</button>
-      <input id="hp">
-      <button class="hp-btn hp-plus" onclick="chgHP(1)">+</button>
+
+      <div class="hp-center">
+        <button class="hp-btn hp-minus" onclick="chgHP(-1)">−</button>
+        <input id="hp">
+        <button class="hp-btn hp-plus" onclick="chgHP(1)">+</button>
+      </div>
+
+      <div class="hp-lower-row">
+        <div id="addictionToggle" class="use-box addiction-box">ADDICTED</div>
+
+        <label class="withdraw-box">
+          <input type="checkbox" id="withdraw1">
+        </label>
+
+        <label class="withdraw-box">
+          <input type="checkbox" id="withdraw2">
+        </label>
+      </div>
     </div>
 
     <div class="uses">
@@ -314,7 +337,7 @@
 </div>
 
 <script>
-const STORAGE_KEY="fallout_character_v7";
+const STORAGE_KEY="fallout_character_v10";
 const statNames=["STR","AGI","END","INT","CHA"];
 const armorTypes=[
   ['Physical','p'],
@@ -340,7 +363,10 @@ let state=JSON.parse(localStorage.getItem(STORAGE_KEY))||{
       {title:"", value:0}
     ]
   })),
-  uses:{skill:false,luck:false,resist:false}
+  uses:{skill:false,luck:false,resist:false},
+  addiction:false,
+  withdraw1:false,
+  withdraw2:false
 };
 
 function save(){ localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); }
@@ -443,7 +469,7 @@ function init(){
   const armorDiv=document.getElementById('armor');
   armorTypes.forEach(([label,c])=>{
     armorDiv.innerHTML+=
-      `<div class='card armor-box center ${c}-theme'>
+      `<div class='armor-box ${c}-theme'>
          <b class='armor-label'>${label}</b>
          <input value='${state.armor[label]}' 
            oninput="state.armor['${label}']=this.value;save();">
@@ -489,18 +515,17 @@ function init(){
     area.innerHTML = "";
 
     it.counters.forEach((c,j)=>{
-  area.innerHTML +=
-    `<div class="card neg-card inv-counter-card">
-       <input class="neg-title-input" type="text" value="${c.title}"
-         oninput="state.inventory[${i}].counters[${j}].title=this.value;save();">
-       <div class="inv-counter-btn-row">
-         <button class="neg-btn inv-counter-btn" onclick="chgCounter(${i},${j},-1)">−</button>
-         <div id="count${i}_${j}" class="neg-value inv-counter-value">${c.value}</div>
-         <button class="neg-btn inv-counter-btn" onclick="chgCounter(${i},${j},1)">+</button>
-       </div>
-     </div>`;
-});
-
+      area.innerHTML +=
+        `<div class="card neg-card inv-counter-card">
+           <input class="neg-title-input" type="text" value="${c.title}"
+             oninput="state.inventory[${i}].counters[${j}].title=this.value;save();">
+           <div class="inv-counter-btn-row">
+             <button class="neg-btn inv-counter-btn" onclick="chgCounter(${i},${j},-1)">−</button>
+             <div id="count${i}_${j}" class="inv-counter-value">${c.value}</div>
+             <button class="neg-btn inv-counter-btn" onclick="chgCounter(${i},${j},1)">+</button>
+           </div>
+         </div>`;
+    });
   });
 
   ['skill','luck','resist'].forEach(k=>{
@@ -509,6 +534,26 @@ function init(){
     el.onclick=()=>{ state.uses[k]=!state.uses[k]; save(); render(); };
     render();
   });
+
+  const addictionEl = document.getElementById("addictionToggle");
+
+  function renderAddiction() {
+    addictionEl.className = "use-box addiction-box";
+    if (state.addiction) {
+      addictionEl.classList.add("use-off");
+    
+   // red state
+  }
+}
+
+addictionEl.onclick = () => {
+  state.addiction = !state.addiction;
+  save();
+  renderAddiction();
+};
+
+renderAddiction();
+
 }
 
 init();
