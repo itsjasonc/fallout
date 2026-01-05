@@ -185,8 +185,6 @@
   color: #2cff2c;
 }
 
-
-
     .uses {
       display:grid;
       grid-template-rows: repeat(3, 1fr);
@@ -208,7 +206,15 @@
     .neg-btn { padding:1px 4px; background:#081408; color:#9fef9f; border:1px solid #2cff2c; font-size:14px; }
 
     .inventory { grid-template-columns:1fr; }
-    .slot { display:flex; flex-direction:column; gap:6px; }
+    .slot {
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  background:#040a04;        /* darker than inside */
+  border:1px solid #2cff2c;
+  padding:6px;
+}
+
 
     .slot-top {
       display:grid;
@@ -271,11 +277,12 @@
     }
 
     .dropdown-area {
-      display:none;
-      padding:6px;
-      border:1px solid #2cff2c;
-      background:#081408;
-    }
+  display:none;
+  padding:0;
+  border:none;
+  background:transparent;
+}
+
 
     .dropdown-area.open {
       display:grid;
