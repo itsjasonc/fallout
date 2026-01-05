@@ -101,19 +101,28 @@
     }
 
     .hp-btn {
-      position:absolute;
-      top:50%;
-      transform:translateY(-50%);
-      font-size:28px;
-      background:#081408;
-      color:#9fef9f;
-      border:1px solid #2cff2c;
-      padding:4px 12px;
-    }
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  font-size: clamp(18px, 4vw, 28px);
+  background:#081408;
+  color:#9fef9f;
+  border:1px solid #2cff2c;
+  padding: clamp(2px, 0.5vw, 4px) clamp(6px, 1vw, 12px);
+}
     .hp-minus { left:8px; }
     .hp-plus { right:8px; }
 
-    #hp {
+    .hp-plus10 {
+  right: 8px;
+  top: 15%;
+  transform: translateY(-50%);
+  font-size: clamp(14px, 3vw, 20px);
+  padding: clamp(2px, 0.5vw, 4px) clamp(4px, 1vw, 8px);
+}
+
+	
+	#hp {
       font-size:42px;
       text-align:center;
       width:160px;
@@ -130,6 +139,8 @@
       gap:12px;
       margin-top:6px;
     }
+	
+	
 
     .addiction-box {
       width:110px;
@@ -331,8 +342,13 @@
 
       <div class="hp-center">
         <button class="hp-btn hp-minus" onclick="chgHP(-1)">−</button>
-        <input id="hp">
-        <button class="hp-btn hp-plus" onclick="chgHP(1)">+</button>
+
+<input id="hp">
+
+<button class="hp-btn hp-plus" onclick="chgHP(1)">+</button>
+
+<button class="hp-btn hp-plus10" onclick="chgHP10()">+10%</button>
+
       </div>
 
       <div class="hp-lower-row">
@@ -421,6 +437,16 @@ function chgNeg(n,d){
   el.style.color=state.neg[n]>5?'#ff4c4c':'#9fef9f';
   save();
 }
+
+function chgHP10() {
+  let {cur, max} = parseHP();
+  let amount = Math.ceil(max * 0.10);
+  cur = Math.min(max, cur + amount);
+  state.hp = `${cur}/${max}`;
+  updateHPDisplay();
+  save();
+}
+
 
 function toggleHeavy(i){
   state.inventory[i].heavy = !state.inventory[i].heavy;
