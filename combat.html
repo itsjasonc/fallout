@@ -242,12 +242,12 @@ function generateZone() {
 // === Monster Categories ===
 const monsterData = {
   E1: { label: "Raiders", notes: "special: hidden land mines. Loot: broken equipment, mines, human flesh", subs: [
-    { name: "Scout", hp: 10, notes: "tier1 weapons, 10x mines" },          // 1-6
-    { name: "Tweaker", hp: 13, notes: "tier2 weapons, 11x mines" },        // 7-8
-    { name: "Scavenger", hp: 16, notes: "tier3 weapons, 12x mines" },      // 9-10
-    { name: "Juicer", hp: 19, notes: "tier4 weapons, 13x mines" },         // 11-12
-    { name: "Elite", hp: 22, notes: "tier5 weapons, 14x mines" },          // 13-14
-    { name: "Chemlord", hp: 25, notes: "tier6 weapons, 15x mines" }        // 15+
+    { name: "Scout", hp: 10, notes: "scaled weapons, 10x mines" },          // 1-6
+    { name: "Tweaker", hp: 13, notes: "scaled weapons, 11x mines" },        // 7-8
+    { name: "Scavenger", hp: 16, notes: "scaled weapons, 12x mines" },      // 9-10
+    { name: "Juicer", hp: 19, notes: "scaled weapons, 13x mines" },         // 11-12
+    { name: "Elite", hp: 22, notes: "scaled weapons, 14x mines" },          // 13-14
+    { name: "Chemlord", hp: 25, notes: "scaled weapons, 15x mines" }        // 15+
   ]},
 
   E2: { label: "Beasts", notes: "on death: allies can immediately attack. Loot: animal flesh", subs: [
@@ -264,7 +264,7 @@ const monsterData = {
     { name: "Mirelurk", hp: 12, notes: "7 P melee, 2x armor, aim head ignores armor" },
     { name: "Fire Gecko", hp: 15, notes: "8 X + burn, short" },
     { name: "Lakelurk", hp: 18, notes: "9 E + disorient, mid" },
-    { name: "Cazadores", hp: 21, notes: "10 P melee + poison, fly, +1 spd" },
+    { name: "Cazadores", hp: 21, notes: "10 P melee + poison+2, hover, +1 spd" },
     { name: "Nightstalker", hp: 24, notes: "2x9 P melee + poison + bleed" }
   ]},
 
@@ -287,27 +287,27 @@ const monsterData = {
   ]},
 
   E6: { label: "Synths", notes: "terrain 4-5: hidden pulse mines. Loot: tech scrap", subs: [
-    { name: "Sentry", hp: 11, notes: "tier1 energy weapons + 10E mines" },
-    { name: "Patroller", hp: 14, notes: "tier2 energy weapons + 11E mines" },
-    { name: "Trooper", hp: 17, notes: "tier3 energy weapons + 12E mines" },
-    { name: "Eradicator", hp: 20, notes: "tier4 energy weapons +13E mines" },
-    { name: "Assassin", hp: 23, notes: "tier5 energy weapons +14E mines" },
-    { name: "Courser", hp: 26, notes: "tier6 energy weapons +15E mines" }
+    { name: "Sentry", hp: 11, notes: "scaled energy weapons + 10E mines" },
+    { name: "Patroller", hp: 14, notes: "scaled energy weapons + 11E mines" },
+    { name: "Trooper", hp: 17, notes: "scaled energy weapons + 12E mines" },
+    { name: "Eradicator", hp: 20, notes: "scaled energy weapons +13E mines" },
+    { name: "Assassin", hp: 23, notes: "scaled energy weapons +14E mines" },
+    { name: "Courser", hp: 26, notes: "scaled energy weapons +15E mines" }
   ]},
 
   O1: { label: "Cultist", notes: "⅓ to use random artifact, mutated weapons. Loot: broken weapons, 1D artifacts, human flesh", subs: [
-    { name: "Initiate", hp: 10, notes: "tier1 weapons" },
-    { name: "Acolyte", hp: 13, notes: "tier2 weapons" },
-    { name: "Disciple", hp: 16, notes: "tier3 weapons" },
-    { name: "Priest", hp: 19, notes: "tier4 weapons" },
-    { name: "Fanatic", hp: 22, notes: "tier5 weapons" },
-    { name: "Leader", hp: 25, notes: "tier6 weapons" }
+    { name: "Initiate", hp: 10, notes: "scaled weapons" },
+    { name: "Acolyte", hp: 13, notes: "scaled weapons" },
+    { name: "Disciple", hp: 16, notes: "scaled weapons" },
+    { name: "Priest", hp: 19, notes: "scaled weapons" },
+    { name: "Fanatic", hp: 22, notes: "scaled weapons" },
+    { name: "Leader", hp: 25, notes: "scaled weapons" }
   ]},
 
   O2: { label: "Hoverbots", notes: "all hover; gain shield when ally dies. Loot: gun scraps", subs: [
-    { name: "Eyebot", hp: 9, notes: "2x4 E, mid" },
+    { name: "Eyebot", hp: 9, notes: "2x5 E, mid" },
     { name: "Mr. Handy", hp: 12, notes: "2x6 P, mid" },
-    { name: "Battle Drone", hp: 15, notes: "3x6 X, short" },
+    { name: "Battle Drone", hp: 15, notes: "3x7 X, short" },
     { name: "Mr. Gutsy", hp: 18, notes: "10 X splash, mid" },
     { name: "Think Tank", hp: 21, notes: "2x9 E + disorient, mid" },
     { name: "UFO", hp: 24, notes: "12 R splash+burn, long" }
@@ -315,11 +315,11 @@ const monsterData = {
 
   O3: { label: "Feral Ghouls", notes: "Xrad, special: hidden bear traps, +1 spd, ignore hazards, +1 mob Loot: mutant flesh, ½ junk item", subs: [
     { name: "Roamer", hp: 7, notes: "2x5 P melee, grapples on 6" },
-    { name: "Stalker", hp: 10, notes: "2x7 P melee, grapples on 6" },
-    { name: "Glowing One", hp: 13, notes: "9 R splash, melee" },
-    { name: "Reaver", hp: 16, notes: "2x9 P melee, grapples on 6" },
-    { name: "Molten One", hp: 19, notes: "12 X splash+burn, short" },
-    { name: "Frozen One", hp: 22, notes: "14 E splash+disorient, short" }
+    { name: "Stalker", hp: 10, notes: "2x6 P melee, grapples on 6" },
+    { name: "Glowing One", hp: 13, notes: "8 R splash, melee" },
+    { name: "Reaver", hp: 16, notes: "2x8 P melee, grapples on 6" },
+    { name: "Molten One", hp: 19, notes: "10 X splash+burn, short" },
+    { name: "Frozen One", hp: 22, notes: "12 E splash+disorient, short" }
   ]},
 
   O4: { label: "Aberrations", notes: "Xrad, special: rad pools. Loot: mutant flesh", subs: [
@@ -331,13 +331,13 @@ const monsterData = {
     { name: "Cybermutant", hp: 26, notes: "12 E + random ailment, very long, immobile, -1 mob" }
   ]},
 
-  O5: { label: "Super Mutants", notes: "Xrad, special: rad pools, heavy weapons only, 1 suicider. Loot: broken weapons, mutant flesh", subs: [
-    { name: "Skirmisher", hp: 12, notes: "tier1 weapons, 16 X splash melee suicider" },
-    { name: "Brute", hp: 15, notes: "tier2 weapons, 17 X splash melee suicider" },
-    { name: "Enforcer", hp: 18, notes: "tier3 weapons, 18 X splash melee suicider" },
-    { name: "Leader", hp: 21, notes: "tier4 weapons, 19 X splash melee suicider" },
-    { name: "Overlord", hp: 24, notes: "tier5 weapons, 20 X splash melee suicider" },
-    { name: "Mastermind", hp: 27, notes: "tier6 weapons, 21 X splash melee suicider" }
+  O5: { label: "Super Mutants", notes: "Xrad, special: rad pools, 1 suicider. Loot: broken weapons, mutant flesh", subs: [
+    { name: "Skirmisher", hp: 12, notes: "scaled heavy weapons, 16 X splash melee suicider" },
+    { name: "Brute", hp: 15, notes: "scaled heavy weapons, 17 X splash melee suicider" },
+    { name: "Enforcer", hp: 18, notes: "scaled heavy weapons, 18 X splash melee suicider" },
+    { name: "Leader", hp: 21, notes: "scaled heavy weapons, 19 X splash melee suicider" },
+    { name: "Overlord", hp: 24, notes: "scaled heavy weapons, 20 X splash melee suicider" },
+    { name: "Mastermind", hp: 27, notes: "scaled heavy weapons, 21 X splash melee suicider" }
   ]},
 
   O6: { label: "Nightkin", notes: "Xrad, special: hidden bear traps, ½ stealthed, Shove on 6, Loot: mutant flesh", subs: [
@@ -412,6 +412,7 @@ document.getElementById("generate").addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
