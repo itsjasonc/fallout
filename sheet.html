@@ -114,13 +114,42 @@
     .hp-plus { right:8px; }
 
     .hp-plus10 {
-  right: 8px;
-  top: 15%;
+  position: absolute;
+  right: 4px;          /* move right */
+  top: 1%;            /* move upward */
   transform: translateY(-50%);
   font-size: clamp(14px, 3vw, 20px);
   padding: clamp(2px, 0.5vw, 4px) clamp(4px, 1vw, 8px);
+  background:#081408;
+  color:#9fef9f;
+  border:1px solid #2cff2c;
+  box-shadow:0 0 6px #2cff2c;
 }
 
+.hp-dmgbox {
+  position: absolute;
+  top: 1%;
+  left: 6px;
+  padding: 0;
+  background: #081408;            /* dark Pip‑Boy background */
+  border: 1px solid #ff3c3c;      /* dark red outline */
+  box-shadow: 0 0 6px #ff3c3c;    /* matching glow */
+}
+
+.armor-dmg-input {
+  width: 40px;
+  background: transparent !important;   /* force override */
+  border: none !important;              /* remove border */
+  outline: none !important;             /* remove focus ring */
+  -webkit-appearance: none !important;  /* remove iOS/Chrome styling */
+  -moz-appearance: none !important;     /* remove Firefox styling */
+  appearance: none !important;          /* remove generic styling */
+  color: #9fef9f;
+  font-size: clamp(12px, 2.5vw, 18px);
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
 	
 	#hp {
       font-size:42px;
@@ -351,14 +380,13 @@
 
       <div class="hp-center">
         <button class="hp-btn hp-minus" onclick="chgHP(-1)">−</button>
-
-<input id="hp">
-
-<button class="hp-btn hp-plus" onclick="chgHP(1)">+</button>
-
-<button class="hp-btn hp-plus10" onclick="chgHP10()">+10%</button>
-
+		<input id="hp">
+		<button class="hp-btn hp-plus" onclick="chgHP(1)">+</button>
+		<button class="hp-btn hp-plus10" onclick="chgHP10()">+10%</button>
+		<button class="hp-btn hp-dmgbox">
+		<input id="armorDmgInput" class="armor-dmg-input" placeholder="0P"></button>
       </div>
+	  
 
       <div class="hp-lower-row">
         <div id="addictionToggle" class="use-box addiction-box">ADDICTED</div>
@@ -436,6 +464,7 @@ function chgHP(d){
   cur = Math.max(0, Math.min(max, cur + d));
   state.hp = `${cur}/${max}`;
   updateHPDisplay();
+  updateHPColor();
   save();
 }
 
@@ -453,6 +482,7 @@ function chgHP10() {
   cur = Math.min(max, cur + amount);
   state.hp = `${cur}/${max}`;
   updateHPDisplay();
+  updateHPColor();
   save();
 }
 
@@ -510,6 +540,7 @@ function init(){
   caps.oninput=e=>{state.caps=e.target.value;save();};
 
   updateHPDisplay();
+  updateHPColor();
   hp.oninput = e => {
     state.hp = e.target.value;
     save();
@@ -614,6 +645,74 @@ addictionEl.onclick = () => {
 renderAddiction();
 
 }
+
+function applyArmorDamage(raw) {
+  const match = raw.match(/^(\d+)([PEXR])$/);
+  if (!match) return;
+
+  const amount = parseInt(match[1]);
+  const type = match[2];
+
+  const armorMap = {
+    P: "Physical",
+    E: "Energy",
+    X: "Explosive",
+    R: "Rad"
+  };
+
+  const armorType = armorMap[type];
+  const armorValue = parseInt(state.armor[armorType]) || 0;
+
+  let damage = amount - armorValue;
+  if (damage < 0) damage = 0;
+
+  let {cur, max} = parseHP();
+  cur = Math.max(0, cur - damage);
+
+  state.hp = `${cur}/${max}`;
+  updateHPDisplay();
+  updateHPColor();
+  save();
+}
+
+document.getElementById("armorDmgInput").addEventListener("input", () => {
+  const raw = armorDmgInput.value.trim().toUpperCase();
+  const match = raw.match(/^(\d+)([PEXR])$/);
+
+  if (!match) return; // wait until input is valid
+
+  applyArmorDamage(raw);  // run calculation
+  armorDmgInput.value = ""; // reset field
+});
+
+function updateHPColor() {
+  const hpEl = document.getElementById("hp");
+  const { cur, max } = parseHP();
+  const pct = cur / max;
+
+  if (pct <= 0.20) {
+    // Red (danger)
+    hpEl.style.color = "#ff3b3b";
+    hpEl.style.textShadow = "0 0 6px #ff3b3b";
+
+  } else if (pct <= 0.50) {
+    // Orange‑yellow (wounded)
+    hpEl.style.color = "#ffb84a";
+    hpEl.style.textShadow = "0 0 6px #ffb84a";
+
+  } else if (pct <= 0.75) {
+    // Yellow‑green (slightly injured)
+    hpEl.style.color = "#e6ff66";
+    hpEl.style.textShadow = "0 0 6px #e6ff66";
+
+  } else {
+    // Healthy green (now glowing too)
+    hpEl.style.color = "#9fef9f";
+    hpEl.style.textShadow = "0 0 6px #9fef9f";
+  }
+}
+
+
 
 init();
 </script>
