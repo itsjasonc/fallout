@@ -4,10 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fallout Character Sheet</title>
+
   <style>
     body { margin:0; font-family: monospace; background:#0b120b; color:#9fef9f; }
     .app { max-width:900px; margin:auto; padding:12px; background:#0f1f0f; box-shadow:0 0 20px #0f0; }
-    h2,h3 { color:#7cff7c; text-shadow:0 0 6px #0f0; margin-top:16px; }
+    h2 { color:#7cff7c; text-shadow:0 0 6px #0f0; margin-top:16px; }
     .grid { display:grid; gap:8px; }
     .title { grid-template-columns:1fr 1fr; }
 
@@ -20,38 +21,67 @@
     .card { background:#081408; border:1px solid #2cff2c; padding:8px; }
     .center { text-align:center; }
 
+    /* spacing between sections */
+    .stats, .armor, .hp-area, .negatives, .inventory {
+      margin:10px 0;
+    }
+
     /* STATS */
     .stats { grid-template-columns: repeat(5, 1fr); }
     .stat-box input { text-align:center; font-size:18px; }
 
     /* ARMOR */
     .armor { grid-template-columns: repeat(4, 1fr); }
-    .armor-box input { text-align:center; font-size:16px; }
-    .p { color:#ff5c5c; }
-    .e { color:#5ca9ff; }
-    .x { color:#ffb85c; }
-    .r { color:#6dff6d; }
+    .armor-box { padding:10px; border:2px solid; }
+    .armor-label { font-weight:bold; margin-bottom:6px; display:block; }
 
-    /* HP + USES (FIXED LAYOUT) */
+    .p-theme { background:#331111; border-color:#ff5c5c; }
+    .e-theme { background:#112233; border-color:#5ca9ff; }
+    .x-theme { background:#332211; border-color:#ffb85c; }
+    .r-theme { background:#113311; border-color:#6dff6d; }
+
+    .armor-box input {
+      text-align:center;
+      font-size:20px;
+      font-weight:bold;
+      background:transparent;
+      border:none;
+      color:inherit;
+    }
+
+    .p-theme input { color:#ff5c5c; }
+    .e-theme input { color:#5ca9ff; }
+    .x-theme input { color:#ffb85c; }
+    .r-theme input { color:#6dff6d; }
+
+    /* HP */
     .hp-area {
       display:grid;
       grid-template-columns: 1fr 72px;
       gap:8px;
       align-items:stretch;
+      margin:10px 0;
     }
 
     .hp-box {
       position:relative;
-      height:120px;
+      height:140px;
       display:flex;
+      flex-direction:column;
       align-items:center;
-      justify-content:center;
-      font-size:64px;
+      justify-content:flex-start;
+      padding-top:10px;
+    }
+
+    .hp-title {
+      font-size:20px;
+      letter-spacing:2px;
+      margin-bottom:6px;
     }
 
     .hp-btn {
       position:absolute;
-      top:50%;
+      top:60%;
       transform:translateY(-50%);
       font-size:28px;
       background:#081408;
@@ -62,6 +92,18 @@
     .hp-minus { left:8px; }
     .hp-plus { right:8px; }
 
+    #hp {
+      font-size:42px;
+      text-align:center;
+      width:160px;
+      background:#081408;
+      border:1px solid #2cff2c;
+      padding:4px;
+      position:relative;
+      top:20px;
+    }
+
+    /* USES */
     .uses {
       display:grid;
       grid-template-rows: repeat(3, 1fr);
@@ -78,17 +120,127 @@
 
     /* NEGATIVES */
     .negatives { grid-template-columns: repeat(5, 1fr); }
-    .neg-card { text-align:center; }
+    .neg-card { text-align:center; min-width:0; padding:4px; }
     .neg-value { font-size:22px; }
-    .neg-btn { padding:2px 6px; background:#081408; color:#9fef9f; border:1px solid #2cff2c; }
+    .neg-btn-row { display:flex; justify-content:center; gap:4px; }
+    .neg-btn { padding:1px 4px; background:#081408; color:#9fef9f; border:1px solid #2cff2c; font-size:14px; }
 
     /* INVENTORY */
     .inventory { grid-template-columns:1fr; }
-    .slot { display:flex; gap:6px; height:4.5em; }
-    .slot textarea { flex:1; resize:none; font-size:clamp(10px,3vw,14px); line-height:1.2em; }
-    .slot label { min-width:36px; display:flex; align-items:center; justify-content:center; border:1px solid #2cff2c; }
+    .slot { display:flex; flex-direction:column; gap:6px; }
+
+    .slot-top {
+      display:grid;
+      grid-template-columns: 32px 1fr 36px;
+      gap:6px;
+      height:4.5em;
+      align-items:stretch;
+    }
+
+    .slot textarea {
+      flex:1;
+      resize:none;
+      font-size:clamp(10px,3vw,14px);
+      line-height:1.2em;
+    }
+
+    .heavy-toggle {
+      width: 36px;
+      height: 100%;
+      border: 1px solid #2cff2c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      background: #081408;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .heavy-toggle::before {
+      content: "H";
+      font-size: 26px;
+      color: rgba(255, 0, 0, 0.25);
+      position: absolute;
+    }
+
+    .heavy-on {
+      border-color: #ff3c3c;
+      background: #2a0000;
+      box-shadow: 0 0 8px #ff3c3c;
+    }
+
+    .heavy-on::before {
+      color: #ff3c3c;
+    }
+
+    /* DROPDOWN */
+    .dropdown-toggle {
+      cursor:pointer;
+      font-size:18px;
+      padding:2px 0;
+      border:1px solid #2cff2c;
+      background:#081408;
+      color:#9fef9f;
+      width:32px;
+      text-align:center;
+      user-select:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .dropdown-area {
+      display:none;
+      padding:6px;
+      border:1px solid #2cff2c;
+      background:#081408;
+    }
+
+    /* when open, make it a 3-column grid like negatives */
+    .dropdown-area.open {
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:8px;
+    }
+
+    .inv-counter-card {
+      padding:4px;
+    }
+
+    .neg-title-input {
+      width:100%;
+      background:#081408;
+      border:1px solid #2cff2c;
+      color:#9fef9f;
+      padding:2px 4px;
+      text-align:center;
+      margin-bottom:2px;
+      font-weight:bold;
+    }
+
+    .inv-counter-value {
+      font-size:20px;
+      margin:2px 0;
+    }
+
+    .inv-counter-btn-row {
+      display:flex;
+      justify-content:center;
+      gap:4px;
+    }
+
+    .inv-counter-btn {
+      padding:1px 4px;
+      background:#081408;
+      color:#9fef9f;
+      border:1px solid #2cff2c;
+      font-size:14px;
+      cursor:pointer;
+    }
   </style>
 </head>
+
 <body>
 <div class="app">
   <h2>Fallout Character Sheet</h2>
@@ -100,19 +252,18 @@
     <input id="caps" placeholder="Caps">
   </div>
 
-  <h3>Stats</h3>
   <div class="grid stats" id="stats"></div>
 
-  <h3>Armor</h3>
   <div class="grid armor" id="armor"></div>
 
-  <h3>Hit Points</h3>
   <div class="hp-area">
     <div class="card hp-box">
+      <div class="hp-title">HIT POINTS</div>
       <button class="hp-btn hp-minus" onclick="chgHP(-1)">−</button>
-      <div id="hp">20</div>
+      <input id="hp">
       <button class="hp-btn hp-plus" onclick="chgHP(1)">+</button>
     </div>
+
     <div class="uses">
       <div id="useSkill" class="use-box">SKILL</div>
       <div id="useLuck" class="use-box">LUCK</div>
@@ -120,60 +271,198 @@
     </div>
   </div>
 
-  <h3>Negative Status</h3>
   <div class="grid negatives" id="negatives"></div>
 
-  <h3>Inventory</h3>
   <div class="grid inventory" id="inventory"></div>
 </div>
 
 <script>
-const STORAGE_KEY="fallout_character_v4";
+const STORAGE_KEY="fallout_character_v7";
 const statNames=["STR","AGI","END","INT","CHA"];
-const armorTypes=[['P','p'],['E','e'],['X','x'],['R','r']];
+const armorTypes=[
+  ['Physical','p'],
+  ['Energy','e'],
+  ['Explosive','x'],
+  ['Rad','r']
+];
 const negNames=["Hunger","Thirst","Fatigue","Rads","Injury"];
 
 let state=JSON.parse(localStorage.getItem(STORAGE_KEY))||{
   name:"", skillName:"", level:"", caps:"",
-  hp:20,
+  hp:"20/20",
   stats:Object.fromEntries(statNames.map(s=>[s,""])),
-  armor:{P:"",E:"",X:"",R:""},
+  armor:{Physical:"",Energy:"",Explosive:"",Rad:""},
   neg:Object.fromEntries(negNames.map(n=>[n,0])),
-  inventory:Array.from({length:12},()=>({name:"",heavy:false})),
+  inventory:Array.from({length:12},()=>({
+    name:"",
+    heavy:false,
+    dropdown:false,
+    counters:[
+      {title:"", value:0},
+      {title:"", value:0},
+      {title:"", value:0}
+    ]
+  })),
   uses:{skill:false,luck:false,resist:false}
 };
 
 function save(){ localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); }
 
-function chgHP(d){ state.hp=Math.max(0,state.hp+d); hp.innerText=state.hp; save(); }
-function chgNeg(n,d){ state.neg[n]=Math.max(0,state.neg[n]+d); const el=document.getElementById(n); el.innerText=state.neg[n]; el.style.color=state.neg[n]>5?'#ff4c4c':'#9fef9f'; save(); }
+function parseHP(){
+  const parts = state.hp.split("/");
+  let cur = parseInt(parts[0]) || 0;
+  let max = parseInt(parts[1]) || cur;
+  return {cur,max};
+}
+
+function updateHPDisplay(){
+  hp.value = state.hp;
+}
+
+function chgHP(d){
+  let {cur,max} = parseHP();
+  cur = Math.max(0, Math.min(max, cur + d));
+  state.hp = `${cur}/${max}`;
+  updateHPDisplay();
+  save();
+}
+
+function chgNeg(n,d){
+  state.neg[n]=Math.max(0,state.neg[n]+d);
+  const el=document.getElementById(n);
+  el.innerText=state.neg[n];
+  el.style.color=state.neg[n]>5?'#ff4c4c':'#9fef9f';
+  save();
+}
+
+function toggleHeavy(i){
+  state.inventory[i].heavy = !state.inventory[i].heavy;
+  save();
+  renderHeavy(i);
+}
+
+function renderHeavy(i){
+  const el = document.getElementById("heavy"+i);
+  if(state.inventory[i].heavy){
+    el.classList.add("heavy-on");
+  } else {
+    el.classList.remove("heavy-on");
+  }
+}
+
+function toggleDropdown(i){
+  state.inventory[i].dropdown = !state.inventory[i].dropdown;
+  save();
+  renderDropdown(i);
+}
+
+function renderDropdown(i){
+  const area = document.getElementById("droparea"+i);
+  const toggle = document.getElementById("dropbtn"+i);
+  if(state.inventory[i].dropdown){
+    area.classList.add("open");
+    toggle.innerText="▲";
+  } else {
+    area.classList.remove("open");
+    toggle.innerText="▼";
+  }
+}
+
+function chgCounter(i,c,d){
+  state.inventory[i].counters[c].value =
+    Math.max(0, state.inventory[i].counters[c].value + d);
+  save();
+  document.getElementById(`count${i}_${c}`).innerText =
+    state.inventory[i].counters[c].value;
+}
 
 function init(){
-  name.value=state.name; skillName.value=state.skillName; level.value=state.level; caps.value=state.caps; hp.innerText=state.hp;
+  name.value=state.name;
+  skillName.value=state.skillName;
+  level.value=state.level;
+  caps.value=state.caps;
+
   name.oninput=e=>{state.name=e.target.value;save();};
   skillName.oninput=e=>{state.skillName=e.target.value;save();};
   level.oninput=e=>{state.level=e.target.value;save();};
   caps.oninput=e=>{state.caps=e.target.value;save();};
 
+  updateHPDisplay();
+  hp.oninput = e => {
+    state.hp = e.target.value;
+    save();
+  };
+
   const statsDiv=document.getElementById('stats');
   statNames.forEach(s=>{
-    statsDiv.innerHTML+=`<div class='card stat-box center'><b>${s}</b><input value='${state.stats[s]}' oninput=\"state.stats['${s}']=this.value;save();\"></div>`;
+    statsDiv.innerHTML+=
+      `<div class='card stat-box center'>
+         <b>${s}</b>
+         <input value='${state.stats[s]}' 
+           oninput="state.stats['${s}']=this.value;save();">
+       </div>`;
   });
 
   const armorDiv=document.getElementById('armor');
-  armorTypes.forEach(([k,c])=>{
-    armorDiv.innerHTML+=`<div class='card armor-box center'><b class='${c}'>${k}:</b><input value='${state.armor[k]}' oninput=\"state.armor['${k}']=this.value;save();\"></div>`;
+  armorTypes.forEach(([label,c])=>{
+    armorDiv.innerHTML+=
+      `<div class='card armor-box center ${c}-theme'>
+         <b class='armor-label'>${label}</b>
+         <input value='${state.armor[label]}' 
+           oninput="state.armor['${label}']=this.value;save();">
+       </div>`;
   });
 
   const negDiv=document.getElementById('negatives');
   negNames.forEach(n=>{
-    negDiv.innerHTML+=`<div class='card neg-card'><b>${n}</b><div id='${n}' class='neg-value'>${state.neg[n]}</div><div><button class='neg-btn' onclick=\"chgNeg('${n}',-1)\">−</button><button class='neg-btn' onclick=\"chgNeg('${n}',1)\">+</button></div></div>`;
+    negDiv.innerHTML+=
+      `<div class='card neg-card'>
+         <b>${n}</b>
+         <div id='${n}' class='neg-value'>${state.neg[n]}</div>
+         <div class='neg-btn-row'>
+           <button class='neg-btn' onclick="chgNeg('${n}',-1)">−</button>
+           <button class='neg-btn' onclick="chgNeg('${n}',1)">+</button>
+         </div>
+       </div>`;
     if(state.neg[n]>5) document.getElementById(n).style.color='#ff4c4c';
   });
 
   const invDiv=document.getElementById('inventory');
   state.inventory.forEach((it,i)=>{
-    invDiv.innerHTML+=`<div class='card slot'><textarea rows='3' oninput=\"state.inventory[${i}].name=this.value;save();\">${it.name}</textarea><label><input type='checkbox' ${it.heavy?'checked':''} onchange=\"state.inventory[${i}].heavy=this.checked;save();\">H</label></div>`;
+    invDiv.innerHTML+=
+      `<div class='card slot'>
+         <div class="slot-top">
+           <div id="dropbtn${i}" class="dropdown-toggle" onclick="toggleDropdown(${i})">▼</div>
+
+           <textarea rows='3'
+             oninput="state.inventory[${i}].name=this.value;save();">${it.name}</textarea>
+
+           <div id="heavy${i}" class="heavy-toggle" onclick="toggleHeavy(${i})"></div>
+         </div>
+
+         <div id="droparea${i}" class="dropdown-area"></div>
+       </div>`;
+  });
+
+  state.inventory.forEach((it,i)=>{
+    renderHeavy(i);
+    renderDropdown(i);
+
+    const area = document.getElementById("droparea"+i);
+    area.innerHTML = "";
+
+    it.counters.forEach((c,j)=>{
+      area.innerHTML +=
+        `<div class="card neg-card inv-counter-card">
+           <input class="neg-title-input" type="text" value="${c.title}"
+             oninput="state.inventory[${i}].counters[${j}].title=this.value;save();">
+           <div id="count${i}_${j}" class="neg-value inv-counter-value">${c.value}</div>
+           <div class="neg-btn-row inv-counter-btn-row">
+             <button class="neg-btn inv-counter-btn" onclick="chgCounter(${i},${j},-1)">−</button>
+             <button class="neg-btn inv-counter-btn" onclick="chgCounter(${i},${j},1)">+</button>
+           </div>
+         </div>`;
+    });
   });
 
   ['skill','luck','resist'].forEach(k=>{
@@ -186,5 +475,6 @@ function init(){
 
 init();
 </script>
+
 </body>
 </html>
