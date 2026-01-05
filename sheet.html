@@ -5,28 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fallout Character Sheet</title>
   <style>
-    body { margin: 0; font-family: monospace; background: #e5e5e5; }
-    .app { max-width: 900px; margin: auto; padding: 12px; background: #fff; }
+    body { margin: 0; font-family: monospace; background: #0b120b; color: #9fef9f; }
+    .app { max-width: 900px; margin: auto; padding: 12px; background: #0f1f0f; box-shadow: 0 0 20px #0f0; }
+    h2, h3 { color: #7CFF7C; text-shadow: 0 0 6px #0f0; }
     .grid { display: grid; gap: 8px; }
     .title { grid-template-columns: 1fr 1fr; }
-    input, textarea { padding: 6px; width: 100%; box-sizing: border-box; font-family: monospace; }
-    .card { border: 1px solid #000; padding: 8px; }
-    .stats { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+    input, textarea { padding: 6px; width: 100%; box-sizing: border-box; font-family: monospace; background: #081408; color: #9fef9f; border: 1px solid #2cff2c; }
+    .card { border: 1px solid #2cff2c; padding: 8px; background: #081408; }
+
+    .stats, .negatives { grid-template-columns: repeat(3, 1fr); }
     .counter { display: flex; justify-content: center; align-items: center; gap: 6px; }
-    .counter button { padding: 2px 6px; font-size: 14px; }
-    .value { font-size: 28px; min-width: 36px; text-align: center; }
+    .counter button { padding: 2px 6px; font-size: 14px; background: #081408; color: #9fef9f; border: 1px solid #2cff2c; }
+    .value { font-size: 26px; min-width: 36px; text-align: center; }
     .center { text-align: center; }
 
-    /* Skill/Luck/Resist compact but big tap targets */
     .uses { grid-template-columns: repeat(3, 1fr); }
-    .use-box { position: relative; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
-    .use-box input { position: absolute; inset: 0; opacity: 0; }
+    .use-box { height: 44px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; cursor: pointer; user-select: none; }
+    .use-on { background: #0f2f0f; border: 1px solid #2cff2c; box-shadow: 0 0 8px #2cff2c; }
+    .use-off { background: #2a0000; border: 1px solid #ff3c3c; color: #ff9c9c; box-shadow: 0 0 8px #ff3c3c; }
 
-    /* Inventory */
     .inventory { grid-template-columns: 1fr; }
     .slot { display: flex; align-items: stretch; gap: 6px; height: 4.5em; }
-    .slot textarea { flex: 1; resize: none; font-size: clamp(10px, 3vw, 14px); line-height: 1.2em; }
-    .slot label { display: flex; align-items: center; justify-content: center; min-width: 36px; font-size: 14px; }
+    .slot textarea { flex: 1; resize: none; font-size: clamp(10px, 3vw, 14px); line-height: 1.2em; background: #081408; color: #9fef9f; }
+    .slot label { display: flex; align-items: center; justify-content: center; min-width: 36px; border: 1px solid #2cff2c; }
   </style>
 </head>
 <body>
@@ -52,11 +53,17 @@
     </div>
   </div>
 
+  <h3>Negative Status</h3>
+  <div class="grid negatives" id="negatives"></div>
+      <button onclick="chg('hp',1)">+</button>
+    </div>
+  </div>
+
   <h3>Skill Uses</h3>
   <div class="grid uses">
-    <label class="card use-box">Skill<input type="checkbox" id="useSkill"></label>
-    <label class="card use-box">Luck<input type="checkbox" id="useLuck"></label>
-    <label class="card use-box">Resist<input type="checkbox" id="useResist"></label>
+    <div id="useSkill" class="use-box">SKILL</div>
+    <div id="useLuck" class="use-box">LUCK</div>
+    <div id="useResist" class="use-box">RESIST</div>
   </div>
 
   <h3>Inventory</h3>
@@ -117,12 +124,12 @@ function init(){
     invDiv.innerHTML+=`<div class='card slot'><textarea rows='3' placeholder='Item ${i+1}' oninput="state.inventory[${i}].name=this.value;save();">${it.name}</textarea><label><input type='checkbox' ${it.heavy?"checked":""} onchange="state.inventory[${i}].heavy=this.checked;save();">H</label></div>`;
   });
 
-  useSkill.checked=state.uses.skill;
-  useLuck.checked=state.uses.luck;
-  useResist.checked=state.uses.resist;
-  useSkill.onchange=e=>{state.uses.skill=e.target.checked;save();};
-  useLuck.onchange=e=>{state.uses.luck=e.target.checked;save();};
-  useResist.onchange=e=>{state.uses.resist=e.target.checked;save();};
+  ['skill','luck','resist'].forEach(k=>{
+    const el=document.getElementById('use'+k.charAt(0).toUpperCase()+k.slice(1));
+    function render(){ el.className='use-box '+(state.uses[k]?'use-on':'use-off'); }
+    el.onclick=()=>{ state.uses[k]=!state.uses[k]; save(); render(); };
+    render();
+  });=e=>{state.uses.resist=e.target.checked;save();};
 }
 
 init();
