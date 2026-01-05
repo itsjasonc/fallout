@@ -31,9 +31,23 @@
     .stat-box input { text-align:center; font-size:18px; }
 
     /* ARMOR */
-    .armor { grid-template-columns: repeat(4, 1fr); }
-    .armor-box { padding:10px; border:2px solid; }
-    .armor-label { font-weight:bold; margin-bottom:6px; display:block; }
+    .armor {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* already present */
+}
+
+    .armor-box {
+  width: 100%;        /* force equal width */
+  box-sizing: border-box; /* ensures borders don’t change width */
+}
+
+    .armor-label {
+  font-weight: bold;
+  margin-bottom: 6px;
+  display: block;
+  font-size: clamp(10px, 2.5vw, 16px); /* responsive scaling */
+}
+
 
     .p-theme { background:#331111; border-color:#ff5c5c; }
     .e-theme { background:#112233; border-color:#5ca9ff; }
@@ -220,15 +234,20 @@
     }
 
     .inv-counter-value {
-      font-size:20px;
-      margin:2px 0;
-    }
+  font-size:28px;       /* larger number */
+  padding:0 6px;
+  text-align:center;
+  min-width:40px;
+}
 
-    .inv-counter-btn-row {
-      display:flex;
-      justify-content:center;
-      gap:4px;
-    }
+.inv-counter-btn-row {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:6px;              /* space between - value + */
+}
+
+
 
     .inv-counter-btn {
       padding:1px 4px;
@@ -238,6 +257,23 @@
       font-size:14px;
       cursor:pointer;
     }
+	
+	.armor {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+
+  /* Never wrap to a new row */
+  flex-wrap: nowrap;
+}
+
+.armor-box {
+  flex: 1 1 0;          /* all boxes shrink evenly */
+  min-width: 0;         /* allows shrinking instead of overflowing */
+  box-sizing: border-box;
+}
+
+
   </style>
 </head>
 
@@ -452,17 +488,18 @@ function init(){
     area.innerHTML = "";
 
     it.counters.forEach((c,j)=>{
-      area.innerHTML +=
-        `<div class="card neg-card inv-counter-card">
-           <input class="neg-title-input" type="text" value="${c.title}"
-             oninput="state.inventory[${i}].counters[${j}].title=this.value;save();">
-           <div id="count${i}_${j}" class="neg-value inv-counter-value">${c.value}</div>
-           <div class="neg-btn-row inv-counter-btn-row">
-             <button class="neg-btn inv-counter-btn" onclick="chgCounter(${i},${j},-1)">−</button>
-             <button class="neg-btn inv-counter-btn" onclick="chgCounter(${i},${j},1)">+</button>
-           </div>
-         </div>`;
-    });
+  area.innerHTML +=
+    `<div class="card neg-card inv-counter-card">
+       <input class="neg-title-input" type="text" value="${c.title}"
+         oninput="state.inventory[${i}].counters[${j}].title=this.value;save();">
+       <div class="inv-counter-btn-row">
+         <button class="neg-btn inv-counter-btn" onclick="chgCounter(${i},${j},-1)">−</button>
+         <div id="count${i}_${j}" class="neg-value inv-counter-value">${c.value}</div>
+         <button class="neg-btn inv-counter-btn" onclick="chgCounter(${i},${j},1)">+</button>
+       </div>
+     </div>`;
+});
+
   });
 
   ['skill','luck','resist'].forEach(k=>{
