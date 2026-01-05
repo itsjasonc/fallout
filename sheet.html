@@ -225,11 +225,13 @@
     }
 
     .slot textarea {
-      flex:1;
-      resize:none;
-      font-size:clamp(10px,3vw,14px);
-      line-height:1.2em;
-    }
+  flex:1;
+  resize:none;
+  font-size: clamp(16px, 3vw, 20px);   /* bigger text */
+  line-height: 1.3em;                  /* more breathing room */
+  min-height: 3.2em;                   /* ensures 2 rows fit cleanly */
+}
+
 
     .heavy-toggle {
       width: 36px;
