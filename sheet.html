@@ -5,133 +5,119 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fallout Character Sheet</title>
   <style>
-    body {
-      margin: 0;
-      font-family: monospace;
-      background: #e5e5e5;
-    }
-    .app {
-      max-width: 900px;
-      margin: auto;
-      padding: 12px;
-      background: #fff;
-    }
-    .grid {
-      display: grid;
-      gap: 8px;
-    }
-    .title {
-      grid-template-columns: 1fr 1fr;
-    }
-    input {
-      padding: 8px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .card {
-      border: 1px solid #000;
-      padding: 8px;
-    }
-    .stats {
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    }
-    button {
-      padding: 6px 10px;
-      font-size: 16px;
-    }
-    .center {
-      text-align: center;
-    }
-    .inventory {
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    }
-    .row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    body { margin: 0; font-family: monospace; background: #e5e5e5; }
+    .app { max-width: 900px; margin: auto; padding: 12px; background: #fff; }
+    .grid { display: grid; gap: 8px; }
+    .title { grid-template-columns: 1fr 1fr; }
+    input { padding: 6px; width: 100%; box-sizing: border-box; font-family: monospace; }
+    .card { border: 1px solid #000; padding: 8px; }
+    .stats { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+    .counter { display: flex; justify-content: center; align-items: center; gap: 6px; }
+    .counter button { padding: 2px 6px; font-size: 14px; }
+    .value { font-size: 28px; min-width: 36px; text-align: center; }
+    .center { text-align: center; }
+    .inventory { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+    .row { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+    .slot-name { flex: 1; }
   </style>
 </head>
 <body>
-  <div class="app">
-    <h2>Fallout Character Sheet</h2>
+<div class="app">
+  <h2>Fallout Character Sheet</h2>
 
-    <div class="grid title card">
-      <input placeholder="Character Name" />
-      <input placeholder="Skill" />
-      <input placeholder="Level" />
-      <input placeholder="Caps" />
-    </div>
+  <div class="grid title card">
+    <input id="name" placeholder="Character Name" />
+    <input id="skillName" placeholder="Skill" />
+    <input id="level" placeholder="Level" />
+    <input id="caps" placeholder="Caps" />
+  </div>
 
-    <h3>Stats</h3>
-    <div class="grid stats">
-      <script>
-        const stats = ["Strength","Agility","Endurance","Intelligence","Charisma"];
-        stats.forEach(stat => {
-          document.write(`
-            <div class='card center'>
-              <div><b>${stat}</b></div>
-              <div id='${stat}'>5</div>
-              <button onclick="chg('${stat}',-1)">-</button>
-              <button onclick="chg('${stat}',1)">+</button>
-            </div>
-          `);
-        });
-      </script>
-    </div>
+  <h3>Stats</h3>
+  <div class="grid stats" id="stats"></div>
 
-    <h3>Hit Points</h3>
-    <div class="card center">
-      <button onclick="chg('hp',-1)">-</button>
-      <span id="hp">20</span>
+  <h3>Hit Points</h3>
+  <div class="card center">
+    <div class="counter">
+      <button onclick="chg('hp',-1)">−</button>
+      <div id="hp" class="value">20</div>
       <button onclick="chg('hp',1)">+</button>
-    </div>
-
-    <h3>Skill Uses</h3>
-    <div class="grid stats">
-      <label class="card"><input type="checkbox"> Skill</label>
-      <label class="card"><input type="checkbox"> Luck</label>
-      <label class="card"><input type="checkbox"> Resist</label>
-    </div>
-
-    <h3>Inventory</h3>
-    <div class="grid inventory">
-      <script>
-        for (let i = 1; i <= 12; i++) {
-          document.write(`
-            <div class='card row'>
-              <span>Slot ${i}</span>
-              <label><input type='checkbox'> H</label>
-            </div>
-          `);
-        }
-      </script>
-    </div>
-
-    <h3>Negative Status</h3>
-    <div class="grid stats">
-      <script>
-        const neg = ["Hunger","Thirst","Fatigue","Rads","Injury"];
-        neg.forEach(n => {
-          document.write(`
-            <div class='card center'>
-              <div><b>${n}</b></div>
-              <div id='${n}'>0</div>
-              <button onclick="chg('${n}',-1)">-</button>
-              <button onclick="chg('${n}',1)">+</button>
-            </div>
-          `);
-        });
-      </script>
     </div>
   </div>
 
-  <script>
-    function chg(id, delta) {
-      const el = document.getElementById(id);
-      let v = parseInt(el.innerText);
-      el.innerText = Math.max(0, v + delta);
-    }
-  </script>
+  <h3>Skill Uses</h3>
+  <div class="grid stats">
+    <label class="card"><input type="checkbox" id="useSkill"> Skill</label>
+    <label class="card"><input type="checkbox" id="useLuck"> Luck</label>
+    <label class="card"><input type="checkbox" id="useResist"> Resist</label>
+  </div>
+
+  <h3>Inventory</h3>
+  <div class="grid inventory" id="inventory"></div>
+
+  <h3>Negative Status</h3>
+  <div class="grid stats" id="negatives"></div>
+</div>
+
+<script>
+const STORAGE_KEY = "fallout_character_v1";
+
+const statNames = ["Strength","Agility","Endurance","Intelligence","Charisma"];
+const negNames = ["Hunger","Thirst","Fatigue","Rads","Injury"];
+
+let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+  name:"", skillName:"", level:"", caps:"",
+  hp:20,
+  stats:Object.fromEntries(statNames.map(s=>[s,5])),
+  neg:Object.fromEntries(negNames.map(n=>[n,0])),
+  inventory:Array.from({length:12},()=>({name:"", heavy:false})),
+  uses:{skill:false,luck:false,resist:false}
+};
+
+function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+function chg(id,delta){
+  if(state.stats[id]!=null){ state.stats[id]=Math.max(0,state.stats[id]+delta); document.getElementById(id).innerText=state.stats[id]; }
+  else if(state.neg[id]!=null){ state.neg[id]=Math.max(0,state.neg[id]+delta); document.getElementById(id).innerText=state.neg[id]; }
+  else if(id==="hp"){ state.hp=Math.max(0,state.hp+delta); document.getElementById("hp").innerText=state.hp; }
+  save();
+}
+
+function init(){
+  document.getElementById("name").value=state.name;
+  document.getElementById("skillName").value=state.skillName;
+  document.getElementById("level").value=state.level;
+  document.getElementById("caps").value=state.caps;
+  document.getElementById("hp").innerText=state.hp;
+
+  document.getElementById("name").oninput=e=>{state.name=e.target.value;save();};
+  document.getElementById("skillName").oninput=e=>{state.skillName=e.target.value;save();};
+  document.getElementById("level").oninput=e=>{state.level=e.target.value;save();};
+  document.getElementById("caps").oninput=e=>{state.caps=e.target.value;save();};
+
+  const statsDiv=document.getElementById("stats");
+  statNames.forEach(s=>{
+    statsDiv.innerHTML+=`<div class='card center'><b>${s}</b><div class='counter'><button onclick="chg('${s}',-1)">−</button><div id='${s}' class='value'>${state.stats[s]}</div><button onclick="chg('${s}',1)">+</button></div></div>`;
+  });
+
+  const negDiv=document.getElementById("negatives");
+  negNames.forEach(n=>{
+    negDiv.innerHTML+=`<div class='card center'><b>${n}</b><div class='counter'><button onclick="chg('${n}',-1)">−</button><div id='${n}' class='value'>${state.neg[n]}</div><button onclick="chg('${n}',1)">+</button></div></div>`;
+  });
+
+  const invDiv=document.getElementById("inventory");
+  state.inventory.forEach((it,i)=>{
+    invDiv.innerHTML+=`<div class='card row'><input class='slot-name' value='${it.name}' oninput="state.inventory[${i}].name=this.value;save();"><label><input type='checkbox' ${it.heavy?"checked":""} onchange="state.inventory[${i}].heavy=this.checked;save();"> H</label></div>`;
+  });
+
+  useSkill.checked=state.uses.skill;
+  useLuck.checked=state.uses.luck;
+  useResist.checked=state.uses.resist;
+  useSkill.onchange=e=>{state.uses.skill=e.target.checked;save();};
+  useLuck.onchange=e=>{state.uses.luck=e.target.checked;save();};
+  useResist.onchange=e=>{state.uses.resist=e.target.checked;save();};
+}
+
+init();
+</script>
 </body>
 </html>
