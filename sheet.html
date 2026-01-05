@@ -446,7 +446,7 @@ const armorTypes=[
 ];
 const negNames=["Hunger","Thirst","Fatigue","Rads","Injury"];
 
-let historyStack = [];
+
 
 let state=JSON.parse(localStorage.getItem(STORAGE_KEY))||{
   name:"", skillName:"", level:"", caps:"",
@@ -470,14 +470,46 @@ let state=JSON.parse(localStorage.getItem(STORAGE_KEY))||{
   withdraw2:false
 };
 
-function save(){ 
-historyStack.push(JSON.stringify(state));
+// ----------------------------
+// UNDO SYSTEM
+// ----------------------------
 
-if (historyStack.length > 20) {
-  historyStack.shift(); // keep last 20 states
+// global history stack
+let historyStack = [];
+
+// override save() to record history
+function save() {
+  // store previous state
+  historyStack.push(JSON.stringify(state));
+
+  // keep last 20 states
+  if (historyStack.length > 20) {
+    historyStack.shift();
+  }
+
+  // save current state
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
-localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); }
+// undo function
+function undo() {
+  if (historyStack.length === 0) return;
+
+  const prev = historyStack.pop();
+  state = JSON.parse(prev);
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+  location.reload(); // refresh UI
+}
+
+// connect undo button
+function init() {
+  load();
+  updateAll();
+  document.getElementById("undoBtn").onclick = undo;
+}
+
 
 function parseHP(){
   const parts = state.hp.split("/");
