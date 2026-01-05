@@ -78,14 +78,15 @@
     }
 
     .hp-box {
-      position:relative;
-      height:140px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:flex-start;
-      padding-top:10px;
-    }
+  position: relative;
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* center vertically */
+  align-items: center;       /* center horizontally */
+  padding-top: 0;            /* remove old offset */
+}
+
 
     .hp-title {
       font-size:20px;
@@ -94,28 +95,28 @@
     }
 
     .hp-btn {
-      position:absolute;
-      top:60%;
-      transform:translateY(-50%);
-      font-size:28px;
-      background:#081408;
-      color:#9fef9f;
-      border:1px solid #2cff2c;
-      padding:4px 12px;
-    }
+  position: absolute;
+  top: 50%;                  /* center vertically */
+  transform: translateY(-50%);
+  font-size: 28px;
+  background: #081408;
+  color: #9fef9f;
+  border: 1px solid #2cff2c;
+  padding: 4px 12px;
+}
+
     .hp-minus { left:8px; }
     .hp-plus { right:8px; }
 
     #hp {
-      font-size:42px;
-      text-align:center;
-      width:160px;
-      background:#081408;
-      border:1px solid #2cff2c;
-      padding:4px;
-      position:relative;
-      top:20px;
-    }
+  font-size: 42px;
+  text-align: center;
+  width: 160px;
+  background: #081408;
+  border: 1px solid #2cff2c;
+  padding: 4px;
+}
+
 
     /* USES */
     .uses {
