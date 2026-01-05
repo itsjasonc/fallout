@@ -27,6 +27,9 @@
 
     .stats { grid-template-columns: repeat(5, 1fr); }
     .stat-box input { text-align:center; font-size:18px; }
+.grid.title.card {
+  margin-top: 10px; /* adjust to taste */
+}
 
     .armor {
       display:flex;
@@ -356,12 +359,31 @@
       font-size:14px;
       cursor:pointer;
     }
+	
+	.undo-btn {
+  background:#081408;
+  color:#9fef9f;
+  border:1px solid #2cff2c;
+  padding:4px 10px;
+  font-family:monospace;
+  cursor:pointer;
+  box-shadow:0 0 6px #2cff2c;
+}
+
+.undo-btn:hover {
+  background:#0f2f0f;
+}
+
   </style>
 </head>
 
 <body>
 <div class="app">
-  <h2>Fallout Character Sheet</h2>
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+  <h2 style="margin:0;">Fallout Character Sheet</h2>
+  <button id="undoBtn" class="undo-btn">UNDO</button>
+</div>
+
 
   <div class="grid title card">
     <input id="name" placeholder="Character Name">
@@ -424,6 +446,8 @@ const armorTypes=[
 ];
 const negNames=["Hunger","Thirst","Fatigue","Rads","Injury"];
 
+let historyStack = [];
+
 let state=JSON.parse(localStorage.getItem(STORAGE_KEY))||{
   name:"", skillName:"", level:"", caps:"",
   hp:"20/20",
@@ -446,7 +470,14 @@ let state=JSON.parse(localStorage.getItem(STORAGE_KEY))||{
   withdraw2:false
 };
 
-function save(){ localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); }
+function save(){ 
+historyStack.push(JSON.stringify(state));
+
+if (historyStack.length > 20) {
+  historyStack.shift(); // keep last 20 states
+}
+
+localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); }
 
 function parseHP(){
   const parts = state.hp.split("/");
@@ -544,6 +575,9 @@ function init(){
   hp.oninput = e => {
     state.hp = e.target.value;
     save();
+	
+	document.getElementById("undoBtn").onclick = undo;
+
   };
 
   const statsDiv=document.getElementById('stats');
@@ -712,6 +746,16 @@ function updateHPColor() {
   }
 }
 
+function undo() {
+  if (historyStack.length === 0) return;
+
+  const prev = historyStack.pop();
+  state = JSON.parse(prev);
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+  location.reload(); // refresh to re-render everything
+}
 
 
 init();
