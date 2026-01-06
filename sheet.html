@@ -31,34 +31,41 @@
 	.grid.title.card {
 	  margin-top: 10px; /* adjust to taste */
 	}
-	
-	
-    .armor {
-      display:flex;
-      flex-direction:row;
-      gap:8px;
-      flex-wrap:nowrap;
-    }
+		
+    
+.armor {
+  display:flex;
+  flex-direction:row;
+  gap:8px;
+  flex-wrap:nowrap;
+}
 
-    .armor-box {
-      flex:1 1 0;
-      min-width:0;
-      box-sizing:border-box;
-      padding:10px;
-      border: 2px solid;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-    }
-	
-	
-    .armor-label {
-      font-weight:bold;
-      margin-bottom:6px;
-      display:block;
-      font-size:clamp(10px, 2.5vw, 16px);
-    }
+.armor-box {
+  flex:1 1 0;
+  min-width:0;
+  box-sizing:border-box;
+  padding:10px;
+  border: 2px solid;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.armor-label {
+  font-weight:bold;
+  margin-bottom:6px;
+  display:block;
+  font-size:clamp(10px, 2.5vw, 16px);
+}
+
+/* underline style for the chosen character */
+.armor-label .underline {
+  text-decoration: underline;
+  text-underline-offset: 2px;     /* nicer spacing */
+  text-decoration-thickness: 2px; /* a bit bolder */
+}
+
 
     .p-theme { background:#331111; border-color:#ff5c5c; }
     .e-theme { background:#112233; border-color:#5ca9ff; }
@@ -1273,16 +1280,20 @@ statNames.forEach(s => {
 
 
   // Armor
-  const armorDiv = document.getElementById("armor");
-  armorDiv.innerHTML = "";
-  armorTypes.forEach(([label, c]) => {
-    armorDiv.innerHTML +=
-      `<div class='armor-box ${c}-theme'>
-         <b class='armor-label'>${label.toUpperCase()}</b>
-         <input value='${state.armor[label]}'
-           oninput="state.armor['${label}']=this.value;save();">
-       </div>`;
-  });
+
+const armorDiv = document.getElementById("armor");
+armorDiv.innerHTML = "";
+
+armorTypes.forEach(([label, c]) => {
+  const underlined = withUnderlinedChar(label, c);
+  armorDiv.innerHTML +=
+    `<div class='armor-box ${c}-theme'>
+       <b class='armor-label'>${underlined}</b>
+       <input value='${state.armor[label]}'
+              oninput="state.armor['${label}']=this.value;save();">
+     </div>`;
+});
+
 
   // Negatives
   const negDiv = document.getElementById("negatives");
@@ -1418,6 +1429,18 @@ function toggleStatStar(el) {
   save();
 }
 
+
+function withUnderlinedChar(word, ch) {
+  const i = word.toLowerCase().indexOf(ch.toLowerCase());
+  if (i === -1) {
+    // If the character isn't found, just return the word uppercased
+    return word.toUpperCase();
+  }
+  const before = word.slice(0, i).toUpperCase();
+  const target = word[i].toUpperCase();
+  const after = word.slice(i + 1).toUpperCase();
+  return `${before}<span class="underline">${target}</span>${after}`;
+}
 
 
 
