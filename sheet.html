@@ -1114,13 +1114,17 @@ bgHeader.onclick = () => toggleBackgrounds(bgHeader);
 	const notesBox = document.createElement("textarea");
 	notesBox.id = "notesBox";
 	notesBox.style.width = "100%";
-	notesBox.style.height = "100%";
+	notesBox.style.minheight = "300px";
+	notesBox.style.height = "500px";
 	notesBox.style.background = "#081408";
 	notesBox.style.color = "#9fef9f";
 	notesBox.style.border = "1px solid #2cff2c";
 	notesBox.style.padding = "8px";
 	notesBox.style.fontFamily = "monospace";
 	notesBox.style.boxSizing = "border-box";
+	notesBox.style.resize = "vertical";     // allow vertical resizing (use "both" for both axes)
+	notesBox.style.overflow = "auto";       // show scrollbars when content exceeds size
+
 
 	// Load saved text
 	notesBox.value = state.notes || "";
