@@ -645,7 +645,7 @@
 		<button class="hp-btn hp-plus" onclick="chgHP(1)">+</button>
 		<button class="hp-btn hp-plus10" onclick="chgHP10()">+10%</button>
 		<button class="hp-btn hp-dmgbox">
-		<input id="armorDmgInput" class="armor-dmg-input" placeholder="0P"></button>
+		<input id="armorDmgInput" class="armor-dmg-input" placeholder="3P"></button>
       </div>
 	  
 
@@ -1380,7 +1380,7 @@ negNames.forEach(n => {
   const armorInput = document.getElementById("armorDmgInput");
   armorInput.addEventListener("input", () => {
     const raw = armorInput.value.trim().toUpperCase();
-    const match = raw.match(/^(\d+)([PEXR])$/);
+    const match = raw.match(/^(\d+)([PNXR])$/);
     if (!match) return;
     applyArmorDamage(raw);
     armorInput.value = "";
