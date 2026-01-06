@@ -1253,7 +1253,7 @@ statNames.forEach(s => {
     // restore gold + stars
     label.dataset.base = s;
     label.dataset.starred = "true";
-    label.textContent = `*${s}*`;
+    label.textContent = `${s}`;
     label.classList.add("stat-starred");
 
     // optional: goldify number box too
@@ -1403,7 +1403,7 @@ function toggleStatStar(el) {
   } else {
     // star
     el.dataset.base = el.textContent;
-    el.textContent = `⭐${el.dataset.base}⭐`;
+    el.textContent = `${el.dataset.base}`;
     el.classList.add("stat-starred");
     el.dataset.starred = "true";
     if (box) box.classList.add("stat-starred");
