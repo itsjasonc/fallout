@@ -564,6 +564,24 @@
   margin-top: 32px;
 }
 
+.nav-btn {
+    margin-right: 18px;
+}
+
+.stat-starred {
+  color: #ffd966;
+  text-shadow: 0 0 3px #ffd966;
+  letter-spacing: -1px;
+  white-space: nowrap;
+}
+
+.stat-starred::before,
+.stat-starred::after {
+  font-size: 0.75em;
+  vertical-align: middle;
+}
+
+
 
   </style>
 </head>
@@ -631,28 +649,19 @@
 <div id="perksScreen" class="hidden-screen">
   <div class="title-bar">
   <div class="title-left"><h2 id="perksTitle" class="major-header"> <span class="triangle">▼</span> Perks </h2></div>
+  <button class="perks-btn" onclick="exportSheet()">SAVE</button> 
+  <button class="perks-btn" onclick="importSheet()">LOAD</button>
   <button id="backBtn" class="perks-btn">SHEET</button>
+  <input type="file" id="fileInput" style="display:none" />
 </div>
 
   <div class="perks-content">
-    <h3>Perks</h3>
-    <ul>
-      <li>Example Perk 1</li>
-      <li>Example Perk 2</li>
-      <li>Example Perk 3</li>
-    </ul>
-
-    <h3>Recipes</h3>
-    <ul>
-      <li>Example Recipe 1</li>
-      <li>Example Recipe 2</li>
-      <li>Example Recipe 3</li>
-    </ul>
-  </div>
+      </div>
 </div>
 
 
 <script>
+
 const STORAGE_KEY = "fallout_character_v10";
 const statNames = ["STR","AGI","END","INT","CHA"];
 const armorTypes = [
@@ -672,6 +681,7 @@ let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
   perks: {},          // perk checkbox states
   perkSections: {},   // perk section open/closed
   stats: Object.fromEntries(statNames.map(s => [s, ""])),
+  specialStats: Object.fromEntries(statNames.map(s => [s, false])),
   armor: { Physical:"", Energy:"", Explosive:"", Rad:"" },
   neg: Object.fromEntries(negNames.map(n => [n, 0])),
   inventory: Array.from({length:12}, () => ({
@@ -687,8 +697,17 @@ let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
   uses: { skill:false, luck:false, resist:false },
   addiction: false,
   withdraw1: false,
-  withdraw2: false
+  withdraw2: false,
+  starredStats: Object.fromEntries(statNames.map(s => [s, false]))
 };
+state.starredStats = state.starredStats || Object.fromEntries(statNames.map(s => [s, false]));
+
+
+function toggleSpecial(stat, el) {
+  state.specialStats[stat] = !state.specialStats[stat];
+  el.classList.toggle('stat-special', state.specialStats[stat]);
+  save();
+}
 
 // Ensure new keys exist even for older saves
 if (!state.perks) state.perks = {};
@@ -1168,16 +1187,42 @@ function init() {
   };
 
   // Stats
-  const statsDiv = document.getElementById("stats");
-  statsDiv.innerHTML = "";
-  statNames.forEach(s => {
-    statsDiv.innerHTML +=
-      `<div class='card stat-box center'>
-         <b>${s}</b>
-         <input value='${state.stats[s]}'
-           oninput="state.stats['${s}']=this.value;save();">
-       </div>`;
-  });
+const statsDiv = document.getElementById("stats");
+statsDiv.innerHTML = "";
+
+statNames.forEach(s => {
+
+  // 1. Build the stat row
+  statsDiv.innerHTML +=
+    `<div class='card stat-box center'>
+       <b onclick="toggleStatStar(this)"
+          data-stat="${s}"
+          style="cursor:pointer;">${s}</b>
+       <input class="stat-input" value='${state.stats[s]}'
+         oninput="state.stats['${s}']=this.value;save();">
+     </div>`;
+
+  // 2. RESTORE STARRED STATE (this is Step 5)
+  const label = statsDiv.querySelector(`b[data-stat="${s}"]`);
+
+  if (state.starredStats && state.starredStats[s]) {
+    // restore gold + stars
+    label.dataset.base = s;
+    label.dataset.starred = "true";
+    label.textContent = `⭐${s}⭐`;
+    label.classList.add("stat-starred");
+
+    // optional: goldify number box too
+    const box = label.parentElement.querySelector(".stat-input");
+    if (box) box.classList.add("stat-starred");
+
+  } else {
+    label.dataset.starred = "false";
+  }
+});
+
+	
+
 
   // Armor
   const armorDiv = document.getElementById("armor");
@@ -1281,6 +1326,81 @@ function init() {
     armorInput.value = "";
   });
 }
+
+function toggleStatStar(el) {
+  const stat = el.dataset.stat;
+  const box = el.parentElement.querySelector(".stat-input");
+
+  if (el.dataset.starred === "true") {
+    // unstar
+    el.textContent = el.dataset.base;
+    el.classList.remove("stat-starred");
+    el.dataset.starred = "false";
+    if (box) box.classList.remove("stat-starred");
+
+    state.starredStats[stat] = false;
+
+  } else {
+    // star
+    el.dataset.base = el.textContent;
+    el.textContent = `⭐${el.dataset.base}⭐`;
+    el.classList.add("stat-starred");
+    el.dataset.starred = "true";
+    if (box) box.classList.add("stat-starred");
+
+    state.starredStats[stat] = true;
+  }
+
+  save();
+}
+
+
+
+
+function exportSheet() {
+  const data = JSON.stringify(state, null, 2);
+  const blob = new Blob([data], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "character-sheet.json";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+function importSheet() {
+  const input = document.getElementById("fileInput");
+  input.click();
+
+  input.onchange = () => {
+    const file = input.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      try {
+        const loaded = JSON.parse(reader.result);
+
+        // Merge loaded data into your state
+        Object.assign(state, loaded);
+
+        // Save to localStorage
+        save();
+
+        // Rebuild UI to reflect loaded data
+        buildPerkUI();
+
+        alert("Sheet loaded successfully!");
+      } catch (e) {
+        alert("Invalid or corrupted file.");
+      }
+    };
+
+    reader.readAsText(file);
+  };
+}
+
 
 document.addEventListener("DOMContentLoaded", init);
 </script>
