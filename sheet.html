@@ -6,9 +6,9 @@
   <title>Fallout Character Sheet</title>
 
   <style>
-    body { margin:0; font-family: monospace; background:#0b120b; color:#9fef9f; }
+    body { margin:0; padding:0; font-family: monospace; background:#0b120b; color:#9fef9f; }
     .app { max-width:900px; margin:auto; padding:12px; background:#0f1f0f; box-shadow:0 0 20px #0f0; }
-    h2 { color:#7cff7c; text-shadow:0 0 6px #0f0; margin-top:16px; }
+    h2 { color:#7cff7c; text-shadow:0 0 6px #0f0;  }
     .grid { display:grid; gap:8px; }
     .title { grid-template-columns:1fr 1fr; }
 
@@ -28,9 +28,9 @@
     .stats { grid-template-columns: repeat(5, 1fr); }
     .stat-box input { text-align:center; font-size:18px; }
 	
-.grid.title.card {
-  margin-top: 10px; /* adjust to taste */
-}
+	.grid.title.card {
+	  margin-top: 10px; /* adjust to taste */
+	}
 
 
     .armor {
@@ -362,20 +362,6 @@
       cursor:pointer;
     }
 	
-	.undo-btn {
-  background:#081408;
-  color:#9fef9f;
-  border:1px solid #2cff2c;
-  padding:4px 10px;
-  font-family:monospace;
-  cursor:pointer;
-  box-shadow:0 0 6px #2cff2c;
-}
-
-.undo-btn:hover {
-  background:#0f2f0f;
-}
-
 /* Top-right button */
 .perks-btn {
   background:#081408;
@@ -385,10 +371,8 @@
   font-family:monospace;
   cursor:pointer;
   box-shadow:0 0 6px #2cff2c;
-  margin-right: 12px; /* ← move left slightly */
+  margin-right: 16px; /* ← move left slightly */
 }
-
-
 
 
 /* Back button */
@@ -403,7 +387,6 @@
   margin-bottom:10px;
 }
 
-/* Hidden screen overlay */
 .hidden-screen {
   display:none;
   position:fixed;
@@ -412,11 +395,11 @@
   width:100%;
   height:100%;
   background:#081408;
-  padding:20px;
   overflow-y:auto;
   z-index:999;
   color:#9fef9f;
 }
+
 
 .perks-content h3 {
   margin-top:20px;
@@ -427,8 +410,101 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: 4px; /* matches the button shift */
   width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 10px; /* identical left + right spacing */
+  
+}
+.title-bar h2 { margin-left: 16px; }
+
+#perksScreen .title-bar {
+  margin: 0;
+  padding-top: 0;
+  padding-left: 0;
+  max-width: 900px;
+  margin: auto;
+}
+
+.title-left {
+  width: 300px;   /* ensures both titles occupy the same space */
+}
+
+#backBtn {
+  margin-right: 26px; /* move SHEET left — adjust value as needed */
+}
+
+.perk-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px 0;
+}
+
+.perk-header .triangle {
+  font-size: 16px;
+  transition: transform 0.2s;
+}
+
+/* When collapsed, rotate triangle to point right */
+.perk-header.collapsed .triangle {
+  transform: rotate(-90deg);
+}
+
+/* Collapsible content */
+.perk-list {
+  display: none;
+  margin-left: 20px;
+}
+
+.perk-list.open {
+  display: block;
+}
+
+
+.collapse-arrow {
+  transition: transform 0.2s;
+}
+
+.collapse-arrow.open {
+  transform: rotate(180deg);
+}
+
+
+.perk-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 6px 0;
+  cursor: pointer;
+}
+
+.perk-item input {
+  display: none;
+}
+
+.perk-box {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #2cff2c;
+  box-shadow: 0 0 6px #2cff2c;
+  position: relative;
+}
+
+.perk-check:checked + .perk-box::after {
+  content: "✔";
+  color: #9fef9f;
+  font-size: 16px;
+  position: absolute;
+  top: -2px;
+  left: 1px;
+  text-shadow: 0 0 6px #0f0;
+}
+
+.perk-text {
+  flex: 1;
+  line-height: 1.3;
 }
 
 
@@ -437,8 +513,11 @@
 
 <body>
 
- <div class="title-bar"> <h2>Fallout Character Sheet</h2> <button id="perksBtn" class="perks-btn">PERKS</button>
+<div class="title-bar">
+  <div class="title-left"><h2>Fallout Character Sheet</h2></div>
+  <button id="perksBtn" class="perks-btn">PERKS</button>
 </div>
+
   <div class="grid title card">
  
     <input id="name" placeholder="Character Name">
@@ -493,9 +572,10 @@
 </div>
 
 <div id="perksScreen" class="hidden-screen">
-  <h2>Perks & Recipes</h2>
-
-  <button id="backBtn" class="back-btn">BACK</button>
+  <div class="title-bar">
+  <div class="title-left"><h2>Perks</h2></div>
+  <button id="backBtn" class="perks-btn">SHEET</button>
+</div>
 
   <div class="perks-content">
     <h3>Perks</h3>
@@ -516,97 +596,88 @@
 
 
 <script>
-const STORAGE_KEY="fallout_character_v10";
-const statNames=["STR","AGI","END","INT","CHA"];
-const armorTypes=[
-  ['Physical','p'],
-  ['Energy','e'],
-  ['Explosive','x'],
-  ['Rad','r']
+const STORAGE_KEY = "fallout_character_v10";
+const statNames = ["STR","AGI","END","INT","CHA"];
+const armorTypes = [
+  ["Physical","p"],
+  ["Energy","e"],
+  ["Explosive","x"],
+  ["Rad","r"]
 ];
-const negNames=["Hunger","Thirst","Fatigue","Rads","Injury"];
+const negNames = ["Hunger","Thirst","Fatigue","Rads","Injury"];
 
-
-
-let state=JSON.parse(localStorage.getItem(STORAGE_KEY))||{
-  name:"", skillName:"", level:"", caps:"",
-  hp:"20/20",
-  stats:Object.fromEntries(statNames.map(s=>[s,""])),
-  armor:{Physical:"",Energy:"",Explosive:"",Rad:""},
-  neg:Object.fromEntries(negNames.map(n=>[n,0])),
-  inventory:Array.from({length:12},()=>({
-    name:"",
-    heavy:false,
-    dropdown:false,
-    counters:[
-      {title:"", value:0},
-      {title:"", value:0},
-      {title:"", value:0}
+let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+  name: "",
+  skillName: "",
+  level: "",
+  caps: "",
+  hp: "20/20",
+  perks: {},          // perk checkbox states
+  perkSections: {},   // perk section open/closed
+  stats: Object.fromEntries(statNames.map(s => [s, ""])),
+  armor: { Physical:"", Energy:"", Explosive:"", Rad:"" },
+  neg: Object.fromEntries(negNames.map(n => [n, 0])),
+  inventory: Array.from({length:12}, () => ({
+    name: "",
+    heavy: false,
+    dropdown: false,
+    counters: [
+      { title:"", value:0 },
+      { title:"", value:0 },
+      { title:"", value:0 }
     ]
   })),
-  uses:{skill:false,luck:false,resist:false},
-  addiction:false,
-  withdraw1:false,
-  withdraw2:false
+  uses: { skill:false, luck:false, resist:false },
+  addiction: false,
+  withdraw1: false,
+  withdraw2: false
 };
 
-// ----------------------------
-// UNDO SYSTEM
-// ----------------------------
+// Ensure new keys exist even for older saves
+if (!state.perks) state.perks = {};
+if (!state.perkSections) state.perkSections = {};
 
-// global history stack
-let historyStack = [];
+// ---------- SAVE / LOAD ----------
 
-// override save() to record history
 function save() {
-  // store previous state
-  historyStack.push(JSON.stringify(state));
-
-  // keep last 20 states
-  if (historyStack.length > 20) {
-    historyStack.shift();
-  }
-
-  // save current state
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
-// undo function
-function undo() {
-  if (historyStack.length === 0) return;
+// ---------- HP / NEGATIVES ----------
 
-  const prev = historyStack.pop();
-  state = JSON.parse(prev);
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-
-  location.reload(); // refresh UI
-}
-
-// connect undo button
-function init() {
-  load();
-  updateAll();
-
-  document.getElementById("perksBtn").onclick = showPerksScreen;
-  document.getElementById("backBtn").onclick = hidePerksScreen;
-}
-
-
-
-function parseHP(){
+function parseHP() {
   const parts = state.hp.split("/");
   let cur = parseInt(parts[0]) || 0;
   let max = parseInt(parts[1]) || cur;
-  return {cur,max};
+  return { cur, max };
 }
 
-function updateHPDisplay(){
+function updateHPDisplay() {
   hp.value = state.hp;
 }
 
-function chgHP(d){
-  let {cur,max} = parseHP();
+function updateHPColor() {
+  const hpEl = document.getElementById("hp");
+  const { cur, max } = parseHP();
+  const pct = max ? cur / max : 0;
+
+  if (pct <= 0.20) {
+    hpEl.style.color = "#ff3b3b";
+    hpEl.style.textShadow = "0 0 6px #ff3b3b";
+  } else if (pct <= 0.50) {
+    hpEl.style.color = "#ffb84a";
+    hpEl.style.textShadow = "0 0 6px #ffb84a";
+  } else if (pct <= 0.75) {
+    hpEl.style.color = "#e6ff66";
+    hpEl.style.textShadow = "0 0 6px #e6ff66";
+  } else {
+    hpEl.style.color = "#9fef9f";
+    hpEl.style.textShadow = "0 0 6px #9fef9f";
+  }
+}
+
+function chgHP(d) {
+  let { cur, max } = parseHP();
   cur = Math.max(0, Math.min(max, cur + d));
   state.hp = `${cur}/${max}`;
   updateHPDisplay();
@@ -614,16 +685,8 @@ function chgHP(d){
   save();
 }
 
-function chgNeg(n,d){
-  state.neg[n]=Math.max(0,state.neg[n]+d);
-  const el=document.getElementById(n);
-  el.innerText=state.neg[n];
-  el.style.color=state.neg[n]>5?'#ff4c4c':'#9fef9f';
-  save();
-}
-
 function chgHP10() {
-  let {cur, max} = parseHP();
+  let { cur, max } = parseHP();
   let amount = Math.ceil(max * 0.10);
   cur = Math.min(max, cur + amount);
   state.hp = `${cur}/${max}`;
@@ -632,168 +695,61 @@ function chgHP10() {
   save();
 }
 
+function chgNeg(n, d) {
+  state.neg[n] = Math.max(0, state.neg[n] + d);
+  const el = document.getElementById(n);
+  el.innerText = state.neg[n];
+  el.style.color = state.neg[n] > 5 ? "#ff4c4c" : "#9fef9f";
+  save();
+}
 
-function toggleHeavy(i){
+// ---------- INVENTORY ----------
+
+function toggleHeavy(i) {
   state.inventory[i].heavy = !state.inventory[i].heavy;
   save();
   renderHeavy(i);
 }
 
-function renderHeavy(i){
-  const el = document.getElementById("heavy"+i);
-  if(state.inventory[i].heavy){
+function renderHeavy(i) {
+  const el = document.getElementById("heavy" + i);
+  if (!el) return;
+  if (state.inventory[i].heavy) {
     el.classList.add("heavy-on");
   } else {
     el.classList.remove("heavy-on");
   }
 }
 
-function toggleDropdown(i){
+function toggleDropdown(i) {
   state.inventory[i].dropdown = !state.inventory[i].dropdown;
   save();
   renderDropdown(i);
 }
 
-function renderDropdown(i){
-  const area = document.getElementById("droparea"+i);
-  const toggle = document.getElementById("dropbtn"+i);
-  if(state.inventory[i].dropdown){
+function renderDropdown(i) {
+  const area = document.getElementById("droparea" + i);
+  const toggle = document.getElementById("dropbtn" + i);
+  if (!area || !toggle) return;
+
+  if (state.inventory[i].dropdown) {
     area.classList.add("open");
-    toggle.innerText="▲";
+    toggle.innerText = "▲";
   } else {
     area.classList.remove("open");
-    toggle.innerText="▼";
+    toggle.innerText = "▼";
   }
 }
 
-function chgCounter(i,c,d){
+function chgCounter(i, c, d) {
   state.inventory[i].counters[c].value =
     Math.max(0, state.inventory[i].counters[c].value + d);
   save();
-  document.getElementById(`count${i}_${c}`).innerText =
-    state.inventory[i].counters[c].value;
+  const el = document.getElementById(`count${i}_${c}`);
+  if (el) el.innerText = state.inventory[i].counters[c].value;
 }
 
-function init(){
-  name.value=state.name;
-  skillName.value=state.skillName;
-  level.value=state.level;
-  caps.value=state.caps;
-
-  name.oninput=e=>{state.name=e.target.value;save();};
-  skillName.oninput=e=>{state.skillName=e.target.value;save();};
-  level.oninput=e=>{state.level=e.target.value;save();};
-  caps.oninput=e=>{state.caps=e.target.value;save();};
-
-  updateHPDisplay();
-  updateHPColor();
-  hp.oninput = e => {
-    state.hp = e.target.value;
-    save();
-	
-	document.getElementById("undoBtn").onclick = undo;
-
-  };
-
-  const statsDiv=document.getElementById('stats');
-  statNames.forEach(s=>{
-    statsDiv.innerHTML+=
-      `<div class='card stat-box center'>
-         <b>${s}</b>
-         <input value='${state.stats[s]}' 
-           oninput="state.stats['${s}']=this.value;save();">
-       </div>`;
-  });
-
-  const armorDiv=document.getElementById('armor');
-  armorTypes.forEach(([label,c])=>{
-    armorDiv.innerHTML+=
-      `<div class='armor-box ${c}-theme'>
-         <b class='armor-label'>${label}</b>
-         <input value='${state.armor[label]}' 
-           oninput="state.armor['${label}']=this.value;save();">
-       </div>`;
-  });
-
-  const negDiv=document.getElementById('negatives');
-  negNames.forEach(n=>{
-    negDiv.innerHTML+=
-      `<div class='card neg-card'>
-         <b>${n}</b>
-         <div id='${n}' class='neg-value'>${state.neg[n]}</div>
-         <div class='neg-btn-row'>
-           <button class='neg-btn' onclick="chgNeg('${n}',-1)">−</button>
-           <button class='neg-btn' onclick="chgNeg('${n}',1)">+</button>
-         </div>
-       </div>`;
-    if(state.neg[n]>5) document.getElementById(n).style.color='#ff4c4c';
-  });
-
-  const invDiv=document.getElementById('inventory');
-  state.inventory.forEach((it,i)=>{
-    invDiv.innerHTML+=
-      `<div class='card slot'>
-         <div class="slot-top">
-           <div id="dropbtn${i}" class="dropdown-toggle" onclick="toggleDropdown(${i})">▼</div>
-
-           <textarea rows='3'
-             oninput="state.inventory[${i}].name=this.value;save();">${it.name}</textarea>
-
-           <div id="heavy${i}" class="heavy-toggle" onclick="toggleHeavy(${i})"></div>
-         </div>
-
-         <div id="droparea${i}" class="dropdown-area"></div>
-       </div>`;
-  });
-
-  state.inventory.forEach((it,i)=>{
-    renderHeavy(i);
-    renderDropdown(i);
-
-    const area = document.getElementById("droparea"+i);
-    area.innerHTML = "";
-
-    it.counters.forEach((c,j)=>{
-      area.innerHTML +=
-        `<div class="card neg-card inv-counter-card">
-           <input class="neg-title-input" type="text" value="${c.title}"
-             oninput="state.inventory[${i}].counters[${j}].title=this.value;save();">
-           <div class="inv-counter-btn-row">
-             <button class="neg-btn inv-counter-btn" onclick="chgCounter(${i},${j},-1)">−</button>
-             <div id="count${i}_${j}" class="inv-counter-value">${c.value}</div>
-             <button class="neg-btn inv-counter-btn" onclick="chgCounter(${i},${j},1)">+</button>
-           </div>
-         </div>`;
-    });
-  });
-
-  ['skill','luck','resist'].forEach(k=>{
-    const el=document.getElementById('use'+k.charAt(0).toUpperCase()+k.slice(1));
-    function render(){ el.className='use-box '+(state.uses[k]?'use-on':'use-off'); }
-    el.onclick=()=>{ state.uses[k]=!state.uses[k]; save(); render(); };
-    render();
-  });
-
-  const addictionEl = document.getElementById("addictionToggle");
-
-  function renderAddiction() {
-    addictionEl.className = "use-box addiction-box";
-    if (state.addiction) {
-      addictionEl.classList.add("use-off");
-    
-   // red state
-  }
-}
-
-addictionEl.onclick = () => {
-  state.addiction = !state.addiction;
-  save();
-  renderAddiction();
-};
-
-renderAddiction();
-
-}
+// ---------- ARMOR DAMAGE ----------
 
 function applyArmorDamage(raw) {
   const match = raw.match(/^(\d+)([PEXR])$/);
@@ -815,7 +771,7 @@ function applyArmorDamage(raw) {
   let damage = amount - armorValue;
   if (damage < 0) damage = 0;
 
-  let {cur, max} = parseHP();
+  let { cur, max } = parseHP();
   cur = Math.max(0, cur - damage);
 
   state.hp = `${cur}/${max}`;
@@ -824,44 +780,208 @@ function applyArmorDamage(raw) {
   save();
 }
 
-document.getElementById("armorDmgInput").addEventListener("input", () => {
-  const raw = armorDmgInput.value.trim().toUpperCase();
-  const match = raw.match(/^(\d+)([PEXR])$/);
+// ---------- PERK DATA ----------
 
-  if (!match) return; // wait until input is valid
+const perkData = {
+  Strength: [
+    { name: "Strong Back", desc: "You can hold +2 heavy items and cannot be shoved or grappled." },
+    { name: "Juggernaut", desc: "Melee attacks do +1 damage after sprinting." },
+    { name: "Artisan", desc: "Repairing a broken item gives it +1 durability." },
+    { name: "Pitcher", desc: "Thrown weapons and grenades do +1 damage at max range." },
+    { name: "Wrecking Ball", desc: "Melee aimed shots can shove the target 1 tile in any direction." },
+    { name: "Carnivore", desc: "Consuming flesh gives an extra -1 hunger and heals 10% HP." },
+    { name: "Big Justice", desc: "Explosive splash damage aimed shots splash to short range." },
+    { name: "Chain Reaction", desc: "Explosive damage kills cause the target to explode." },
+    { name: "Chiropractor", desc: "When you cripple a limb, you can cripple another different limb." },
+    { name: "Bear Hug", desc: "Melee aimed shots can grapple the target until your next turn." },
+    { name: "Boomer", desc: "Explosive guns do +1 damage and always detonate explosive tiles." },
+    { name: "Heavy Metal", desc: "Gain +1 energy armor for each heavy item you have." }
+  ],
 
-  applyArmorDamage(raw);  // run calculation
-  armorDmgInput.value = ""; // reset field
-});
+  Agility: [
+    { name: "Commando", desc: "Rifles do +1 damage when fired from cover." },
+    { name: "Gunslinger", desc: "Pistol attacks can spend your movement to do +1 damage." },
+    { name: "Sixth Sense", desc: "You can also move or sprint when you defend or search." },
+    { name: "Gotta Go Fast", desc: "Sprint moves +1 distance and lets you ignore ground hazards." },
+    { name: "Ninja", desc: "You can move while sneaking and sneak attack kills do not reveal you." },
+    { name: "Guerrilla", desc: "Special terrain also counts as cover and attacks ignore obstructions." },
+    { name: "Sniper", desc: "Long range weapons gain +1 range and ignore cover." },
+    { name: "Perfectionist", desc: "Crits restore luck, heal 10% HP, and deal +1 damage if attacking." },
+    { name: "Jack of All Trades", desc: "Gain another skill that uses stats different from your skill." },
+    { name: "Good Karma", desc: "Tag an additional stat. Critical fails now count as regular fails." },
+    { name: "Rivers of Blood", desc: "Physical damage aimed shots can cause the target to bleed." },
+    { name: "Gun Fu", desc: "Gain +1 physical armor for each enemy in melee range." }
+  ],
 
-function updateHPColor() {
-  const hpEl = document.getElementById("hp");
-  const { cur, max } = parseHP();
-  const pct = cur / max;
+  Endurance: [
+    { name: "Blacksmith", desc: "Consume one fewer scrap when you roll a success on a repair roll." },
+    { name: "Iron Man", desc: "Gain +10 max HP and your limbs can only be crippled once each." },
+    { name: "Lead Belly", desc: "Treat irradiated food and drink as dirty instead." },
+    { name: "Sadist", desc: "Aimed shots that apply ailments add +1 stack to all ailments on the target." },
+    { name: "All-nighter", desc: "You can gain +1 fatigue to scavenge a settlement." },
+    { name: "Chromomancer", desc: "Gain the ability to harvest mutant DNA to create a mutant." },
+    { name: "Ghoulish", desc: "Heal 10% HP each time you gain one or more rads." },
+    { name: "Perseverance", desc: "After you make a roll with a stat at 0 or 1, restore skill." },
+    { name: "Rare Hunter", desc: "You can scavenge for special items directly." },
+    { name: "Catch a Ride", desc: "When you move you can take an ally in melee range with you." },
+    { name: "Shotgun Surgeon", desc: "Shotguns do +1 damage against enemies in melee range." },
+    { name: "Exposure Therapy", desc: "Rad damage aimed shots can poison the target." }
+  ],
 
-  if (pct <= 0.20) {
-    // Red (danger)
-    hpEl.style.color = "#ff3b3b";
-    hpEl.style.textShadow = "0 0 6px #ff3b3b";
+  Intelligence: [
+    { name: "Scrounger", desc: "Looting killed humans always yields an extra 5 caps." },
+    { name: "Substance Enthusiast", desc: "Chems last twice as long and heal 10% HP on use." },
+    { name: "Hoarder", desc: "You can use broken items but durability loss destroys them." },
+    { name: "Discerning Eye", desc: "You can reroll the type of scavenging roll you get once each." },
+    { name: "Idiot Savant", desc: "You can treat two rolled 1s as a 6." },
+    { name: "Green Thumb", desc: "Potted plants have +100% yield if held for the whole level." },
+    { name: "Side Hustle", desc: "Gain an additional background." },
+    { name: "Test Subject", desc: "Artifacts can convert durability to or from your HP at a 1:10 ratio." },
+    { name: "Robotics Expert", desc: "Gain the ability to hack and build robots." },
+    { name: "Overclock", desc: "Energy damage aimed shots can cause the target to burn." },
+    { name: "Chosen One", desc: "You understand alien technology and meds restore +10% HP." },
+    { name: "Magnetic Field", desc: "Gain +1 rad armor for each technology you are holding." }
+  ],
 
-  } else if (pct <= 0.50) {
-    // Orange‑yellow (wounded)
-    hpEl.style.color = "#ffb84a";
-    hpEl.style.textShadow = "0 0 6px #ffb84a";
+  Charisma: [
+    { name: "Animal Friend", desc: "Gain the ability to pacify and befriend wild animals." },
+    { name: "Do Not Go Gently", desc: "Luck gives +1 die when used on another player." },
+    { name: "VIP Member", desc: "Sleeping in a settlement is free and twice as effective." },
+    { name: "True Grit", desc: "Resist can be used on other players and always rolls at least 2 dice." },
+    { name: "Wasteland’s Got Talent", desc: "You can perform a show in each settlement." },
+    { name: "Selfless", desc: "You can intercept non aimed shot attacks against allies in melee range." },
+    { name: "Vampire", desc: "You can drink the blood of recently deceased creatures." },
+    { name: "I know a Place", desc: "Chosen faction settlements provide a free crit faction loot roll." },
+    { name: "Cyberpsycho", desc: "You can have +2 implants and doctor services cost you 50% less." },
+    { name: "Grifter", desc: "Haggling is twice as effective." },
+    { name: "High Roller", desc: "You can treat any rolled triples as a 6." },
+    { name: "Cool Guys Don’t Look at Explosions", desc: "Gain +5 explosive armor." }
+  ]
+};
 
-  } else if (pct <= 0.75) {
-    // Yellow‑green (slightly injured)
-    hpEl.style.color = "#e6ff66";
-    hpEl.style.textShadow = "0 0 6px #e6ff66";
+const backgroundData = [
+  { name: "Technician", desc: "Repairing weapons does not require a roll." },
+  { name: "Mechanic", desc: "Repairing armor does not require a roll." },
+  { name: "Farmer", desc: "You can purify rations 2:1 (irradiated⭢dirty⭢clean)." },
+  { name: "Chef", desc: "You can convert any 2 flesh into 1 fuel." },
+  { name: "Exterminator", desc: "You can instantly execute enemies within melee range with less HP than your level on your turn." },
+  { name: "Guard", desc: "You can convert 2 small rounds ⭤ 1 large round." },
+  { name: "Plumber", desc: "You can purify water 2:1 (irradiated⭢dirty⭢clean)." },
+  { name: "Doctor", desc: "You can convert any 2 meds into another med." },
+  { name: "Scientist", desc: "You can convert any 2 chems into another chem." },
+  { name: "Engineer", desc: "Repairing technology does not require a roll." },
+  { name: "Tailor", desc: "You can convert any 2 scrap into another scrap." },
+  { name: "Electrician", desc: "You can convert 2 E-cells ⭤ 1 MF-cell." }
+];
 
-  } else {
-    // Healthy green (now glowing too)
-    hpEl.style.color = "#9fef9f";
-    hpEl.style.textShadow = "0 0 6px #9fef9f";
-  }
+
+// ---------- PERKS UI ----------
+
+function toggleSection(stat, header) {
+  const list = header.nextElementSibling;
+  const collapsed = header.classList.toggle("collapsed");
+  list.classList.toggle("open");
+  state.perkSections[stat] = !collapsed;
+  save();
 }
 
+function buildPerkUI() {
+  const container = document.querySelector(".perks-content");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  Object.keys(perkData).forEach(stat => {
+    const section = document.createElement("div");
+    section.className = "perk-section";
+
+    const isOpen = state.perkSections[stat] !== false;
+
+    section.innerHTML = `
+      <div class="perk-header ${isOpen ? "" : "collapsed"}"
+           onclick="toggleSection('${stat}', this)">
+        <span class="triangle">▼</span>
+        <h3>${stat}</h3>
+      </div>
+      <div class="perk-list ${isOpen ? "open" : ""}"></div>
+    `;
+
+    const list = section.querySelector(".perk-list");
+
+    perkData[stat].forEach(perk => {
+      const id = `${stat}-${perk.name}`;
+      const item = document.createElement("label");
+      item.className = "perk-item";
+
+      item.innerHTML = `
+        <input type="checkbox" class="perk-check" data-id="${id}">
+        <span class="perk-box"></span>
+        <span class="perk-text"><b>${perk.name}:</b> ${perk.desc}</span>
+      `;
+
+      if (state.perks[id]) {
+        item.querySelector(".perk-check").checked = true;
+      }
+
+      list.appendChild(item);
+    });
+
+    container.appendChild(section);
+  });
+
+  // Hook up checkbox change → save
+  container.querySelectorAll(".perk-check").forEach(box => {
+    box.addEventListener("change", () => {
+      const id = box.dataset.id;
+      state.perks[id] = box.checked;
+      save();
+    });
+  });
+// ---------- BACKGROUNDS SECTION ----------
+const bgSection = document.createElement("div");
+bgSection.className = "perk-section";
+
+const bgOpen = state.perkSections["Backgrounds"] !== false;
+
+bgSection.innerHTML = `
+  <div class="perk-header ${bgOpen ? "" : "collapsed"}"
+       onclick="toggleSection('Backgrounds', this)">
+    <span class="triangle">▼</span>
+    <h3>Backgrounds</h3>
+  </div>
+  <div class="perk-list ${bgOpen ? "open" : ""}"></div>
+`;
+
+const bgList = bgSection.querySelector(".perk-list");
+
+backgroundData.forEach(bg => {
+  const id = `Background-${bg.name}`;
+
+  const item = document.createElement("label");
+  item.className = "perk-item";
+
+  item.innerHTML = `
+    <input type="checkbox" class="perk-check" data-id="${id}">
+    <span class="perk-box"></span>
+    <span class="perk-text"><b>${bg.name}:</b> ${bg.desc}</span>
+  `;
+
+  if (state.perks[id]) {
+    item.querySelector(".perk-check").checked = true;
+  }
+
+  bgList.appendChild(item);
+});
+
+container.appendChild(bgSection);
+
+
+}
+
+// ---------- SCREEN SWITCHING ----------
+
 function showPerksScreen() {
+  buildPerkUI();
   document.getElementById("perksScreen").style.display = "block";
 }
 
@@ -869,11 +989,149 @@ function hidePerksScreen() {
   document.getElementById("perksScreen").style.display = "none";
 }
 
+// ---------- INIT ----------
 
+function init() {
+  // Front page fields
+  name.value = state.name;
+  skillName.value = state.skillName;
+  level.value = state.level;
+  caps.value = state.caps;
 
+  document.getElementById("perksBtn").onclick = showPerksScreen;
+  document.getElementById("backBtn").onclick = hidePerksScreen;
 
-init();
+  name.oninput = e => { state.name = e.target.value; save(); };
+  skillName.oninput = e => { state.skillName = e.target.value; save(); };
+  level.oninput = e => { state.level = e.target.value; save(); };
+  caps.oninput = e => { state.caps = e.target.value; save(); };
+
+  updateHPDisplay();
+  updateHPColor();
+
+  hp.oninput = e => {
+    state.hp = e.target.value;
+    save();
+  };
+
+  // Stats
+  const statsDiv = document.getElementById("stats");
+  statsDiv.innerHTML = "";
+  statNames.forEach(s => {
+    statsDiv.innerHTML +=
+      `<div class='card stat-box center'>
+         <b>${s}</b>
+         <input value='${state.stats[s]}'
+           oninput="state.stats['${s}']=this.value;save();">
+       </div>`;
+  });
+
+  // Armor
+  const armorDiv = document.getElementById("armor");
+  armorDiv.innerHTML = "";
+  armorTypes.forEach(([label, c]) => {
+    armorDiv.innerHTML +=
+      `<div class='armor-box ${c}-theme'>
+         <b class='armor-label'>${label}</b>
+         <input value='${state.armor[label]}'
+           oninput="state.armor['${label}']=this.value;save();">
+       </div>`;
+  });
+
+  // Negatives
+  const negDiv = document.getElementById("negatives");
+  negDiv.innerHTML = "";
+  negNames.forEach(n => {
+    negDiv.innerHTML +=
+      `<div class='card neg-card'>
+         <b>${n}</b>
+         <div id='${n}' class='neg-value'>${state.neg[n]}</div>
+         <div class='neg-btn-row'>
+           <button class='neg-btn' onclick="chgNeg('${n}',-1)">−</button>
+           <button class='neg-btn' onclick="chgNeg('${n}',1)">+</button>
+         </div>
+       </div>`;
+  });
+  negNames.forEach(n => {
+    if (state.neg[n] > 5) document.getElementById(n).style.color = "#ff4c4c";
+  });
+
+  // Inventory
+  const invDiv = document.getElementById("inventory");
+  invDiv.innerHTML = "";
+  state.inventory.forEach((it, i) => {
+    invDiv.innerHTML +=
+      `<div class='card slot'>
+         <div class="slot-top">
+           <div id="dropbtn${i}" class="dropdown-toggle" onclick="toggleDropdown(${i})">▼</div>
+           <textarea rows='3'
+             oninput="state.inventory[${i}].name=this.value;save();">${it.name}</textarea>
+           <div id="heavy${i}" class="heavy-toggle" onclick="toggleHeavy(${i})"></div>
+         </div>
+         <div id="droparea${i}" class="dropdown-area"></div>
+       </div>`;
+  });
+
+  state.inventory.forEach((it, i) => {
+    renderHeavy(i);
+    renderDropdown(i);
+    const area = document.getElementById("droparea" + i);
+    area.innerHTML = "";
+    it.counters.forEach((c, j) => {
+      area.innerHTML +=
+        `<div class="card neg-card inv-counter-card">
+           <input class="neg-title-input" type="text" value="${c.title}"
+             oninput="state.inventory[${i}].counters[${j}].title=this.value;save();">
+           <div class="inv-counter-btn-row">
+             <button class="neg-btn inv-counter-btn" onclick="chgCounter(${i},${j},-1)">−</button>
+             <div id="count${i}_${j}" class="inv-counter-value">${c.value}</div>
+             <button class="neg-btn inv-counter-btn" onclick="chgCounter(${i},${j},1)">+</button>
+           </div>
+         </div>`;
+    });
+  });
+
+  // Uses
+  ["skill","luck","resist"].forEach(k => {
+    const el = document.getElementById(
+      "use" + k.charAt(0).toUpperCase() + k.slice(1)
+    );
+    function render() {
+      el.className = "use-box " + (state.uses[k] ? "use-on" : "use-off");
+    }
+    el.onclick = () => { state.uses[k] = !state.uses[k]; save(); render(); };
+    render();
+  });
+
+  // Addiction toggle
+  const addictionEl = document.getElementById("addictionToggle");
+  function renderAddiction() {
+    addictionEl.className = "use-box addiction-box";
+    if (state.addiction) {
+      addictionEl.classList.add("use-off");
+    }
+  }
+  addictionEl.onclick = () => {
+    state.addiction = !state.addiction;
+    save();
+    renderAddiction();
+  };
+  renderAddiction();
+
+  // Armor damage input
+  const armorInput = document.getElementById("armorDmgInput");
+  armorInput.addEventListener("input", () => {
+    const raw = armorInput.value.trim().toUpperCase();
+    const match = raw.match(/^(\d+)([PEXR])$/);
+    if (!match) return;
+    applyArmorDamage(raw);
+    armorInput.value = "";
+  });
+}
+
+document.addEventListener("DOMContentLoaded", init);
 </script>
+
 
 </body>
 </html>
