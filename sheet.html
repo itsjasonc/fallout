@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fallout Character Sheet</title>
+  <title>FALLOUT CHARACTER SHEET</title>
 
   <style>
     body { overflow-x: hidden; width: 100%; margin:0; padding:0; font-family: monospace; background:#0b120b; color:#9fef9f; }
@@ -31,8 +31,8 @@
 	.grid.title.card {
 	  margin-top: 10px; /* adjust to taste */
 	}
-
-
+	
+	
     .armor {
       display:flex;
       flex-direction:row;
@@ -45,13 +45,14 @@
       min-width:0;
       box-sizing:border-box;
       padding:10px;
-      border:2px solid;
+      border: 2px solid;
       display:flex;
       flex-direction:column;
       justify-content:center;
       align-items:center;
     }
-
+	
+	
     .armor-label {
       font-weight:bold;
       margin-bottom:6px;
@@ -63,6 +64,30 @@
     .e-theme { background:#112233; border-color:#5ca9ff; }
     .x-theme { background:#332211; border-color:#ffb85c; }
     .r-theme { background:#113311; border-color:#6dff6d; }
+	
+	/* Physical */
+	.armor-box.p-theme input {
+	  color: #ff5c5c;
+	  border-color: #ff5c5c;
+	}
+
+	/* Energy */
+	.armor-box.e-theme input {
+	  color: #5ca9ff;
+	  border-color: #5ca9ff;
+	}
+
+	/* Explosive */
+	.armor-box.x-theme input {
+	  color: #ffb85c;
+	  border-color: #ffb85c;
+	}
+
+	/* Rad */
+	.armor-box.r-theme input {
+	  color: #6dff6d;
+	  border-color: #6dff6d;
+	}
 
     .armor-box input {
       text-align:center;
@@ -70,8 +95,10 @@
       font-weight:bold;
       background:transparent;
       border:none;
-      color:inherit;
+      color: var(--armor-color);
+		border: 1px solid var(--armor-color);
     }
+	
 
     .hp-area {
       display:grid;
@@ -223,6 +250,7 @@
       display:grid;
       grid-template-rows: repeat(3, 1fr);
       gap:6px;
+	  transform: translateX(-4px); /* move left without resizing */
     }
 
     .use-box {
@@ -589,16 +617,16 @@
 <body>
 
 <div class="title-bar">
-  <div class="title-left"><h2>Fallout Character Sheet</h2></div>
+  <div class="title-left"><h2>FALLOUT CHARACTER SHEET</h2></div>
   <button id="perksBtn" class="perks-btn">PERKS</button>
 </div>
 
   <div class="grid title card">
  
-    <input id="name" placeholder="Character Name">
-    <input id="skillName" placeholder="Skill">
-    <input id="level" placeholder="Level">
-    <input id="caps" placeholder="Caps">
+    <input id="name" placeholder="CHARACTER NAME">
+    <input id="skillName" placeholder="SKILL">
+    <input id="level" placeholder="LEVEL">
+    <input id="caps" placeholder="CAPS">
   </div>
   
   
@@ -648,7 +676,7 @@
 
 <div id="perksScreen" class="hidden-screen">
   <div class="title-bar">
-  <div class="title-left"><h2 id="perksTitle" class="major-header"> <span class="triangle">▼</span> Perks </h2></div>
+  <div class="title-left"><h2 id="perksTitle" class="major-header"> <span class="triangle">▼</span> PERKS </h2></div>
   <button class="perks-btn" onclick="exportSheet()">SAVE</button> 
   <button class="perks-btn" onclick="importSheet()">LOAD</button>
   <button id="backBtn" class="perks-btn">SHEET</button>
@@ -859,7 +887,7 @@ function applyArmorDamage(raw) {
 // ---------- PERK DATA ----------
 
 const perkData = {
-  Strength: [
+  STRENGTH: [
     { name: "Strong Back", desc: "You can hold +2 heavy items and cannot be shoved or grappled." },
     { name: "Juggernaut", desc: "Melee attacks do +1 damage after sprinting." },
     { name: "Artisan", desc: "Repairing a broken item gives it +1 durability." },
@@ -874,7 +902,7 @@ const perkData = {
     { name: "Heavy Metal", desc: "Gain +1 energy armor for each heavy item you have." }
   ],
 
-  Agility: [
+  AGILITY: [
     { name: "Commando", desc: "Rifles do +1 damage when fired from cover." },
     { name: "Gunslinger", desc: "Pistol attacks can spend your movement to do +1 damage." },
     { name: "Sixth Sense", desc: "You can also move or sprint when you defend or search." },
@@ -889,7 +917,7 @@ const perkData = {
     { name: "Gun Fu", desc: "Gain +1 physical armor for each enemy in melee range." }
   ],
 
-  Endurance: [
+  ENDURANCE: [
     { name: "Blacksmith", desc: "Consume one fewer scrap when you roll a success on a repair roll." },
     { name: "Iron Man", desc: "Gain +10 max HP and your limbs can only be crippled once each." },
     { name: "Lead Belly", desc: "Treat irradiated food and drink as dirty instead." },
@@ -904,7 +932,7 @@ const perkData = {
     { name: "Exposure Therapy", desc: "Rad damage aimed shots can poison the target." }
   ],
 
-  Intelligence: [
+  INTELLIGENCE: [
     { name: "Scrounger", desc: "Looting killed humans always yields an extra 5 caps." },
     { name: "Substance Enthusiast", desc: "Chems last twice as long and heal 10% HP on use." },
     { name: "Hoarder", desc: "You can use broken items but durability loss destroys them." },
@@ -919,7 +947,7 @@ const perkData = {
     { name: "Magnetic Field", desc: "Gain +1 rad armor for each technology you are holding." }
   ],
 
-  Charisma: [
+  CHARISMA: [
     { name: "Animal Friend", desc: "Gain the ability to pacify and befriend wild animals." },
     { name: "Do Not Go Gently", desc: "Luck gives +1 die when used on another player." },
     { name: "VIP Member", desc: "Sleeping in a settlement is free and twice as effective." },
@@ -999,7 +1027,7 @@ container.appendChild(specialWrapper);
       item.innerHTML = `
         <input type="checkbox" class="perk-check" data-id="${id}">
         <span class="perk-box"></span>
-        <span class="perk-text"><b>${perk.name}:</b> ${perk.desc}</span>
+        <span class="perk-text"><b>${perk.name.toUpperCase()}:</b> ${perk.desc}</span>
       `;
 
       if (state.perks[id]) {
@@ -1015,7 +1043,7 @@ container.appendChild(specialWrapper);
 		// BACKGROUNDS HEADER
 	const bgHeader = document.createElement("h2");
 	bgHeader.className = "major-header";
-	bgHeader.innerHTML = `<span class="triangle">▼</span> Backgrounds`;
+	bgHeader.innerHTML = `<span class="triangle">▼</span> BACKGROUNDS`;
 	container.appendChild(bgHeader);
 
 	// BACKGROUNDS LIST (always visible)
@@ -1033,7 +1061,7 @@ container.appendChild(specialWrapper);
   item.innerHTML = `
     <input type="checkbox" class="perk-check" data-id="${id}">
     <span class="perk-box"></span>
-    <span class="perk-text"><b>${bg.name}:</b> ${bg.desc}</span>
+    <span class="perk-text"><b>${bg.name.toUpperCase()}:</b> ${bg.desc}</span>
   `;
 
   if (state.perks[id]) {
@@ -1230,7 +1258,7 @@ statNames.forEach(s => {
   armorTypes.forEach(([label, c]) => {
     armorDiv.innerHTML +=
       `<div class='armor-box ${c}-theme'>
-         <b class='armor-label'>${label}</b>
+         <b class='armor-label'>${label.toUpperCase()}</b>
          <input value='${state.armor[label]}'
            oninput="state.armor['${label}']=this.value;save();">
        </div>`;
@@ -1242,7 +1270,7 @@ statNames.forEach(s => {
   negNames.forEach(n => {
     negDiv.innerHTML +=
       `<div class='card neg-card'>
-         <b>${n}</b>
+         <b>${n.toUpperCase()}</b>
          <div id='${n}' class='neg-value'>${state.neg[n]}</div>
          <div class='neg-btn-row'>
            <button class='neg-btn' onclick="chgNeg('${n}',-1)">−</button>
