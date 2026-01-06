@@ -44,10 +44,9 @@
       flex:1 1 0;
       min-width:0;
       box-sizing:border-box;
-      padding:2px;
+      padding:10px;
       border: 2px solid;
       display:flex;
-      font-size:14px
       flex-direction:column;
       justify-content:center;
       align-items:center;
@@ -873,7 +872,7 @@ function chgCounter(i, c, d) {
 // ---------- ARMOR DAMAGE ----------
 
 function applyArmorDamage(raw) {
-  const match = raw.match(/^(\d+)([PEXR])$/);
+  const match = raw.match(/^(\d+)([PNXR])$/);
   if (!match) return;
 
   const amount = parseInt(match[1]);
