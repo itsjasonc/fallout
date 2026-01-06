@@ -829,6 +829,49 @@ function chgNeg(n, d) {
 }
 
 
+state.caps = state.caps || 0; // initialize if not set
+const capsInput = document.getElementById("caps");
+
+// Show initial CAPS value
+capsInput.value = state.caps;
+
+// Handle user input when they press Enter or leave the field
+capsInput.addEventListener("blur", applyCapsChange);
+capsInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    applyCapsChange();
+    capsInput.blur(); // optional: remove focus
+  }
+});
+
+function applyCapsChange() {
+  const raw = capsInput.value.trim();
+  if (!raw) return;
+
+  // Detect modifier (+ or - at the end)
+  const match = raw.match(/^(\d+)([+-])?$/);
+  if (!match) {
+    // Invalid input: reset to current state
+    capsInput.value = state.caps;
+    return;
+  }
+
+  const amount = parseInt(match[1], 10);
+  const modifier = match[2];
+
+  if (modifier === "+") {
+    state.caps += amount;
+  } else if (modifier === "-") {
+    state.caps -= amount;
+  } else {
+    // No modifier: replace value
+    state.caps = amount;
+  }
+
+  capsInput.value = state.caps;
+  save(); // persist changes
+}
+
 
 
 // ---------- INVENTORY ----------
