@@ -1474,6 +1474,7 @@ document.getElementById("showTakenToggle").addEventListener("change", e => {
 
   // Rebuild the perk UI
   buildPerkUI();
+  
 });
 
 
@@ -1865,6 +1866,9 @@ function togglePerkFilter() {
   buildPerkUI();
   attachTooltips();
 }
+// Restore the top toggle's checkmark
+document.querySelector(".taken-toggle .perk-box").textContent =
+  state.showTakenOnly ? "✔" : "";
 
 
 
