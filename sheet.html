@@ -667,6 +667,44 @@
 }
 
 
+/* TAKEN toggle aligned with SAVE / LOAD */
+.taken-toggle {
+  display: flex;          /* cleaner, no inline spacing */
+  justify-content: flex-start;
+  align-items: center;    /* vertically center contents */
+  gap: 6px;
+  padding: 4px 10px;
+  background: #081408;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+
+.taken-toggle input {
+  display: none; /* hide native checkbox */
+}
+
+.taken-toggle .perk-box {
+  width: 18px;
+  height: 18px;
+  border: 1px solid #2cff2c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  line-height: 1;
+  margin: 0;
+}
+
+
+.taken-toggle .perk-text {
+  font-size: 14px;
+  line-height: 1;
+}
+
+
+
   </style>
 </head>
 
@@ -733,8 +771,15 @@
 <div id="perksScreen" class="hidden-screen">
   <div class="title-bar">
   <div class="title-left"><h2 id="perksTitle" class="major-header"> <span class="triangle">▼</span> PERKS </h2></div>
+  
+  <label class="taken-toggle">
+    <input type="checkbox" id="showTakenToggle">
+    <span class="perk-box"></span>
+  </label>  
+
   <button class="perks-btn" onclick="exportSheet()">SAVE</button> 
   <button class="perks-btn" onclick="importSheet()">LOAD</button>
+  
   <button id="backBtn" class="perks-btn">SHEET</button>
   <input type="file" id="fileInput" style="display:none" />
 </div>
@@ -785,6 +830,7 @@ let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
   starredStats: Object.fromEntries(statNames.map(s => [s, false]))
 };
 state.starredStats = state.starredStats || Object.fromEntries(statNames.map(s => [s, false]));
+state.showTakenOnly = state.showTakenOnly ?? false;
 
 
 function toggleSpecial(stat, el) {
@@ -1225,48 +1271,89 @@ function buildPerkUI() {
 	container.appendChild(allPerksWrapper);
 	
 	const specialWrapper = document.createElement("div");
-specialWrapper.id = "specialWrapper";
-container.appendChild(specialWrapper);
+	specialWrapper.id = "specialWrapper";
+	container.appendChild(specialWrapper);
+
+	
+
 
   Object.keys(perkData).forEach(stat => {
-    const section = document.createElement("div");
-    section.className = "perk-section";
 
-    const isOpen = state.perkSections[stat] !== false;
+  // Hide SPECIAL headers entirely when showing taken only
+  if (state.showTakenOnly) return;
 
-    section.innerHTML = `
-      <div class="perk-header ${isOpen ? "" : "collapsed"}"
-           onclick="toggleSection('${stat}', this)">
-        <span class="triangle">▼</span>
-        <h3>${stat}</h3>
-      </div>
-      <div class="perk-list ${isOpen ? "open" : ""}"></div>
+  const section = document.createElement("div");
+  section.className = "perk-section";
+
+  const isOpen = state.perkSections[stat] !== false;
+
+  section.innerHTML = `
+    <div class="perk-header ${isOpen ? "" : "collapsed"}"
+         onclick="toggleSection('${stat}', this)">
+      <span class="triangle">▼</span>
+      <h3>${stat}</h3>
+    </div>
+    <div class="perk-list ${isOpen ? "open" : ""}"></div>
+  `;
+
+  const list = section.querySelector(".perk-list");
+
+  perkData[stat].forEach(perk => {
+    const id = `${stat}-${perk.name}`;
+
+    // If filtering, skip un-taken perks
+    if (state.showTakenOnly && !state.perks[id]) return;
+
+    const item = document.createElement("label");
+    item.className = "perk-item";
+
+    item.innerHTML = `
+      <input type="checkbox" class="perk-check" data-id="${id}">
+      <span class="perk-box"></span>
+      <span class="perk-text"><b>${perk.name.toUpperCase()}:</b> ${perk.desc}</span>
     `;
 
-    const list = section.querySelector(".perk-list");
+    if (state.perks[id]) {
+      item.querySelector(".perk-check").checked = true;
+    }
 
-    perkData[stat].forEach(perk => {
+    list.appendChild(item);
+  });
+
+  if (list.children.length > 0) {
+    specialWrapper.appendChild(section);
+	  }
+	});
+	
+		if (state.showTakenOnly) {
+  const flat = document.createElement("div");
+  flat.style.margin = "0 16px";
+
+  Object.entries(perkData).forEach(([stat, perks]) => {
+    perks.forEach(perk => {
       const id = `${stat}-${perk.name}`;
+      if (!state.perks[id]) return;
+
       const item = document.createElement("label");
       item.className = "perk-item";
 
       item.innerHTML = `
-        <input type="checkbox" class="perk-check" data-id="${id}">
+        <input type="checkbox" class="perk-check" data-id="${id}" checked>
         <span class="perk-box"></span>
-        <span class="perk-text"><b>${perk.name.toUpperCase()}:</b> ${perk.desc}</span>
+        <span class="perk-text">
+          <b>${perk.name.toUpperCase()}</b>
+          <span style="opacity:.6;">(${stat})</span>: ${perk.desc}
+        </span>
       `;
 
-      if (state.perks[id]) {
-        item.querySelector(".perk-check").checked = true;
-      }
-
-      list.appendChild(item);
+      flat.appendChild(item);
     });
-
-    specialWrapper.appendChild(section);
   });
+
+  specialWrapper.appendChild(flat);
+	}
   
-		// BACKGROUNDS HEADER
+	// BACKGROUNDS HEADER
 	const bgHeader = document.createElement("h2");
 	bgHeader.className = "major-header";
 	bgHeader.innerHTML = `<span class="triangle">▼</span> BACKGROUNDS`;
@@ -1280,9 +1367,12 @@ container.appendChild(specialWrapper);
 
 	// Add each background directly
 	backgroundData.forEach(bg => {
-	  const id = `Background-${bg.name}`;
-	  const item = document.createElement("label");
-	  item.className = "perk-item";
+  const id = `Background-${bg.name}`;
+
+  if (state.showTakenOnly && !state.perks[id]) return;
+
+  const item = document.createElement("label");
+  item.className = "perk-item";
 
   item.innerHTML = `
     <input type="checkbox" class="perk-check" data-id="${id}">
@@ -1296,6 +1386,7 @@ container.appendChild(specialWrapper);
 
   bgListWrapper.appendChild(item);
 });
+
 
 // Restore saved collapse state
 if (state.perkSections["Backgrounds"] === false) {
@@ -1367,6 +1458,20 @@ bgHeader.onclick = () => toggleBackgrounds(bgHeader);
 
 
 }
+
+document.getElementById("showTakenToggle").addEventListener("change", e => {
+  state.showTakenOnly = e.target.checked;
+  save();
+
+  // Update the tick in the top button
+  const box = document.querySelector(".taken-toggle .perk-box");
+  box.textContent = e.target.checked ? "✔" : "";
+
+  // Rebuild the perk UI
+  buildPerkUI();
+});
+
+
 
 function toggleNotes(header) {
   const wrap = document.getElementById("notesWrapper");
@@ -1458,15 +1563,29 @@ function init() {
 
   updateHPDisplay();
   updateHPColor();
+  
+  const takenToggle = document.getElementById("showTakenToggle");
+if (takenToggle) {
+  takenToggle.checked = state.showTakenOnly;
+
+  takenToggle.onchange = () => {
+    state.showTakenOnly = takenToggle.checked;
+    save();
+    buildPerkUI();
+  };
+}
+
+
 
   hp.oninput = e => {
     state.hp = e.target.value;
     save();
   };
+  
 
   // Stats
-const statsDiv = document.getElementById("stats");
-statsDiv.innerHTML = "";
+	const statsDiv = document.getElementById("stats");
+	statsDiv.innerHTML = "";
 
 statNames.forEach(s => {
 
@@ -1734,6 +1853,14 @@ function importSheet() {
     reader.readAsText(file);
   };
 }
+
+function togglePerkFilter() {
+  state.showOnlyAllocated = !state.showOnlyAllocated;
+  save();
+  buildPerkUI();
+  attachTooltips();
+}
+
 
 
 document.addEventListener("DOMContentLoaded", init);
