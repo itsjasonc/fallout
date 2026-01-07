@@ -33,16 +33,27 @@
 	text-align: center;
 	font-size: 25px;
 	padding: 0;          /* removes extra space */
+	margin: 0;
 	line-height: 1;      /* keeps height tight */
 	width: 45px;         /* adjust to taste */
 }
+
+	.stat-box {
+	  padding: 6px 0;   /* reduce vertical padding */
+	}
+
 
 	
 	.grid.title.card {
 	  margin-top: 10px; /* adjust to taste */
 	}
 		
-    
+	html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+	
+	    
 .armor {
   display:flex;
   flex-direction:row;
@@ -54,38 +65,43 @@
   flex:1 1 0;
   min-width:0;
   box-sizing:border-box;
-  padding:10px;
+  padding-top: 6px; /* instead of 10px */ 
+  padding-bottom: 6px;
   border: 2px solid;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
+  margin: 0;
 }
 
 .armor-label {
   font-weight:bold;
-  margin-bottom:6px;
+  margin-bottom:0px;
   display:block;
   font-size:clamp(10px, 2.5vw, 16px);
 }
 
 .armor-box input {
-  width: 50px;
-  text-align:center;
-  font-size:clamp(14px, 4vw, 22px); /* keep your existing responsive size */
-  transform: scale(1.5);            /* scale up the text */
-  transform-origin: center;
-  display: inline-block;            /* required for transform */
-  font-weight:bold;
-  background:transparent;
-  border:none;
+  text-align: center;
+  font-size: clamp(25px, 8vw, 30px);
+  font-weight: bold;
+  line-height: 1;
+  padding: 0;          /* no internal spacing */
+  margin: 0;
+
+  background: transparent;
+  border: none;
+
   color: var(--armor-color);
-  border: 1px solid var(--armor-color);
+  width: 55px;
+
+  /* remove the scaling — this is what caused vertical padding illusion */
+  transform: none;
+  display: inline-block;
 }
 
 
-
-	
 
 /* underline style for the chosen character */
 .armor-label .underline {
@@ -118,23 +134,13 @@
 	  border-color: #ffb85c;
 	}
 
-	/* Rad */
+	/* Radiation */
 	.armor-box.r-theme input {
 	  color: #6dff6d;
 	  border-color: #6dff6d;
 	}
 
-    .armor-box input {
-      text-align:center;
-      font-size:clamp(14px, 4vw, 22px);
-      font-weight:bold;
-      background:transparent;
-      border:none;
-      color: var(--armor-color);
-		border: 1px solid var(--armor-color);
-    }
-	
-
+    
     .hp-area {
       display:grid;
       grid-template-columns: 1fr 72px;
@@ -183,6 +189,8 @@
 
     .hp-plus10 {
   position: absolute;
+  max-width: 100%;
+  overflow: hidden;
   right: 4px;          /* move right */
   top: 1%;            /* move upward */
   transform: translateY(-50%);
@@ -194,10 +202,12 @@
   box-shadow:0 0 6px #2cff2c;
 }
 
+
 .hp-dmgbox {
   position: absolute;
+  height:20px;
   top: 1%;
-  left: 6px;
+  left: 4px;
   padding: 0;
   background: #081408;            /* dark Pip‑Boy background */
   border: 1px solid #ff3c3c;      /* dark red outline */
@@ -213,8 +223,9 @@
   -moz-appearance: none !important;     /* remove Firefox styling */
   appearance: none !important;          /* remove generic styling */
   color: #9fef9f;
-  font-size: clamp(12px, 2.5vw, 18px);
+  font-size: clamp(14px, 3vw, 20px);
   text-align: center;
+  transform: translateY(-3px);
   padding: 0;
   margin: 0;
 }
@@ -300,7 +311,7 @@
     .negatives { grid-template-columns: repeat(5, 1fr); }
     .neg-card { text-align:center; min-width:0; padding:4px; }
     .neg-value { font-size:22px; }
-    .neg-btn-row { display:flex; justify-content:center; gap:8px; }
+    .neg-btn-row { display:flex; gap: 8px; justify-content:center;}
     .neg-btn { padding:1px 4px; background:#081408; color:#9fef9f; border:1px solid #2cff2c; font-size:14px; }
 
     .inventory { grid-template-columns:1fr; }
@@ -652,7 +663,7 @@
 #stats b {
   font-size: 20px;        /* bigger label text */
   line-height: 1;         /* removes vertical dead space */
-  margin-bottom: 4px;     /* tighten spacing above the input */
+  margin: 0 0 2px 0;     /* tighten spacing above the input */
   display: inline-block;  /* allows line-height to behave predictably */
 }
 
@@ -742,7 +753,7 @@ const armorTypes = [
   ["Physical","p"],
   ["Energy","n"],
   ["Explosive","x"],
-  ["Rad","r"]
+  ["Radiation","r"]
 ];
 const negNames = ["Hunger","Thirst","Fatigue","Rads","Injury"];
 
@@ -756,7 +767,7 @@ let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
   perkSections: {},   // perk section open/closed
   stats: Object.fromEntries(statNames.map(s => [s, ""])),
   specialStats: Object.fromEntries(statNames.map(s => [s, false])),
-  armor: { Physical:"", Energy:"", Explosive:"", Rad:"" },
+  armor: { Physical:"", Energy:"", Explosive:"", Radiation:"" },
   neg: Object.fromEntries(negNames.map(n => [n, 0])),
   inventory: Array.from({length:12}, () => ({
     name: "",
@@ -1082,7 +1093,7 @@ function applyArmorDamage(raw) {
     P: "Physical",
     N: "Energy",
     X: "Explosive",
-    R: "Rad"
+    R: "Radiation"
   };
 
   const armorType = armorMap[type];
