@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,6 +59,24 @@
   display:block;
   font-size:clamp(10px, 2.5vw, 16px);
 }
+
+.armor-box input {
+  width: 50px;
+  text-align:center;
+  font-size:clamp(14px, 4vw, 22px); /* keep your existing responsive size */
+  transform: scale(1.5);            /* scale up the text */
+  transform-origin: center;
+  display: inline-block;            /* required for transform */
+  font-weight:bold;
+  background:transparent;
+  border:none;
+  color: var(--armor-color);
+  border: 1px solid var(--armor-color);
+}
+
+
+
+	
 
 /* underline style for the chosen character */
 .armor-label .underline {
