@@ -1421,19 +1421,40 @@ function hidePerksScreen() {
 
 function init() {
   // Front page fields
-  name.value = state.name;
-  skillName.value = state.skillName;
-  level.value = state.level;
-  caps.value = state.caps;
-
   document.getElementById("perksBtn").onclick = showPerksScreen;
   document.getElementById("backBtn").onclick = hidePerksScreen;
   document.getElementById("perksTitle").onclick = togglePerks;
 
-  name.oninput = e => { state.name = e.target.value; save(); };
-  skillName.oninput = e => { state.skillName = e.target.value; save(); };
-  level.oninput = e => { state.level = e.target.value; save(); };
-  caps.oninput = e => { state.caps = e.target.value; save(); };
+	const nameInput = document.getElementById("name");
+	const skillInput = document.getElementById("skillName");
+	const levelInput = document.getElementById("level");
+	const capsInput = document.getElementById("caps");
+
+	nameInput.value = state.name;
+	skillInput.value = state.skillName;
+	levelInput.value = state.level;
+	capsInput.value = state.caps;
+
+	nameInput.addEventListener("input", e => {
+	  state.name = e.target.value;
+	  save();
+	});
+
+	skillInput.addEventListener("input", e => {
+	  state.skillName = e.target.value;
+	  save();
+	});
+
+	levelInput.addEventListener("input", e => {
+	  state.level = e.target.value;
+	  save();
+	});
+
+	capsInput.addEventListener("input", e => {
+	  state.caps = e.target.value;
+	  save();
+	});
+ 
 
   updateHPDisplay();
   updateHPColor();
