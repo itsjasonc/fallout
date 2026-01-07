@@ -27,7 +27,16 @@
     }
 
     .stats { grid-template-columns: repeat(5, 1fr); }
-    .stat-box input { text-align:center; font-size:18px; }
+    
+	.stat-box input {
+	border: none;
+	text-align: center;
+	font-size: 25px;
+	padding: 0;          /* removes extra space */
+	line-height: 1;      /* keeps height tight */
+	width: 45px;         /* adjust to taste */
+}
+
 	
 	.grid.title.card {
 	  margin-top: 10px; /* adjust to taste */
@@ -138,6 +147,7 @@
       position:relative;
       height:180px;
       display:flex;
+	  
       flex-direction:column;
       align-items:center;
       padding-top:6px;
@@ -639,6 +649,12 @@
   vertical-align: middle;
 }
 
+#stats b {
+  font-size: 20px;        /* bigger label text */
+  line-height: 1;         /* removes vertical dead space */
+  margin-bottom: 4px;     /* tighten spacing above the input */
+  display: inline-block;  /* allows line-height to behave predictably */
+}
 
 
   </style>
