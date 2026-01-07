@@ -436,7 +436,8 @@
       cursor:pointer;
     }
 	
-/* Top-right button */
+/* Top-right buttons */
+
 .perks-btn {
   background:#081408;
   color:#9fef9f;
@@ -494,8 +495,11 @@
 .title-bar h2 { margin-left: 16px; }
 
 .title-left {
-  width: 300px;   /* ensures both titles occupy the same space */
+  display: flex;
+  align-items: center;
+  gap: 8px; /* spacing between PERKS and toggle */
 }
+
 
 #backBtn {
   margin-right: 16px; /* move SHEET left — adjust value as needed */
@@ -620,7 +624,7 @@
   cursor: pointer;
   color: #9fef9f;
   text-shadow: 0 0 6px #0f0;
-  margin-left: 16px; /* same as your Perks title */
+  margin-left: 0px; /* same as your Perks title */
 }
 
 .major-header .triangle {
@@ -675,7 +679,7 @@
   gap: 6px;
   padding: 4px 10px;
   background: #081408;
-  border: none;
+    border: none;
   cursor: pointer;
   user-select: none;
 }
@@ -692,6 +696,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: -40px; 
   font-size: 16px;
   line-height: 1;
   margin: 0;
@@ -770,13 +775,13 @@
 
 <div id="perksScreen" class="hidden-screen">
   <div class="title-bar">
-  <div class="title-left"><h2 id="perksTitle" class="major-header"> <span class="triangle">▼</span> PERKS </h2></div>
-  
-  <label class="taken-toggle">
-    <input type="checkbox" id="showTakenToggle">
-    <span class="perk-box"></span>
-  </label>  
-
+  	  <div class="title-left"><h2 id="perksTitle" class="major-header"> <span class="triangle">▼</span> PERKS </h2>
+	    <label class="taken-toggle">
+		<input type="checkbox" id="showTakenToggle">
+		<span class="perk-box"></span>
+	  </label>  
+	  </div>
+	
   <button class="perks-btn" onclick="exportSheet()">SAVE</button> 
   <button class="perks-btn" onclick="importSheet()">LOAD</button>
   
