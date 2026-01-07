@@ -203,16 +203,16 @@
 }
 
 
-.hp-dmgbox {
-  position: absolute;
-  height:20px;
-  top: 1%;
-  left: 4px;
-  padding: 0;
-  background: #081408;            /* dark Pip‑Boy background */
-  border: 1px solid #ff3c3c;      /* dark red outline */
-  box-shadow: 0 0 6px #ff3c3c;    /* matching glow */
-}
+	.hp-dmgbox {
+	  position: absolute;
+	  height:20px;
+	  top: 1%;
+	  left: 4px;
+	  padding: 0;
+	  background: #081408;            /* dark Pip‑Boy background */
+	  border: 1px solid #ff3c3c;      /* dark red outline */
+	  box-shadow: 0 0 6px #ff3c3c;    /* matching glow */
+	}
 
 .armor-dmg-input {
   width: 40px;
@@ -315,15 +315,15 @@
     .neg-btn { padding:1px 4px; background:#081408; color:#9fef9f; border:1px solid #2cff2c; font-size:14px; }
 
     .inventory { grid-template-columns:1fr; }
+	
     .slot {
   display:flex;
   flex-direction:column;
   gap:6px;
-  background:#040a04;        /* darker than inside */
-  border:1px solid #2cff2c;
-  padding:6px;
+  border:none;
+  padding:0px;
+  margin:0px;
 }
-
 
     .slot-top {
       display:grid;
@@ -341,10 +341,9 @@
   min-height: 3.2em;                   /* ensures 2 rows fit cleanly */
 }
 
-
     .heavy-toggle {
-      width: 36px;
-      height: 100%;
+      width: 33px;
+      height: auto;
       border: 1px solid #2cff2c;
       display: flex;
       align-items: center;
@@ -1648,6 +1647,14 @@ function withUnderlinedChar(word, ch) {
 
 
 function exportSheet() {
+  // FORCE sync of all live inputs before export
+  document.querySelectorAll("input, textarea").forEach(el => {
+    el.dispatchEvent(new Event("input"));
+    el.dispatchEvent(new Event("change"));
+  });
+
+  save(); // ensure localStorage is up to date
+
   const data = JSON.stringify(state, null, 2);
   const blob = new Blob([data], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -1659,6 +1666,7 @@ function exportSheet() {
 
   URL.revokeObjectURL(url);
 }
+
 
 function importSheet() {
   const input = document.getElementById("fileInput");
@@ -1673,15 +1681,15 @@ function importSheet() {
         const loaded = JSON.parse(reader.result);
 
         // Merge loaded data into your state
-        Object.assign(state, loaded);
+       Object.assign(state, loaded);
+		save();
 
-        // Save to localStorage
-        save();
+		// FULL UI rebuild
+		init();
+		buildPerkUI();
 
-        // Rebuild UI to reflect loaded data
-        buildPerkUI();
+		alert("Sheet loaded successfully!");
 
-        alert("Sheet loaded successfully!");
       } catch (e) {
         alert("Invalid or corrupted file.");
       }
