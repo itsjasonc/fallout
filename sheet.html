@@ -1647,13 +1647,27 @@ function withUnderlinedChar(word, ch) {
 
 
 function exportSheet() {
-  // FORCE sync of all live inputs before export
+  // Force sync of all live inputs before export
   document.querySelectorAll("input, textarea").forEach(el => {
     el.dispatchEvent(new Event("input"));
     el.dispatchEvent(new Event("change"));
   });
 
-  save(); // ensure localStorage is up to date
+  save(); // ensure localStorage is current
+
+  // Suggest a filename based on character name
+  const defaultName =
+    (state.name || "fallout-character")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+
+  const fileName = prompt(
+    "Save character sheet as:",
+    defaultName + ".json"
+  );
+
+  if (!fileName) return; // user cancelled
 
   const data = JSON.stringify(state, null, 2);
   const blob = new Blob([data], { type: "application/json" });
@@ -1661,11 +1675,12 @@ function exportSheet() {
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = "character-sheet.json";
+  a.download = fileName.endsWith(".json") ? fileName : fileName + ".json";
   a.click();
 
   URL.revokeObjectURL(url);
 }
+
 
 
 function importSheet() {
