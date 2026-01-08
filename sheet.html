@@ -811,6 +811,14 @@ const armorTypes = [
   ["Explosive","x"],
   ["Radiation","r"]
 ];
+const statAbbrev = {
+  STRENGTH: "STR",
+  AGILITY: "AGI",
+  ENDURANCE: "END",
+  INTELLIGENCE: "INT",
+  CHARISMA: "CHA"
+};
+
 const negNames = ["Hunger","Thirst","Fatigue","Rads","Injury"];
 
 let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
@@ -1211,7 +1219,7 @@ const perkData = {
     { name: "Ghoulish", desc: "Heal 10% HP each time you gain one or more rads." },
     { name: "Perseverance", desc: "After rolling with a stat at 0 or 1, restore skill." },
     { name: "Rare Hunter", desc: "You can scavenge for special items directly." },
-    { name: "Guardian", desc: "You can bring an ally with you when you move and can intercept non aimed shots against allies in melee." },
+    { name: "Paladin", desc: "You can bring an ally with you when you move and can intercept non aimed shots against allies in melee range." },
     { name: "Shotgun Surgeon", desc: "Shotguns do +1 damage against enemies in melee range." },
     { name: "Exposure Therapy", desc: "Rad damage aimed shots poison the target." }
   ],
@@ -1354,7 +1362,7 @@ function buildPerkUI() {
         <span class="perk-box"></span>
         <span class="perk-text">
           <b>${perk.name.toUpperCase()}</b>
-          <span style="opacity:.6;">(${stat})</span>: ${perk.desc}
+          <span style="opacity:.6;">(${statAbbrev[stat] || stat})</span>: ${perk.desc}
         </span>
       `;
 
