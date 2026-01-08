@@ -535,14 +535,18 @@
 /* Collapsible content */
 .perk-list {
   display: none;
-  margin-left: 10px;
-  margin-right: 10px;
-  
 }
 
 .perk-list.open {
   display: block;
 }
+
+.perk-list,
+.perks-align {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 
 
 .collapse-arrow {
@@ -562,12 +566,15 @@
   max-width: 100%;
   flex-wrap: wrap;
   margin-top: 8px; /* adjust to taste */
+  margin-left: 10px;
   
 }
 
 .perk-text {
   flex: 1;
   min-width: 0; /* CRITICAL */
+  padding-right: 10px;  
+  box-sizing: border-box;
   overflow-wrap: break-word;
 }
 
@@ -581,24 +588,24 @@
   height: 18px;
   border: 2px solid #2cff2c;
   box-shadow: 0 0 6px #2cff2c;
-  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+  line-height: 1;
 }
 
 .perk-check:checked + .perk-box::after {
   content: "✔";
   color: #9fef9f;
-  font-size: 16px;
-  position: absolute;
-  top: -2px;
-  left: 1px;
   text-shadow: 0 0 6px #0f0;
 }
 
-/* Highlight the whole perk row when selected */
-.perk-check:checked ~ .perk-text,
-.perk-check:checked ~ .perk-box {
-  background: rgba(44, 255, 44, 0.12); /* soft green glow */
-  box-shadow: 0 0 6px #2cff2c;
+.perks-align {
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 
@@ -1172,7 +1179,7 @@ const perkData = {
     { name: "Karate Kid", desc: "Melee aimed shots can shove or grapple the target instead of crippling." },
     { name: "Carnivore", desc: "Consuming flesh gives an extra -1 hunger and heals 10% HP." },
     { name: "Big Justice", desc: "Explosive splash damage aimed shots splash to short range." },
-    { name: "Hidden Gem", desc: "When you scavenge you also find a heavy junk item worth 1d6x10 caps" },   
+    { name: "Hidden Gem", desc: "When you scavenge you also find a heavy junk item worth 1d6x10 caps." },   
     { name: "Chiropractor", desc: "When you cripple a limb, you can cripple another different limb." },
     { name: "Fast Metabolism", desc: "You are immune to ailments and withdrawl only lasts 1 day." },
     { name: "Boomer", desc: "Explosive guns do +1 damage and always detonate explosive tiles." },
@@ -1185,7 +1192,7 @@ const perkData = {
     { name: "Sixth Sense", desc: "You can also move or sprint when you defend or search." },
     { name: "Gotta Go Fast", desc: "Sprint moves +1 distance and lets you ignore ground hazards." },
     { name: "Ninja", desc: "You can move while sneaking and sneak attack kills do not reveal you." },
-    { name: "Guerrilla", desc: "All special terrain also counts as cover and attacks ignore obstructions." },
+    { name: "Guerrilla", desc: "Special terrain also counts as cover and your attacks ignore obstructions." },
     { name: "Sniper", desc: "You ignore cover and long range weapons gain +1 range." },
     { name: "Perfectionist", desc: "Crits restore luck, heal 10% HP, and deal +1 damage if attacking." },
     { name: "Jack of All Trades", desc: "Gain another skill that uses stats different from your skill." },
@@ -1204,7 +1211,7 @@ const perkData = {
     { name: "Ghoulish", desc: "Heal 10% HP each time you gain one or more rads." },
     { name: "Perseverance", desc: "After rolling with a stat at 0 or 1, restore skill." },
     { name: "Rare Hunter", desc: "You can scavenge for special items directly." },
-    { name: "Paladin", desc: "You can bring an ally when you move and can intercept non aimed shots against them." },
+    { name: "Paladin", desc: "You can bring an ally with you when you move and can intercept non aimed shots against allies in melee range." },
     { name: "Shotgun Surgeon", desc: "Shotguns do +1 damage against enemies in melee range." },
     { name: "Exposure Therapy", desc: "Rad damage aimed shots poison the target." }
   ],
@@ -1332,7 +1339,7 @@ function buildPerkUI() {
 	
 		if (state.showTakenOnly) {
   const flat = document.createElement("div");
-  flat.style.margin = "0 16px";
+  flat.className = "perks-align";
 
   Object.entries(perkData).forEach(([stat, perks]) => {
     perks.forEach(perk => {
