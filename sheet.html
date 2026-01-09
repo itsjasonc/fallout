@@ -1189,19 +1189,19 @@ const perkData = {
     { name: "Big Justice", desc: "Explosive splash damage aimed shots splash to short range." },
     { name: "Hidden Gem", desc: "When you scavenge you also find a heavy junk item worth 1d6x10 caps." },   
     { name: "Chiropractor", desc: "When you cripple a limb, you can cripple another different limb." },
-    { name: "Fast Metabolism", desc: "You are immune to ailments and withdrawl only lasts 1 day." },
+    { name: "Iron Man", desc: "You are immune to ailments and cannot be shoved or grappled" },
     { name: "Boomer", desc: "Explosive guns do +1 damage and always detonate explosive tiles." },
     { name: "Heavy Metal", desc: "Gain +1 energy armor for each heavy item slot you have." }
   ],
 
   AGILITY: [
-    { name: "Commando", desc: "Rifles do +1 damage when fired from cover." },
+    { name: "Commando", desc: "Rifles do +1 damage when fired from special terrain." },
     { name: "Gunslinger", desc: "Pistol attacks can spend your movement to do +1 damage." },
     { name: "Sixth Sense", desc: "You can also move or sprint when you defend or search." },
     { name: "Gotta Go Fast", desc: "Sprint moves +1 distance and lets you ignore ground hazards." },
     { name: "Ninja", desc: "You can move while sneaking and sneak attack kills do not reveal you." },
     { name: "Guerrilla", desc: "Special terrain also counts as cover and your attacks ignore obstructions." },
-    { name: "Sniper", desc: "You ignore cover and long range weapons gain +1 range." },
+    { name: "Sniper", desc: "Your attacks ignore cover and long range weapons gain +1 range." },
     { name: "Perfectionist", desc: "Crits restore luck, heal 10% HP, and deal +1 damage if attacking." },
     { name: "Jack of All Trades", desc: "Gain another skill that uses stats different from your skill." },
     { name: "Good Karma", desc: "Tag an additional stat. Critical fails now count as regular fails." },
@@ -1211,7 +1211,7 @@ const perkData = {
 
   ENDURANCE: [
     { name: "Blacksmith", desc: "Consume one fewer scrap when you roll a 6 on a repair roll." },
-    { name: "Iron Man", desc: "Gain +10 max HP and you cannot be shoved or grappled." },
+    { name: "Fast Metabolism", desc: "Gain +10 max HP and addiction withdrawl only lasts 1 day." },
     { name: "Lead Belly", desc: "Treat irradiated food and drink as dirty instead." },
     { name: "Sadist", desc: "Aimed shots that apply ailments add +1 stack to all ailments on the target." },
     { name: "All-nighter", desc: "You can gain +1 fatigue to scavenge a settlement." },
@@ -1219,7 +1219,7 @@ const perkData = {
     { name: "Ghoulish", desc: "Heal 10% HP each time you gain one or more rads." },
     { name: "Perseverance", desc: "After rolling with a stat at 0 or 1, restore skill." },
     { name: "Rare Hunter", desc: "You can scavenge for special items directly." },
-    { name: "Paladin", desc: "You can bring an ally with you when you move and can intercept non aimed shots against allies in melee range." },
+    { name: "Guardian", desc: "You can bring an ally with you when you move and can intercept non aimed shots against allies." },
     { name: "Shotgun Surgeon", desc: "Shotguns do +1 damage against enemies in melee range." },
     { name: "Exposure Therapy", desc: "Rad damage aimed shots poison the target." }
   ],
@@ -1245,9 +1245,9 @@ const perkData = {
     { name: "VIP Member", desc: "Sleeping in a settlement is free and twice as effective." },
     { name: "True Grit", desc: "Resist always rolls at least 2 dice and can be used on other players." },
     { name: "Wasteland’s Got Talent", desc: "You can perform a show in each settlement to earn caps." },
-	{ name: "Bloody Mess", desc: "Sneak attack kills and crit kills cause the target to explode." },
+	{ name: "Bloody Mess", desc: "Aimed shot kills cause the target to explode for half their max HP." },
     { name: "Vampire", desc: "You can drink the blood of recently deceased creatures." },
-    { name: "I know a Place", desc: "Chosen faction settlements provide a free crit faction loot roll." },
+    { name: "I Know a Place", desc: "Chosen faction settlements provide a free crit faction loot roll." },
     { name: "Cyberpunk", desc: "You can have +2 implants and doctor services cost 50% less for you." },
     { name: "The Art of the Deal", desc: "Haggling is twice as effective." },
     { name: "High Roller", desc: "You can treat any rolled triples as a 6." },
