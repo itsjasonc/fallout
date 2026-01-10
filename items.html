@@ -113,7 +113,26 @@ button:hover { background:#2a6ce2; }
   line-height:1.3;
   font-size:.95rem;
 }
-	#medOutput {
+	#medsOnlyOutput {
+  background:#1e1e2f;
+  border-radius:.5rem;
+  padding:.6rem;
+  text-align:center;
+  margin-top:.5rem;
+  line-height:1.3;
+  font-size:.95rem;
+}
+	#chemsOnlyOutput {
+  background:#1e1e2f;
+  border-radius:.5rem;
+  padding:.6rem;
+  text-align:center;
+  margin-top:.5rem;
+  line-height:1.3;
+  font-size:.95rem;
+}
+
+	#techOutput {
   background:#1e1e2f;
   border-radius:.5rem;
   padding:.6rem;
@@ -330,15 +349,15 @@ window.addEventListener('load', distribute);
   { roll: 5, text: "Chain armor: +12 def, 90c" },
   { roll: 6, text: "Metal armor: +13 def, 100c" },
   { roll: 7, text: "Synth armor: +14 def, 110c" },
-  { roll: 8, text: "Mutant armor: +15 def, 120c" },
-  { roll: 9, text: "Rugged armor: +16 def, 130c" },
-  { roll: 10, text: "Combat armor: +18 def, 140c" },
-  { roll: 11, text: "Infantry armor: +20 def, 150c" },
-  { roll: 12, text: "Assault armor: +22 def, 160c" },
-  { roll: 13, text: "Ranger armor: +24 def, 170c" },
-  { roll: 14, text: "Salvaged power armor: +26 def, 180c" },
-  { roll: 15, text: "Power armor: +28 def, +190c" },
-  { roll: 16, text: "Advanced power armor: +30 def, 200c" }
+  { roll: 8, text: "Mutant armor: +16 def, 120c" },
+  { roll: 9, text: "Rugged armor: +18 def, 130c" },
+  { roll: 10, text: "Combat armor: +20 def, 140c" },
+  { roll: 11, text: "Infantry armor: +22 def, 150c" },
+  { roll: 12, text: "Assault armor: +24 def, 160c" },
+  { roll: 13, text: "Ranger armor: +26 def, 170c" },
+  { roll: 14, text: "Salvaged power armor: +28 def, 180c" },
+  { roll: 15, text: "Power armor: +30 def, +190c" },
+  { roll: 16, text: "Advanced power armor: +32 def, 200c" }
 ];
 
 // helper for single die roll
@@ -584,7 +603,7 @@ function generateComplications() {
   const c1 = complications[Math.floor(Math.random() * complications.length)];
   
   document.getElementById("ComplicationOutput").innerHTML =
-    ` ${c1[0]} | Skill: ${c1[1]}<br><i>${c1[2]}</i>`;
+    ` ${c1[0]} | Save: ${c1[1]}<br><i>${c1[2]}</i>`;
 }
 
 // ===== RATION GENERATOR =====
@@ -808,8 +827,8 @@ const townQuests = [
 
   { roll: 31, text: `Uprising – A slaver town faces a slave rebellion. Choose a side.` },
   { roll: 32, text: `Establish Trade Routes – Make contact with nearby settlements to open trade.` },
-  { roll: 33, text: `Recover Lost Technology – Rumors say a nearby settlement has valuable pre-war tech.` },
-  { roll: 34, text: `Help the Doctor – The autodoc needs a replacement bulb from a stubborn neighboring town.` },
+  { roll: 33, text: `Recover Lost Technology – Rumors say a nearby X faction settlement has valuable pre-war tech they arent using. help retrieve it or activate it for the others.` },
+  { roll: 34, text: `Stolen GECK" – Raiders from X faction stole a GECK needed to terraform barren fields. Infiltrate and recover, or help them create a new life` },
   { roll: 35, text: `Investigate the Crime – A crime has occurred; find the culprit.` },
   { roll: 36, text: `"The Ghoulfather" – A ghoul crime lord wants one last score against X faction.` },
 
@@ -824,15 +843,15 @@ const townQuests = [
   { roll: 52, text: `Investigate the Ruins – Strange activity reported in nearby ruins, it is currently being looted by X faction who do not want to share.` },
   { roll: 53, text: `"AI Overlord" – An AI controls a town and won’t let workers take breaks or leave. Find a way to stop the AI from ruining the town.` },
   { roll: 54, text: `Quell the Rebellion – A group of townsfolk plan a rebellion; some want to stay with the current leaders and some want to splinter to X faction. Choose a side.` },
-  { roll: 55, text: `Deliver the Message – Deliver an urgent message safely.` },
+  { roll: 55, text: `The Disappearing – Many townsfolk exploring near X faction settlement nearby never come back. find out why. ` },
   { roll: 56, text: `Heal the Injured – Several citizens need medical supplies urgently. There is a nearby settlement of X faction that may be able to help` },
 
-  { roll: 61, text: `Protect the Caravan – Escort a caravan to a nearby settlement.` },
-  { roll: 62, text: `"New Gods of the Old World" – A cult worships a nuclear bomb.` },
-  { roll: 63, text: `Rescue the Captives – A faction kidnapped townsfolk; infiltrate and rescue them.` },
+  { roll: 61, text: `Protect the Scavengers – Escort a scavenger party to a nearby ruins inhabited by a difficult enemy.` },
+  { roll: 62, text: `"New Gods of the Old World" – The town worships a nuclear bomb that sits unexploded and unstable in the middle of town. It may not be completely dormant...` },
+  { roll: 63, text: `Rescue the Captives – X faction kidnapped townsfolk; infiltrate and rescue them.` },
   { roll: 64, text: `Hostile Neighbors – A nearby X faction settlement terrorizes the town; eliminate or negotiate.` },
-  { roll: 65, text: `Uncover the Legend – Rumors of an old legend spread; uncover the truth.` },
-  { roll: 66, text: `Find the Missing Civilian – A key figure is missing; track them down.` }
+  { roll: 65, text: `Refugee Crisis - Several refugees have come to the town but are not being accepted in due to lack of resources. resolve the conflict. ` },
+  { roll: 66, text: `Find the Missing Civilian – A key figure has gone missing in a maze-like network of sewer tunnels under the town. Find them without getting lost or learn the truth.` }
 ];
 // ===== PROFESSION QUESTS =====
 const professionQuests = {
@@ -1047,56 +1066,82 @@ function generateTown() {
 
   output += `<b>Sidequest (${chosenProf}):</b><br>${sidequest}<br><br>`;
 
+
   // ===== SHOPS =====
-  output += "<b>Town Shops:</b><br><br>";
+output += "";
 
-  for (let i = 1; i <= 2; i++) {
-    const shop = shopTypes[Math.floor(Math.random() * shopTypes.length)];
-    output += `<b>Shop ${i}: ${shop.name}</b><br>`;
+// 1. Find the faction's signature shop
+const signatureShop = shopTypes.find(shop => shop.name.toLowerCase().includes(faction.tag.toLowerCase())) 
+                     || shopTypes.find(shop => shop.name === "Weapons"); // fallback
 
-    for (let r = 0; r < 2; r++) {
-      shop.func();
+// 2. We'll display 3 shops total
+const shopSlots = [1, 2, 3];
 
-      let result = "";
+// We want the signature shop to appear exactly once → we'll place it randomly among the 3 slots
+const signatureSlotIndex = Math.floor(Math.random() * 3); // 0, 1 or 2
 
-switch (shop.name) {
-  case "Weapons":
-    generateWeapon();
-    result = document.getElementById("weaponResult").innerHTML;
-    break;
+for (let i = 0; i < shopSlots.length; i++) {
+  let chosenShop;
 
-  case "Armor":
-    generateArmor();
-    result = document.getElementById("armorTitle").innerHTML;
-    break;
+  if (i === signatureSlotIndex) {
+    // This is the guaranteed faction shop
+    chosenShop = signatureShop;
+  } else {
+    // Random shop, but try to avoid duplicating the signature one too often
+    let attempts = 0;
+    do {
+      chosenShop = shopTypes[Math.floor(Math.random() * shopTypes.length)];
+      attempts++;
+    } while (chosenShop.name === signatureShop.name && attempts < 10);
+  }
 
-  case "Meds":
-    generateMeds(); // NEW meds-only generator
-    result = document.getElementById("medsOnlyOutput").innerHTML;
-    break;
+  output += `<b>Shop ${i+1}: ${chosenShop.name}</b> `;
+  
+  // Mark the faction specialty shop
+  if (chosenShop.name === signatureShop.name) {
+    output += `<span style="color:#4e8cff; font-weight:bold;">(Faction)</span>`;
+  }
+  output += `<br>`;
 
-  case "Chems":
-    generateChems(); // NEW chems-only generator
-    result = document.getElementById("chemsOnlyOutput").innerHTML;
-    break;
+  // Generate 2 items for this shop
+  for (let r = 0; r < 2; r++) {
+    chosenShop.func();
 
-  case "Tech":
-    generateTech();
-    result = document.getElementById("techOutput").innerHTML;
-    break;
-
-  case "Food & Water":
-    generateRations();
-    result = document.getElementById("RationWaterOutput").innerHTML;
-    break;
-}
-
-
-      output += `<div style="margin-left:10px; margin-bottom:8px;">${result}</div>`;
+    let result = "";
+    switch (chosenShop.name) {
+      case "Weapons":
+        generateWeapon();
+        result = document.getElementById("weaponResult").innerHTML;
+        break;
+      case "Armor":
+        generateArmor();
+        result = document.getElementById("armorTitle").innerHTML;
+        break;
+      case "Meds":
+        generateMeds();
+        result = document.getElementById("medsOnlyOutput").innerHTML;
+        break;
+      case "Chems":
+        generateChems();
+        result = document.getElementById("chemsOnlyOutput").innerHTML;
+        break;
+      case "Tech":
+        generateTech();
+        result = document.getElementById("techOutput").innerHTML;
+        break;
+      case "Food & Water":
+        generateRations();
+        result = document.getElementById("RationWaterOutput").innerHTML;
+        break;
+      default:
+        result = "<i>(no items generated)</i>";
     }
 
-    output += "<br>";
+    output += `<div style="margin-left:14px; margin-bottom:8px;">${result}</div>`;
   }
+
+  output += "<br>";
+}
 
   document.getElementById("townOutput").innerHTML = output;
 }
@@ -1107,4 +1152,3 @@ switch (shop.name) {
 </script>
 </body>
 </html>
-
