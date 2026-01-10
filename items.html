@@ -483,7 +483,33 @@ function generateWeapon(){
     }
   }
   // 🎯 Heavy mechanic (1/3 chance)
-  let isHeavy = Math.random() < 1 / 3; // 1/3 chance
+let isHeavy = Math.random() < 1 / 3;
+
+// Copy damage text so we can modify it safely
+let damageText = chosen[2];
+
+if (isHeavy) {
+  // AxB weapons (e.g. 3x6 P, 2x4 E)
+  const axbMatch = damageText.match(/^(\d+)x(\d+)\s*(.*)$/i);
+
+  if (axbMatch) {
+    const a = axbMatch[1]; // first number stays the same
+    const b = parseInt(axbMatch[2], 10) + 1; // ONLY increase second number
+    const rest = axbMatch[3] || "";
+
+    damageText = `${a}x${b} ${rest}`.trim();
+  } else {
+    // Flat damage (e.g. 7 P, 10 X splash)
+    const flatMatch = damageText.match(/^(\d+)\s*(.*)$/i);
+    if (flatMatch) {
+      const base = parseInt(flatMatch[1], 10) + 1;
+      const rest = flatMatch[2] || "";
+
+      damageText = `${base} ${rest}`.trim();
+    }
+  }
+}
+
    
   if(!chosen){
     out.innerHTML = `<span>No weapon matches your filters.</span>`;
@@ -491,7 +517,7 @@ function generateWeapon(){
   }
 
   out.innerHTML = `<span Style="font-size: 18px;">${isHeavy ? "<span style='color:red; font-weight:bold;'>(H)</span> " : ""}${chosen[1]}</span>
-                   <div Style="font-size: 18px;">Damage: ${chosen[2]}&nbsp;&nbsp;&nbsp;&nbsp;Ammo: ${chosen[3]}</div>
+                   <div Style="font-size: 18px;">Damage: ${damageText}&nbsp;&nbsp;&nbsp;&nbsp;Ammo: ${chosen[3]}</div>
                    <div Style="font-size: 18px;">Range: ${chosen[4]}&nbsp;&nbsp;&nbsp;&nbsp;Stat: ${chosen[5]}&nbsp;&nbsp;&nbsp;&nbsp;Value:${chosen[6]}</div>`;
 }
 // ===== COMPLICATION GENERATOR =====
@@ -655,6 +681,7 @@ function generateAmmo() {
 </script>
 </body>
 </html>
+
 
 
 
