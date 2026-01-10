@@ -227,7 +227,7 @@ button:hover { background:#2a6ce2; }
 	
 <div class="container">
 	<div class="generator-box">
-  	<h2>💥 Ammo Generator</h2>
+  	<h2>💥 Ammo</h2>
  	 <button onclick="generateAmmo()">Generate Ammo</button>
   	<div id="ammoOutput" class="output"></div>
 </div></div>  
@@ -239,11 +239,37 @@ button:hover { background:#2a6ce2; }
 <button onclick="generateRations()">Generate Items</button>
 <div id="RationWaterOutput" style="margin-top: 10px;"></div>
 </div>
-	<div class="container">
-  <h2>💉 Meds & Chems </h2>
-  <button onclick="generateMedsAndChems()">Generate Meds & Chems</button>
-  <div id="medOutput" style="margin-top: 10px;"></div>
+
+<div class="container">
+  <h2>💉 Meds</h2>
+  <button onclick="generateMeds()">Generate Meds</button>
+  <div id="medsOnlyOutput" class="output"></div>
 </div>
+
+<div class="container">
+  <h2>☣️ Chems</h2>
+  <button onclick="generateChems()">Generate Chems</button>
+  <div id="chemsOnlyOutput" class="output"></div>
+</div>
+
+
+<div class="container">
+  <div class="generator-box">
+    <h2>🧰 Technology</h2>
+    <button onclick="generateTech()">Generate Technology</button>
+    <div id="techOutput" class="output"></div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="generator-box">
+    <h2>🏘️ Town Generator</h2>
+    <button onclick="generateTown()">Generate Town</button>
+    <div id="townOutput" class="output"></div>
+  </div>
+</div>
+
+
 
 <script>
 /* ---------- Integer Distributor ---------- */
@@ -586,8 +612,7 @@ function generateRations() {
 
   document.getElementById("RationWaterOutput").innerHTML = output;
 }
-// ===== MED + CHEM GENERATOR =====
-function generateMedsAndChems() {
+function generateMeds() {
   const medTable = [
     { name: "Bandage", effect: "-1 Injury, +10% HP" },
     { name: "Rad-X", effect: "-1 Rads, +10% HP" },
@@ -597,6 +622,15 @@ function generateMedsAndChems() {
     { name: "Addictol", effect: "Removes addictions, +10% HP" }
   ];
 
+  const med = medTable[Math.floor(Math.random() * medTable.length)];
+  const count = rollDie(6) + 1;
+
+  document.getElementById("medsOnlyOutput").innerHTML = `
+    <b>${med.name} x${count}</b><br>
+    <i>${med.effect}</i>
+  `;
+}
+function generateChems() {
   const chemTable = [
     { name: "Jet", effect: "Next turn take 2 turns with +1 speed & all rolls (Addictive)" },
     { name: "Psycho", effect: "+1 damage for 1 day (Addictive)" },
@@ -606,26 +640,17 @@ function generateMedsAndChems() {
     { name: "Beer", effect: "+1 CHA for 1 day, -1 thirst (Addictive)" }
   ];
 
-  // Roll meds
-  const medCount = rollDie(6) + 1;
-  const med = medTable[Math.floor(Math.random() * medTable.length)];
-
-  // Roll chems
-  const chemCount = rollDie(6) + 1;
   const chem = chemTable[Math.floor(Math.random() * chemTable.length)];
+  const count = rollDie(6) + 1;
 
-  const output = `
-    <b>Meds Found</b><br>
-    ${med.name} x${medCount}<br>
-    <i>${med.effect}</i><br><br>
-
-    <b>Chems Found</b><br>
-    ${chem.name} x${chemCount}<br>
+  document.getElementById("chemsOnlyOutput").innerHTML = `
+    <b>${chem.name} x${count}</b><br>
     <i>${chem.effect}</i>
   `;
-
-  document.getElementById("medOutput").innerHTML = output;
 }
+
+
+
 const ammoTable = [
   { type: "Small rounds", roll: "1d6+4", cost: 5 },
   { type: "E-cell", roll: "1d6+3", cost: 10 },
@@ -689,61 +714,396 @@ function generateAmmo() {
   document.getElementById("ammoOutput").innerHTML =
     `${quantity} x ${selected.type} ${costText}`;
 }
+
+// ===== TECHNOLOGY GENERATOR =====
+const techTable = [
+  { name: "Generator", effect: "Provides temporary power for electronics" },
+  { name: "Autojacker", effect: "Portable jack to move heavy objects or jammed doors" },
+  { name: "Hammerator", effect: "Hand jackhammer used to expand openings or clear rubble" },
+  { name: "Breatherator", effect: "Allows exploration of low oxygen or underwater areas" },
+  { name: "Flashlight", effect: "Allows exploration of dark or foggy areas" },
+  { name: "Hackerator", effect: "Opens locks and hacks computers" }
+];
+
+function generateTech() {
+  const tech = techTable[Math.floor(Math.random() * techTable.length)];
+
+  document.getElementById("techOutput").innerHTML = `
+    <b>${tech.name}</b><br>
+    <i>${tech.effect}</i>
+  `;
+}
+
+// ===== TOWN GENERATOR =====
+
+// Shop types and their corresponding generator functions
+const shopTypes = [
+  { name: "Weapons", func: generateWeapon },
+  { name: "Armor", func: generateArmor },
+  { name: "Meds", func: generateMeds }, 
+  { name: "Chems", func: generateChems },
+  { name: "Tech", func: generateTech },
+  { name: "Food & Water", func: generateRations }
+];
+
+// ===== TOWN DESCRIPTORS =====
+const townDescriptors = [
+  { roll: 11, name: "Old Fort", desc: "A pre-war military fort repurposed by settlers for defense and shelter, complete with makeshift barracks and watchtowers." },
+  { roll: 12, name: "Western Town", desc: "An abandoned western town brought back to life by settlers who have repaired and occupied its buildings." },
+  { roll: 13, name: "Mining Camp", desc: "A community built around an old mine, extracting valuable minerals and using them to trade for other necessities." },
+  { roll: 14, name: "Train Station", desc: "An old train station turned into a central hub for a small settlement, with train cars repurposed as homes." },
+  { roll: 15, name: "Wind Farm", desc: "Settlers have established a community around an old wind farm, using the remaining turbines to generate power." },
+  { roll: 16, name: "Abandoned Airport", desc: "The terminal and hangars have been turned into living spaces and workshops by a group of settlers." },
+
+  { roll: 21, name: "Deserted Factory Town", desc: "An old factory complex repurposed into a settlement, with the factory buildings serving as homes and workshops." },
+  { roll: 22, name: "Ruined Hotel", desc: "A large, partially collapsed hotel now houses a community, with rooms turned into living quarters." },
+  { roll: 23, name: "Fishing Village", desc: "Located near a dried-up lakebed, settlers rely on small-scale farming and trade for survival." },
+  { roll: 24, name: "Cliffside Dwellings", desc: "Homes built into the sides of cliffs, offering natural defense and a unique living environment." },
+  { roll: 25, name: "Desert Outpost", desc: "A small, fortified settlement built around a well or water source, serving as a rest stop for travelers." },
+  { roll: 26, name: "Abandoned Theme Park", desc: "The remains of an old amusement park now house a quirky community that has repurposed the attractions." },
+
+  { roll: 31, name: "Scrap Yard", desc: "A large junkyard turned settlement, with homes and workshops built from scavenged materials." },
+  { roll: 32, name: "Power Plant Village", desc: "A small community has formed around the ruins of a power plant, using its resources for energy and shelter." },
+  { roll: 33, name: "Desert Monastery", desc: "An old religious site now inhabited by settlers who maintain the buildings and gardens." },
+  { roll: 34, name: "Deserted Prison", desc: "The cells and facilities of an old prison now house a community, providing a secure and fortified location." },
+  { roll: 35, name: "Abandoned Mall", desc: "The remains of a shopping mall now serve as a large, communal living space for settlers." },
+  { roll: 36, name: "Water Tower Town", desc: "A settlement has formed around a large water tower, with homes and farms benefiting from the stored water." },
+
+  { roll: 41, name: "Canyon Settlement", desc: "A community built within a canyon, using the natural formations for defense and shelter." },
+  { roll: 42, name: "Deserted School Campus", desc: "An old school repurposed into a settlement, with classrooms and gyms turned into living spaces." },
+  { roll: 43, name: "Oil Rig Community", desc: "An old, once ocean-based oil rig now houses a small, industrious settlement." },
+  { roll: 44, name: "Ruined Church", desc: "The remains of a large church now serve as a communal living space and meeting hall for settlers." },
+  { roll: 45, name: "Old Gas Station", desc: "A small settlement has formed around an old gas station, using its infrastructure for trade and repair." },
+  { roll: 46, name: "Desert Market Town", desc: "A town built around a central market square, where traders and settlers gather to exchange goods." },
+
+  { roll: 51, name: "Fallen Bridge Camp", desc: "A settlement has formed beneath the remains of a large collapsed bridge, using the structure for shelter." },
+  { roll: 52, name: "Drive-In Theater", desc: "The old projection booth and concession stands have been repurposed into homes and shops for a small community." },
+  { roll: 53, name: "Airplane Graveyard", desc: "Settlers have turned old, grounded planes into homes and workshops in a sprawling community." },
+  { roll: 54, name: "Shipping Container Village", desc: "A settlement made from repurposed shipping containers, providing sturdy and modular living spaces." },
+  { roll: 55, name: "Ruined Observatory", desc: "An old observatory turned into a fortified settlement, using the high ground for defense." },
+  { roll: 56, name: "Desert Commune", desc: "A community with an unexploded nuclear bomb in the center." },
+
+  { roll: 61, name: "Small Farmstead", desc: "A group of settlers is attempting to grow crops and raise livestock, using irrigation systems and old farming techniques." },
+  { roll: 62, name: "Shanty Town", desc: "A collection of makeshift homes built from scrap metal and other scavenged materials, housing a small community." },
+  { roll: 63, name: "Trading Post", desc: "A bustling hub where traders from various parts of the wasteland come to barter goods and services." },
+  { roll: 64, name: "Ranch", desc: "A larger-scale farm with fields and animal pens, providing food and supplies for a small settlement." },
+  { roll: 65, name: "Ruined Suburb", desc: "An old suburban neighborhood being repurposed by settlers, with houses turned into communal living spaces." },
+  { roll: 66, name: "Vault", desc: "A vault that allows visitors and trades with outsiders." }
+];
+// ===== MAIN QUEST TABLE =====
+const townQuests = [
+  { roll: 11, text: `"Rot from Within" – A trusted town member of X faction is secretly poisoning food supplies to ‘thin the weak.’ Expose them, join them, or take their place.` },
+  { roll: 12, text: `"Election Day" – An election is being held to decide if they want to continue on their current faction or convert to another after being visited by an envoy.` },
+  { roll: 13, text: `Retrieve the Stolen Goods – Thieves from X faction have stolen valuable supplies from the town, and the player must recover them.` },
+  { roll: 14, text: `Investigate the Sabotage – Someone from X faction is sabotaging the town's equipment; find and stop them.` },
+  { roll: 15, text: `Secure the Power Source – The town's power source is failing; find a new one or repair the existing one involving X faction.` },
+  { roll: 16, text: `"The Price of Safety" – A settlement wants a massive wall built, but the only materials are sacred to a nearby X faction settlement.` },
+
+  { roll: 21, text: `Help the Farmers – Crops are failing; determine the cause and fix it.` },
+  { roll: 22, text: `Recruit New Settlers – The town needs more people; recruit settlers from other areas.` },
+  { roll: 23, text: `Resolve a Dispute – Two important town members are in conflict; mediate a resolution.` },
+  { roll: 24, text: `Feed the Hunger – The town hides a secret: they are reluctant cannibals suffering withdrawal.` },
+  { roll: 25, text: `"The Hardest Goodbye" – A survivor asks you to put down their feral ghoul spouse… unless they can be saved.` },
+  { roll: 26, text: `Escort the Diplomat – Safely escort a diplomat to a neighboring settlement.` },
+
+  { roll: 31, text: `Uprising – A slaver town faces a slave rebellion. Choose a side.` },
+  { roll: 32, text: `Establish Trade Routes – Make contact with nearby settlements to open trade.` },
+  { roll: 33, text: `Recover Lost Technology – Rumors say a nearby settlement has valuable pre-war tech.` },
+  { roll: 34, text: `Help the Doctor – The autodoc needs a replacement bulb from a stubborn neighboring town.` },
+  { roll: 35, text: `Investigate the Crime – A crime has occurred; find the culprit.` },
+  { roll: 36, text: `"The Ghoulfather" – A ghoul crime lord wants one last score against X faction.` },
+
+  { roll: 41, text: `Convince the Skeptics – Some townsfolk doubt an important discovery; win them over.` },
+  { roll: 42, text: `Reclaim the Outpost – A nearby outpost has been taken by X enemy; reclaim it.` },
+  { roll: 43, text: `"The Guilty Innocent" – A beloved hero is secretly guilty; expose or protect them.` },
+  { roll: 44, text: `"Psycho Circus" – A chem dealer’s new formula turns people feral.` },
+  { roll: 45, text: `"The Arena" – A raider warband has built a combat arena in town.` },
+  { roll: 46, text: `Negotiate Peace – Two rival factions are at odds; broker peace.` },
+
+  { roll: 51, text: `"The Price of Freedom" – A nearby town will release captives… for a price.` },
+  { roll: 52, text: `Investigate the Ruins – Strange activity reported in nearby ruins, it is currently being looted by X faction who do not want to share.` },
+  { roll: 53, text: `"AI Overlord" – An AI controls a town and won’t let workers take breaks or leave. Find a way to stop the AI from ruining the town.` },
+  { roll: 54, text: `Quell the Rebellion – A group of townsfolk plan a rebellion; some want to stay with the current leaders and some want to splinter to X faction. Choose a side.` },
+  { roll: 55, text: `Deliver the Message – Deliver an urgent message safely.` },
+  { roll: 56, text: `Heal the Injured – Several citizens need medical supplies urgently. There is a nearby settlement of X faction that may be able to help` },
+
+  { roll: 61, text: `Protect the Caravan – Escort a caravan to a nearby settlement.` },
+  { roll: 62, text: `"New Gods of the Old World" – A cult worships a nuclear bomb.` },
+  { roll: 63, text: `Rescue the Captives – A faction kidnapped townsfolk; infiltrate and rescue them.` },
+  { roll: 64, text: `Hostile Neighbors – A nearby faction terrorizes the town; eliminate or negotiate.` },
+  { roll: 65, text: `Uncover the Legend – Rumors of an old legend spread; uncover the truth.` },
+  { roll: 66, text: `Find the Missing Civilian – A key figure is missing; track them down.` }
+];
+// ===== PROFESSION QUESTS =====
+const professionQuests = {
+  Technician: [
+    "Dead Signal – Restore a dead radio relay using a salvaged comm tower part.",
+    "Gun Show – Upgrade a scavenger’s sentimental weapon.",
+    "Cold Steel – Repair one of each: weapon, armor, and tech."
+  ],
+  Mechanic: [
+    "Steel & Silence – Upgrade a stealth merc’s armor.",
+    "Harden the Hide – Restore riot gear using ceramic plates.",
+    "Overhaul – Reinforce a caravan’s busted armor."
+  ],
+  Farmer: [
+    "Tainted Crop – Cure a fungal infection in irradiated melons.",
+    "Dig Deep – Convert an old garden into a viable plot.",
+    "The Root Problem – Track mutated vines destroying a well."
+  ],
+  Chef: [
+    "Thirsty Business – Convert meat into fuel for town tech.",
+    "Kitchen Sink Science – Recreate a legendary morale‑boosting stew.",
+    "Grill Master – Produce exotic‑meat fuel for a merchant."
+  ],
+  Exterminator: [
+    "Rats in the Walls – Clear a mole‑rat infestation.",
+    "Big Game Hunt – Kill a mutant alpha predator.",
+    "Pest Control – Clear bloatflies from a junkyard."
+  ],
+  Police: [
+    "Gun Balance – Convert small ammo to large for guards.",
+    "Hold the Line – Arm and organize a civilian watch.",
+    "Order in the Wastes – Retrieve stolen ammo crates."
+  ],
+  Plumber: [
+    "Pipe Dream – Repair a vault’s sludge‑clogged plumbing.",
+    "Backflow – Fix upstream contamination of clean water.",
+    "Thirst Trap – Purify a dirty desert pool."
+  ],
+  Doctor: [
+    "Wounded Pride – Convert wrong meds into life‑saving ones.",
+    "First Do Harm – Replace swapped placebos before riots start.",
+    "Curative Measures – Synthesize medicine for a rare plague."
+  ],
+  Scientist: [
+    "Happy Accidents – Combine random chems safely.",
+    "Stimulant Shortage – Reclaim hoarded chems from raiders.",
+    "Bad Batch – Stabilize an unstable chem supply."
+  ],
+  Engineer: [
+    "Arc Spark – Repair a malfunctioning tech turret.",
+    "Linebreaker – Rebuild a settlement’s power fence.",
+    "Mind the Gap – Restore a failing bridge lift system."
+  ],
+  Tailor: [
+    "Patch It Up – Craft protective clothing for wasteland kids.",
+    "Fashion Statement – Create an outfit to impress a faction.",
+    "The Disguise – Make a fake uniform for a spy."
+  ],
+  Electrician: [
+    "Overload – Convert a broken fusion cell into usable energy.",
+    "Power Play – Restore power to a Nuka‑Cola billboard.",
+    "Mission Impossible – Disable an unstable bomb guarded by threats."
+  ]
+};
+
+// ===== FACTIONS =====
+const factions = [
+  {
+    name: "Metallion",
+    tag: "Armor",
+    desc: "Hoard tech, meritocracy, hate tickers (mutants), hateful"
+  },
+  {
+    name: "The Institute",
+    tag: "Meds",
+    desc: "Trying to rebuild society with science, democracy, weary"
+  },
+  {
+    name: "Children of Atom",
+    tag: "Water",
+    desc: "Simple-life Amish, theocracy, friendly"
+  },
+  {
+    name: "New Country Republic",
+    tag: "Weapons",
+    desc: "Bureaucratic, republic, weary"
+  },
+  {
+    name: "The Legion Solis Empire",
+    tag: "Chems",
+    desc: "Communist monarchy, slavers, hateful"
+  },
+  {
+    name: "Commonwealth",
+    tag: "Technology",
+    desc: "Small town commune, anarchy, friendly"
+  }
+];
+
+function getRivalFaction(mainFactionName) {
+  const rivals = factions.filter(f => f.name !== mainFactionName);
+  return rivals[Math.floor(Math.random() * rivals.length)];
+}
+
+// ===== NPC TABLE =====
+const npcTable = [
+  { roll: 11, name: "Bitter War Veteran", desc: "Gruff, one-eyed, tells long stories of battles no one remembers. Distrusts outsiders." },
+  { roll: 12, name: "Cheerful Merchant", desc: "Overly optimistic, insists every item is 'a steal,' even junk." },
+  { roll: 13, name: "Paranoid Scavenger", desc: "Constantly scanning the horizon, mutters about being followed." },
+  { roll: 14, name: "Wandering Bard", desc: "Plays a battered guitar, trades songs for food. Knows odd rumors." },
+  { roll: 15, name: "Cynical Medic", desc: "Skilled healer but mocks patients for getting hurt in the first place." },
+  { roll: 16, name: "Soft-Spoken Farmer", desc: "Avoids conflict, loves talking about soil and crops." },
+
+  { roll: 21, name: "Scrap Artist", desc: "Creates sculptures from junk, values beauty over practicality." },
+  { roll: 22, name: "Cold Bounty Hunter", desc: "Says little, eyes everyone as a potential target." },
+  { roll: 23, name: "Story-Hoarding Elder", desc: "Collects tales like treasure, trades them for supplies." },
+  { roll: 24, name: "Outcast Mutant", desc: "Mistrustful but surprisingly gentle; hides disfigurements." },
+  { roll: 25, name: "Disgraced Officer", desc: "Still wears a faded uniform, insists on strict protocol." },
+  { roll: 26, name: "Gambling Addict", desc: "Always shuffling a deck, willing to bet on anything." },
+
+  { roll: 31, name: "Feral Child", desc: "Skittish and dirty, communicates with whistles and hand signals." },
+  { roll: 32, name: "Smooth-Talking Swindler", desc: "Can make junk sound valuable and lies sound sweet." },
+  { roll: 33, name: "Inventive Tinkerer", desc: "Constantly fiddling with devices, absent-minded in conversation." },
+  { roll: 34, name: "Runaway Cultist", desc: "Avoids eye contact, refuses to talk about their past faith." },
+  { roll: 35, name: "Grumpy Fisherman", desc: "Complains about everything except fishing." },
+  { roll: 36, name: "Nomadic Trader", desc: "Has goods from distant places, shares strange slang." },
+
+  { roll: 41, name: "Desert Hermit", desc: "Lives alone by choice, mutters about 'the old ways.'" },
+  { roll: 42, name: "Overzealous Guard", desc: "Takes rules way too seriously, even in casual conversation." },
+  { roll: 43, name: "Scarred Pit Fighter", desc: "Proud of every scar, constantly seeks challenges." },
+  { roll: 44, name: "Lovesick Drunk", desc: "Always talking about a lost lover, drinks to remember." },
+  { roll: 45, name: "Animal Whisperer", desc: "Talks to animals as if they respond, claims they do." },
+  { roll: 46, name: "Irradiated Prophet", desc: "Speaks in riddles, claims visions come from 'the Glow.'" },
+
+  { roll: 51, name: "Hoarder", desc: "Collects anything shiny or unusual, highly territorial." },
+  { roll: 52, name: "Traveling Preacher", desc: "Preaches hope in the wasteland but hides deep doubt." },
+  { roll: 53, name: "Retired Raider", desc: "Calm now, but still has a dangerous glint in their eye." },
+  { roll: 54, name: "Wanderlust Explorer", desc: "Maps everything, constantly seeks 'what’s over that hill.'" },
+  { roll: 55, name: "Charismatic Drifter", desc: "Always has a story, usually half true." },
+  { roll: 56, name: "Grinning Bodyguard", desc: "Enjoys their work a little too much." },
+
+  { roll: 61, name: "Silent Gunslinger", desc: "Answers with nods, lets their weapon do the talking." },
+  { roll: 62, name: "Bitter Widow/Widower", desc: "Blames the wasteland for everything lost." },
+  { roll: 63, name: "Scavenger Kid", desc: "Tiny, bold, and far too street-smart for their age." },
+  { roll: 64, name: "Flamboyant Trader", desc: "Dresses extravagantly, announces every sale dramatically." },
+  { roll: 65, name: "Fortune Teller", desc: "Uses cards, bones, or bottle caps to 'see' the future." },
+  { roll: 66, name: "Sleepless Night Watchman", desc: "Stares into the dark like they’re waiting for something awful." }
+];
+
+
+
+function generateTown() {
+  let output = "";
+
+  // ===== TOWN TYPE =====
+  const d1 = rollDie(6);
+  const d2 = rollDie(6);
+  const roll = d1 * 10 + d2;
+
+  const descriptor = townDescriptors.find(t => t.roll === roll);
+
+  output += `<b>Town Type:</b> ${descriptor?.name || "Unknown Settlement"}<br>`;
+  output += `<i>${descriptor?.desc || ""}</i><br><br>`;
+  
+    // ===== FACTION =====
+	const faction = factions[Math.floor(Math.random() * factions.length)];
+
+	output += `<b>Faction:</b> ${faction.name} <br>`;
+	output += `<i>${faction.desc}</i><br><br>`;
+	
+	
+	// ===== NPCs (3 total) =====
+	output += `<b>Notable NPCs:</b><br>`;
+
+	for (let i = 0; i < 3; i++) {
+	  const n1 = rollDie(6);
+	  const n2 = rollDie(6);
+	  const nRoll = n1 * 10 + n2;
+
+	  const npc = npcTable.find(n => n.roll === nRoll);
+
+	  output += `<div style="margin-left:10px; margin-bottom:6px;">
+				   <b>${npc?.name || "Unknown NPC"}</b><br>
+				   <i>${npc?.desc || ""}</i>
+				 </div>`;
+	}
+
+	output += `<br>`;
+
+
+
+	// ===== MAIN QUEST =====
+	const q1 = rollDie(6);
+	const q2 = rollDie(6);
+	const qRoll = q1 * 10 + q2;
+
+	let quest = townQuests.find(q => q.roll === qRoll)?.text || "Unknown Quest";
+
+	// If the quest references "X faction", insert a rival faction
+	if (quest.includes("X faction") || quest.includes("X enemy")) {
+	  const rival = getRivalFaction(faction.name);
+	  quest = quest.replace(/X faction|X enemy/g, rival.name);
+	}
+
+	output += `<b>Main Quest:</b><br>${quest}<br><br>`;
+
+
+  // ===== SIDEQUEST (Profession Quest) =====
+  const professions = Object.keys(professionQuests);
+  const chosenProf = professions[Math.floor(Math.random() * professions.length)];
+  const sidequest = professionQuests[chosenProf][Math.floor(Math.random() * 3)];
+
+  output += `<b>Sidequest (${chosenProf}):</b><br>${sidequest}<br><br>`;
+
+  // ===== SHOPS =====
+  output += "<b>Town Shops:</b><br><br>";
+
+  for (let i = 1; i <= 2; i++) {
+    const shop = shopTypes[Math.floor(Math.random() * shopTypes.length)];
+    output += `<b>Shop ${i}: ${shop.name}</b><br>`;
+
+    for (let r = 0; r < 2; r++) {
+      shop.func();
+
+      let result = "";
+
+switch (shop.name) {
+  case "Weapons":
+    generateWeapon();
+    result = document.getElementById("weaponResult").innerHTML;
+    break;
+
+  case "Armor":
+    generateArmor();
+    result = document.getElementById("armorTitle").innerHTML;
+    break;
+
+  case "Meds":
+    generateMeds(); // NEW meds-only generator
+    result = document.getElementById("medsOnlyOutput").innerHTML;
+    break;
+
+  case "Chems":
+    generateChems(); // NEW chems-only generator
+    result = document.getElementById("chemsOnlyOutput").innerHTML;
+    break;
+
+  case "Tech":
+    generateTech();
+    result = document.getElementById("techOutput").innerHTML;
+    break;
+
+  case "Food & Water":
+    generateRations();
+    result = document.getElementById("RationWaterOutput").innerHTML;
+    break;
+}
+
+
+      output += `<div style="margin-left:10px; margin-bottom:8px;">${result}</div>`;
+    }
+
+    output += "<br>";
+  }
+
+  document.getElementById("townOutput").innerHTML = output;
+}
+
+
+
 	
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
