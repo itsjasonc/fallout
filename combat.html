@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>5x5 Weighted Grid Generator</title>
+<title>5x5 Grid & Encounter Generator</title>
 <style>
   body {
     background-color: #1e1e1e;
@@ -17,32 +17,26 @@
     margin-bottom: 10px;
     font-size: 1.3em;
   }
-  .controls {
-    display: inline-block;
-    background-color: #2b2b2b;
-    padding: 8px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    width: 95%;
-    max-width: 400px;
+  button {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    margin: 12px 0;
+    border-radius: 8px;
+    cursor: pointer;
   }
-  .controls label {
-    display: flex;
-    justify-content: space-between;
-    margin: 3px 0;
-    font-size: 0.9em;
-  }
-  .controls input {
-    width: 50px;
-    text-align: right;
+  button:hover {
+    background-color: #666;
   }
   #grid {
     display: grid;
-    grid-template-columns: 12% repeat(5, 1fr);
-    gap: 2px;
+    grid-template-columns: 10% repeat(5, 1fr);
+    gap: 3px;
     justify-items: center;
     width: 100%;
-    max-width: 100vw;
+    max-width: 90vw;
     margin: 0 auto;
   }
   .tile {
@@ -50,11 +44,11 @@
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    border-radius: 6px;
+    border-radius: 8px;
     color: white;
     width: 100%;
     aspect-ratio: 1/1;
-    font-size: 4vw;
+    font-size: 5vw;
     user-select: none;
   }
   .label {
@@ -62,107 +56,79 @@
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    font-size: 3vw;
-    color: #ddd;
+    font-size: 4vw;
+    color: #ccc;
     width: 100%;
     aspect-ratio: 1/1;
   }
-  button {
-    background-color: #444;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    font-size: 1em;
-    margin-top: 6px;
-    border-radius: 6px;
-    cursor: pointer;
+  .tile:hover {
+    filter: brightness(1.3);
+    transform: scale(1.08);
+    transition: all 0.12s;
   }
-  button:hover {
-    background-color: #666;
+  .tile.special-glow {
+    box-shadow: 0 0 14px #ffd700;
+    animation: pulse 2.5s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50%     { opacity: 0.75; }
   }
   @media (min-width: 500px) {
-    .tile { font-size: 2em; }
-    .label { font-size: 1em; }
-    .controls label { font-size: 1em; }
-    .controls input { width: 60px; }
+    .tile { font-size: 2.2em; }
+    .label { font-size: 1.4em; }
   }
 </style>
 </head>
 <body>
+<h1>5×5 Encounter Generator</h1>
 
-<h1>5x5 Weighted Grid Generator</h1>
-
-<div class="controls">
-  <h3>Tile Weighting</h3>
-  <label>💣 Explosive: <input type="number" id="explosive" value="1" step="0.1"></label>
-  <label>🧱 Cover: <input type="number" id="cover" value="1" step="0.1"></label>
-  <label>🪨 Ruins: <input type="number" id="ruins" value="1" step="0.1"></label>
-  <label>❌ Impassible: <input type="number" id="impassible" value="1" step="0.1"></label>
-  <label>⭐ Special: <input type="number" id="special" value="2" step="0.1"></label>
-  <label>⬛ Blank: <input type="number" id="blank" value="5" step="0.1"></label>
-  <button id="generate" onclick="generateGrid()">Generate Grid</button>
-</div>
-<div style="display:flex; justify-content:center; gap:8px; margin-top:4px;">
-  <label>Party Level: <input id="partyLevel" type="number" value="5" min="1" style="width:50px;"></label>
-  <label>Players: <input id="numPlayers" type="number" value="3" min="1" style="width:50px;"></label>
+<div style="display:flex; justify-content:center; gap:12px; margin:12px 0;">
+  <label>Party Level: <input id="partyLevel" type="number" value="5" min="1" style="width:60px; text-align:center;"></label>
+  <label>Players: <input id="numPlayers" type="number" value="3" min="1" style="width:60px; text-align:center;"></label>
 </div>
 
+<button id="generate">Generate Encounter</button>
 
-<h3 id="zone-display" style="text-align:center; margin-bottom:8px;">Zone: —</h3>
-<h3 id="monster-display" style="text-align:center; margin-bottom:8px;">Monsters: —</h3>
-
+<h3 id="zone-display" style="margin:12px 0;">Zone: —</h3>
+<h3 id="monster-display" style="margin:12px 0;">Monsters: —</h3>
+<h3 id="bonus-room-display" style="margin:12px 0;">Bonus Room: —</h3>
+<h3 id="loot-display" style="margin:12px 0;">Loot: —</h3>
 
 <div id="grid"></div>
 
 <script>
   const tileTypes = [
     { name: "Explosive", symbol: "💣", color: "#e25822" },
-    { name: "Cover", symbol: "🧱", color: "#888888" },
-    { name: "Ruins", symbol: "🪨", color: "#6b4f3a" },
-    { name: "Impassible", symbol: "❌", color: "#4a148c" },
-    { name: "Special", symbol: "⭐", color: "#e6c200" },
-    { name: "Blank", symbol: "", color: "#2b2b2b" }
+    { name: "Cover",     symbol: "🧱", color: "#888888" },
+    { name: "Ruins",     symbol: "🪨", color: "#6b4f3a" },
+    { name: "Impassible",symbol: "❌", color: "#4a148c" },
+    { name: "Special",   symbol: "⭐", color: "#e6c200" },
+    { name: "Blank",     symbol: "",   color: "#2b2b2b" }
   ];
 
   const rowLabels = ["A","B","C","D","E"];
   const colLabels = ["1","2","3","4","5"];
 
-  function generateGrid() {
-    const weights = [
-      parseFloat(document.getElementById("explosive").value),
-      parseFloat(document.getElementById("cover").value),
-      parseFloat(document.getElementById("ruins").value),
-      parseFloat(document.getElementById("impassible").value),
-      parseFloat(document.getElementById("special").value),
-      parseFloat(document.getElementById("blank").value)
-    ];
+  // Fixed equal weights (you can still tweak these numbers if desired)
+  const fixedWeights = [1, 2, 2, 1, 3, 6]; // Explosive, Cover, Ruins, Impassible, Special, Blank
 
-    const totalWeight = weights.reduce((a, b) => a + b, 0);
-    const probabilities = weights.map(w => w / totalWeight);
+  function generateGrid() {
+    const totalWeight = fixedWeights.reduce((a, b) => a + b, 0);
+    const probabilities = fixedWeights.map(w => w / totalWeight);
 
     const gridContainer = document.getElementById("grid");
     gridContainer.innerHTML = "";
 
-    // Top-left corner
-    const corner = document.createElement("div");
-    corner.className = "label";
-    gridContainer.appendChild(corner);
+    // Corner
+    gridContainer.appendChild(createLabel(""));
 
     // Column labels
-    for (let c = 0; c < colLabels.length; c++) {
-      const colLabel = document.createElement("div");
-      colLabel.className = "label";
-      colLabel.textContent = colLabels[c];
-      gridContainer.appendChild(colLabel);
-    }
+    colLabels.forEach(c => gridContainer.appendChild(createLabel(c)));
 
-    // Rows and tiles
+    // Rows + tiles
     for (let r = 0; r < 5; r++) {
-      // Row label
-      const rowLabel = document.createElement("div");
-      rowLabel.className = "label";
-      rowLabel.textContent = rowLabels[r];
-      gridContainer.appendChild(rowLabel);
+      gridContainer.appendChild(createLabel(rowLabels[r]));
 
       for (let c = 0; c < 5; c++) {
         const tileType = weightedRandom(tileTypes, probabilities);
@@ -170,86 +136,87 @@
         tile.className = "tile";
         tile.style.backgroundColor = tileType.color;
         tile.textContent = tileType.symbol;
+        if (tileType.name === "Special") tile.classList.add("special-glow");
         gridContainer.appendChild(tile);
       }
     }
   }
 
-  function weightedRandom(items, probabilities) {
+  function createLabel(text) {
+    const el = document.createElement("div");
+    el.className = "label";
+    el.textContent = text;
+    return el;
+  }
+
+  function weightedRandom(items, probs) {
     let r = Math.random();
     let sum = 0;
     for (let i = 0; i < items.length; i++) {
-      sum += probabilities[i];
+      sum += probs[i];
       if (r <= sum) return items[i];
     }
     return items[items.length - 1];
   }
 
-  generateGrid();
-  // === Zone Table Data ===
-const zoneTable = {
-  11: "Office: Contains 2 Vending machines with 1d6 Nuka Cola / Sunset Sarsaparilla for 10c each. Autojacker to open.",
-  12: "Mall: Scavenging allows choosing one of 2 loot rolls, rerolls reroll both options. ",
-  13: "Bunker: Scavenged items have +1 durability. Use Breatherator to add +2 to scavenge roll.",
-  14: "Graveyard: Contains map to legendary loot 3 hexes away. Use Hammerator to add +2 to scavenge roll.",
-  15: "School: Contains 3 special rooms instead of 1, each requires a different technology.",
-  16: "Factory: Contains a random tech, Use Flashlight to add +2 to scavenge roll.",
+  // === Zone Table (kept as-is) ===
+  const zoneTable = {
+    11: "Office: Contains 2 Vending machines with 1d6 Nuka Cola / Sunset Sarsaparilla for 10c each. Autojacker to open.",
+    12: "Mall: Scavenging allows choosing one of 2 loot rolls, rerolls reroll both options. ",
+    13: "Bunker: Scavenged items have +1 durability. Use Breatherator to add +2 to scavenge roll.",
+    14: "Graveyard: Contains map to legendary loot 3 hexes away. Use Hammerator to add +2 to scavenge roll.",
+    15: "School: Contains 3 special rooms instead of 1, each requires a different technology.",
+    16: "Factory: Contains a random tech, Use Flashlight to add +2 to scaven roll.",
+    21: "Museum: Contains 1 artifact. Use Hammerator for heavy relic worth 1d6+Lx20c.",
+    22: "Prison: +1 enemy. Contains a random military equipment item.",
+    23: "Park: Contains a random potted plant. Plants planted here give +100% yield if left for the whole level.",
+    24: "Railyard: Contains 1d6 flares (20c). Flares reduce enemies by 1 in Ruins.",
+    25: "Library: Can order a random recipe that arrives on level up",
+    26: "Warehouse: Ship your items to any cleared hex; Use hackerator to ship yourselves instead",
+    31: "Casino: Contains a slot machine. Spend 40c to roll 1d6×10c. can luck/resist. Crit = 120c jackpot, 1 = break.",
+    32: "Laundromat: Spend 10c to reroll armor values. Use generator to also give it +1 durability",
+    33: "Workshop: Has a workbench; repairing items costs 1 less scrap.",
+    34: "Missile Silo: Spend 10 tech scrap to fire a nuclear missile at any hex (annihilates towns for -1 morale)",
+    35: "Armory: Spend 5 gun scrap to upgrade any gun with +1 damage.",
+    36: "Bank: Deposit caps, gain 20% on level up. Withdraw at any bank.",
+    41: "Military Base: Scavenging weapons/armor here gives +1 to rolls with no penalty.",
+    42: "Farm: Contains a brahmin. CHA/AGI(fatigue) to scavenge 1d6 milk/flesh (-2 thirst/hunger, +20% HP, 30c). Crit: 3× yield.",
+    43: "Quarry: Use autojacker or grenades/explosive weapons to excavate heavy ore worth 1d6+L×20c.",
+    44: "Crash Site: Contains a anything -> mutated weapon alien tech, powered by 1D artifact",
+    45: "Campsite: Can scavenge for 1d3 flares. Crit: find 3×.",
+    46: "Foundry: Spend 5 armor scrap to upgrade any melee/fist weapon with +1 damage",
+    51: "Interchange: Generates any faction’s settlement 3 hexes away.",
+    52: "Laboratory: Generates a Ruins from 5 choices 3 hexes away.",
+    53: "Airport: Generates an adjacent Subway. Contains 1 flare for each Subway.",
+    54: "Resort: Generates adjacent irradiated lake (+1 rads each way) with uninhabited island (+3 to scavenging).",
+    55: "Subway: Generates another Subway 5 hexes away. You can fast travel between cleared Subways.",
+    56: "Greenhouse: Can scavenge for a mutamelon that gives 5x -1 hunger+thirst, heavy.",
+    61: "Hospital: When you heal or remove a status, heal +10% or remove 1 extra.",
+    62: "Restaurant: Can order food (1d6+10 clean rations) that arrives on level up.",
+    63: "Hotel: Sleeping here grants 'Well Rested' and refreshes all skill/luck/resist.",
+    64: "Construction Yard: Copies the effect of any ruins you have encountered.",
+    65: "Supermarket: Scavenging ammo/food/water gives +1 to rolls with no penalty.",
+    66: "Church: No battle. Friendly merchant with 2 bodyguards has random loot + random crit loot."
+  };
 
-  21: "Museum: Contains 1 artifact. Use Hammerator for heavy relic worth 1d6+Lx20c.",
-  22: "Prison: +1 enemy. Contains a random military equipment item.",
-  23: "Park: Contains a random potted plant. Plants planted here give +100% yield if left for the whole level.",
-  24: "Railyard: Contains 1d6 flares (20c). Flares reduce enemies by 1 in Ruins.",
-  25: "Library: Can order a random recipe that arrives on level up",
-  26: "Warehouse: Ship your items to any cleared hex; Use hackerator to ship yourselves instead",
+  function generateZone() {
+    const d1 = Math.floor(Math.random() * 6) + 1;
+    const d2 = Math.floor(Math.random() * 6) + 1;
+    const roll = d1 * 10 + d2;
+    const zone = zoneTable[roll] || "Unknown Zone";
+    document.getElementById("zone-display").textContent = `Zone: ${zone}`;
+  }
 
-  31: "Casino: Contains a slot machine. Spend 40c to roll 1d6×10c. can luck/resist. Crit = 120c jackpot, 1 = break.",
-  32: "Laundromat: Spend 10c to reroll armor values. Use generator to also give it +1 durability",
-  33: "Workshop: Has a workbench; repairing items costs 1 less scrap.",
-  34: "Missile Silo: Spend 10 tech scrap to fire a nuclear missile at any hex (annihilates towns for -1 morale)",
-  35: "Armory: Spend 5 gun scrap to upgrade any gun with +1 damage.",
-  36: "Bank: Deposit caps, gain 20% on level up. Withdraw at any bank.",
-
-  41: "Military Base: Scavenging weapons/armor here gives +1 to rolls with no penalty.",
-  42: "Farm: Contains a brahmin. CHA/AGI(fatigue) to scavenge 1d6 milk/flesh (-2 thirst/hunger, +20% HP, 30c). Crit: 3× yield.",
-  43: "Quarry: Use autojacker or grenades/explosive weapons to excavate heavy ore worth 1d6+L×20c.",
-  44: "Crash Site: Contains a anything -> mutated weapon alien tech, powered by 1D artifact",
-  45: "Campsite: Can scavenge for 1d3 flares. Crit: find 3×.",
-  46: "Foundry: Spend 5 armor scrap to upgrade any melee/fist weapon with +1 damage",
-
-  51: "Interchange: Generates any faction’s settlement 3 hexes away.",
-  52: "Laboratory: Generates a Ruins from 5 choices 3 hexes away.",
-  53: "Airport: Generates an adjacent Subway. Contains 1 flare for each Subway.",
-  54: "Resort: Generates adjacent irradiated lake (+1 rads each way) with uninhabited island (+3 to scavenging).",
-  55: "Subway: Generates another Subway 5 hexes away. You can fast travel between cleared Subways.",
-  56: "Greenhouse: Can scavenge for a mutamelon that gives 5x -1 hunger+thirst, heavy.",
-
-  61: "Hospital: When you heal or remove a status, heal +10% or remove 1 extra.",
-  62: "Restaurant: Can order food (1d6+10 clean rations) that arrives on level up.",
-  63: "Hotel: Sleeping here grants 'Well Rested' and refreshes all skill/luck/resist.",
-  64: "Construction Yard: Copies the effect of any ruins you have encountered.",
-  65: "Supermarket: Scavenging ammo/food/water gives +1 to rolls with no penalty.",
-  66: "Church: No battle. Friendly merchant with 2 bodyguards has random loot + random crit loot."
-};
-
-// === Zone Generator Function ===
-function generateZone() {
-  const d1 = Math.floor(Math.random() * 6) + 1;
-  const d2 = Math.floor(Math.random() * 6) + 1;
-  const roll = d1 * 10 + d2;
-  const zone = zoneTable[roll] || "Unknown Zone";
-  document.getElementById("zone-display").textContent = `${zone}`;
-}
-// === Monster Categories ===
+  // === Monster Data (unchanged) ===
 const monsterData = {
   E1: { label: "Raiders", notes: "special: hidden land mines. Loot: broken equipment, mines, human flesh", subs: [
-    { name: "Scout", hp: 7, notes: "scaled weapons, 10x mines" },          // 1-6
-    { name: "Tweaker", hp: 11, notes: "scaled weapons, 11x mines" },        // 7-8
-    { name: "Scavenger", hp: 15, notes: "scaled weapons, 12x mines" },      // 9-10
-    { name: "Juicer", hp: 19, notes: "scaled weapons, 13x mines" },         // 11-12
-    { name: "Elite", hp: 23, notes: "scaled weapons, 14x mines" },          // 13-14
-    { name: "Chemlord", hp: 27, notes: "scaled weapons, 15x mines" }        // 15+
+    { name: "Scout", hp: 7, notes: "scaled weapons, 10x mines" }, // 1-6
+    { name: "Tweaker", hp: 11, notes: "scaled weapons, 11x mines" }, // 7-8
+    { name: "Scavenger", hp: 15, notes: "scaled weapons, 12x mines" }, // 9-10
+    { name: "Juicer", hp: 19, notes: "scaled weapons, 13x mines" }, // 11-12
+    { name: "Elite", hp: 23, notes: "scaled weapons, 14x mines" }, // 13-14
+    { name: "Chemlord", hp: 27, notes: "scaled weapons, 15x mines" } // 15+
   ]},
-
   E2: { label: "Beasts", notes: "on death: allies can immediately attack. Loot: animal flesh", subs: [
     { name: "Bloatfly", hp: 6, notes: "5 R short thrown" },
     { name: "Wild Dog", hp: 10, notes: "8 P melee, grapples on 6" },
@@ -258,7 +225,6 @@ const monsterData = {
     { name: "Deathclaw", hp: 22, notes: "2x11 P melee + bleed, +1 spd" },
     { name: "Radragon", hp: 26, notes: "12 X+R splash + poison + burn, mid, hovers, -1 mob" }
   ]},
-
   E3: { label: "Nesters", notes: "special: eggs, 50% to hatch into swarmers each round. Loot: animal flesh", subs: [
     { name: "Gecko", hp: 5, notes: "6 P + bleed, melee" },
     { name: "Mirelurk", hp: 9, notes: "7 P melee, 2x armor, aim head ignores armor" },
@@ -267,7 +233,6 @@ const monsterData = {
     { name: "Cazadores", hp: 21, notes: "10 P melee + poison+2, hover, +1 spd" },
     { name: "Nightstalker", hp: 25, notes: "2x9 P melee + poison + bleed" }
   ]},
-
   E4: { label: "Burrowers", notes: "special: burrow. Loot: animal flesh", subs: [
     { name: "Radroach", hp: 4, notes: "7 P melee" },
     { name: "Molerat", hp: 8, notes: "2x6 P melee, +1 spd" },
@@ -276,7 +241,6 @@ const monsterData = {
     { name: "Gulper", hp: 20, notes: "2x9 P + grapple, +1 spd" },
     { name: "Tunneler", hp: 24, notes: "13 P melee + poison + grapples on 6" }
   ]},
-
   E5: { label: "Robots", notes: "explode end of turn when killed 50% HP X splash . Loot: armor scraps", subs: [
     { name: "Protectron", hp: 8, notes: "8 E melee" },
     { name: "Cyberdog", hp: 12, notes: "9 P melee, +1 spd" },
@@ -285,7 +249,6 @@ const monsterData = {
     { name: "Sentry Bot", hp: 24, notes: "3x9 P mid" },
     { name: "Assaultron", hp: 28, notes: "14 E+R melee, charge 1, +1 spd" }
   ]},
-
   E6: { label: "Synths", notes: "terrain 4-5: hidden pulse mines. Loot: tech scrap", subs: [
     { name: "Sentry", hp: 7, notes: "scaled energy weapons + 10E mines" },
     { name: "Patroller", hp: 11, notes: "scaled energy weapons + 11E mines" },
@@ -294,7 +257,6 @@ const monsterData = {
     { name: "Assassin", hp: 23, notes: "scaled energy weapons +14E mines" },
     { name: "Courser", hp: 27, notes: "scaled energy weapons +15E mines" }
   ]},
-
   O1: { label: "Cultist", notes: "⅓ to use random artifact, mutated weapons. Loot: broken weapons, 1D artifacts, human flesh", subs: [
     { name: "Initiate", hp: 7, notes: "scaled weapons" },
     { name: "Acolyte", hp: 11, notes: "scaled weapons" },
@@ -303,7 +265,6 @@ const monsterData = {
     { name: "Fanatic", hp: 23, notes: "scaled weapons" },
     { name: "Leader", hp: 27, notes: "scaled weapons" }
   ]},
-
   O2: { label: "Hoverbots", notes: "all hover; gain shield when ally dies. Loot: gun scraps", subs: [
     { name: "Eyebot", hp: 5, notes: "2x5 E, mid" },
     { name: "Mr. Handy", hp: 9, notes: "2x6 P, mid" },
@@ -312,7 +273,6 @@ const monsterData = {
     { name: "Think Tank", hp: 21, notes: "2x9 E + disorient, mid" },
     { name: "UFO", hp: 25, notes: "12 R splash+burn, long" }
   ]},
-
   O3: { label: "Feral Ghouls", notes: "Xrad, special: hidden bear traps, +1 spd, ignore hazards, +1 mob Loot: mutant flesh, ½ junk item", subs: [
     { name: "Roamer", hp: 5, notes: "2x5 P melee, grapples on 6" },
     { name: "Stalker", hp: 9, notes: "2x6 P melee, grapples on 6" },
@@ -321,7 +281,6 @@ const monsterData = {
     { name: "Molten One", hp: 21, notes: "10 X splash+burn, short" },
     { name: "Frozen One", hp: 25, notes: "12 E splash+disorient, short" }
   ]},
-
   O4: { label: "Aberrations", notes: "Xrad, special: rad pools. Loot: mutant flesh", subs: [
     { name: "Mutant Plant", hp: 5, notes: "7 P melee, immobile" },
     { name: "Centaur", hp: 10, notes: "8 R, short" },
@@ -330,7 +289,6 @@ const monsterData = {
     { name: "Wanamingo", hp: 25, notes: "9 P+R+psn melee, +1 spd" },
     { name: "Cybermutant", hp: 30, notes: "12 E + random ailment, very long, -1 mob" }
   ]},
-
   O5: { label: "Super Mutants", notes: "Xrad, special: rad pools, 1 suicider. Loot: broken weapons, mutant flesh", subs: [
     { name: "Skirmisher", hp: 9, notes: "scaled heavy weapons, 16 X splash melee suicider" },
     { name: "Brute", hp: 13, notes: "scaled heavy weapons, 17 X splash melee suicider" },
@@ -339,7 +297,6 @@ const monsterData = {
     { name: "Overlord", hp: 25, notes: "scaled heavy weapons, 20 X splash melee suicider" },
     { name: "Mastermind", hp: 29, notes: "scaled heavy weapons, 21 X splash melee suicider" }
   ]},
-
   O6: { label: "Nightkin", notes: "Xrad, special: hidden bear traps, ½ stealthed, Shove on 6, Loot: mutant flesh", subs: [
     { name: "Rogue", hp: 9, notes: "8 P melee" },
     { name: "Scoundrel", hp: 13, notes: "2x7 P melee" },
@@ -349,78 +306,233 @@ const monsterData = {
     { name: "Assassin", hp: 29, notes: "2x11 P melee" }
   ]}
 };
-// === Helper: map tierRoll to tier index (0..5) and a human-range label ===
-function tierIndexFromRoll(tierRoll) {
-  if (tierRoll <= 6) return { idx: 0, label: "1 (1-6)" };
-  if (tierRoll <= 8) return { idx: 1, label: "2 (7-8)" };
-  if (tierRoll <= 10) return { idx: 2, label: "3 (9-10)" };
-  if (tierRoll <= 12) return { idx: 3, label: "4 (11-12)" };
-  if (tierRoll <= 14) return { idx: 4, label: "5 (13-14)" };
-  return { idx: 5, label: "6 (15+)" };
-}
-// === Monster Generator ===
-function generateMonsters() {
-  const level = Math.max(1, parseInt(document.getElementById("partyLevel").value) || 1);
-  const players = Math.max(1, parseInt(document.getElementById("numPlayers").value) || 1);
 
-  // Category selection (2d6: d1 even/odd -> prefix, d2 -> category number)
-  const d1 = Math.floor(Math.random() * 6) + 1;
-  const d2 = Math.floor(Math.random() * 6) + 1;
-  const prefix = (d1 % 2 === 0) ? "O" : "E";
-  const catKey = `${prefix}${d2}`;
-  const cat = monsterData[catKey] || { label: "Unknown", subs: [] };
+  function tierIndexFromRoll(tierRoll) {
+    if (tierRoll <= 6) return 0;
+    if (tierRoll <= 8) return 1;
+    if (tierRoll <= 10) return 2;
+    if (tierRoll <= 12) return 3;
+    if (tierRoll <= 14) return 4;
+    return 5;
+  }
 
-  // Number of enemies: roll 1d6 per player and sum
-const counts = [];
-for (let i = 0; i < players; i++) {
-  const roll = Math.floor(Math.random() * 6) + 1; // 1–6
-  if (roll === 1) counts.push(0);      // 0 enemies
-  else if (roll >= 2 && roll <= 4) counts.push(1); // 1 enemy
-  else counts.push(2);                 // 5–6 = 2 enemies
-}
-const totalEnemies = counts.reduce((a, b) => a + b, 0);
+  function generateMonsters() {
+    const level = Math.max(1, parseInt(document.getElementById("partyLevel").value) || 1);
+    const players = Math.max(1, parseInt(document.getElementById("numPlayers").value) || 1);
 
+    let prefix = Math.random() < 0.5 ? "O" : "E";
+    const d2 = Math.floor(Math.random() * 6) + 1;
+    const catKey = `${prefix}${d2}`;
+    const cat = monsterData[catKey] || { label: "???", subs: [] };
 
-  // Tier roll: 1d6 + party level
-  const tierRoll = Math.floor(Math.random() * 6) + 1 + level;
-  const tierInfo = tierIndexFromRoll(tierRoll);
-  const tierIdx = tierInfo.idx;
+    let totalEnemies = players + Math.floor(Math.random() * (players + 1));
+    totalEnemies = Math.max(1, Math.min(12, totalEnemies));
 
-  // Pick subtype for the tier
-  const subtype = (cat.subs && cat.subs[tierIdx]) ? cat.subs[tierIdx] : { name: "Unknown", hp: "?", notes: "" };
+    const tierRoll = Math.floor(Math.random() * 6) + 1 + Math.floor(level / 3);
+    const tierIdx = tierIndexFromRoll(tierRoll);
+    const subtype = cat.subs[tierIdx] || { name: "???", hp: "?", notes: "" };
 
-  // Build a readable string
-  const summaryLines = [];
-  summaryLines.push(`${cat.label} — ${cat.notes || ""}`);
-  summaryLines.push(`${totalEnemies}x ${subtype.name} (${subtype.hp} HP)`);
-  if (subtype.notes) summaryLines.push(`${subtype.notes}`);
+    const lines = [
+      `${cat.label} — ${cat.notes || ""}`,
+      `${totalEnemies}× ${subtype.name} (${subtype.hp} HP)`,
+      subtype.notes ? `(${subtype.notes})` : ""
+    ].filter(Boolean);
 
-  // Write to UI
-  const out = summaryLines.join(" · ");
-  const md = document.getElementById("monster-display");
-  if (md) md.textContent = out;
-}
+    document.getElementById("monster-display").textContent = `Monsters: ${lines.join(" · ")}`;
+  }
 
-// Modify your existing “Generate Map” button click logic to also call this:
-document.getElementById("generate").addEventListener("click", () => {
-  generateGrid();
-  generateZone();
-  generateMonsters();
-});
+  // === Bonus Room Data ===
+  const bonusRoomData = [
+    { req: "Use a generator or int save + 5 MF cells.", actions: [
+      "Powering Up a Vault Door to enter room",
+      "Activating Terminals to open door",
+      "Recharging Robot to enter secure room",
+      "Running a Water pump to unflood a facility",
+      "Operating a Conveyor System to access items",
+      "Powering an elevator"
+    ]},
+    { req: "Use autojacker or group STR check (mixed/fail=+1 injury)", actions: [
+      "Lifting a Collapsed Beam",
+      "Raising a Heavy Vehicle",
+      "Removing large rocks",
+      "Propping Up a Collapsing Structure",
+      "Accessing a Supply Cache",
+      "Opening a Sealed Crate"
+    ]},
+    { req: "Use hackerator or +3 status and INT save", actions: [
+      "Bypassing Security Systems (fatigue)",
+      "Unlocking door (fatigue)",
+      "Dismantling generator (rads)",
+      "Disabling defenses (injury)",
+      "Reprogramming Robots (injury)",
+      "Hacking an irradiated Control Panel (rads)"
+    ]},
+    { req: "Use hammerator or group END check (mixed/fail=+1 Fatigue)", actions: [
+      "Breaking Through Concrete wall",
+      "Excavating Buried Supplies",
+      "Clearing a blocked stairwell/elevator",
+      "Drilling a drainage hole",
+      "Accessing a collapsed tunnel",
+      "Clearing obstacles"
+    ]},
+    { req: "Use breatherator or +3 status and AGI save.", actions: [
+      "Entering a radioactive Area (rads)",
+      "Navigating a flooded area (rads)",
+      "Exploring a no oxygen area (fatigue)",
+      "Investigating an asbestos exposed area (injury)",
+      "Investigating a toxic chemical exposed area (injury)",
+      "Entering a smoky Area (fatigue)"
+    ]},
+    { req: "use flashlight or agi save + spend 5 fuel", actions: [
+      "Area has radiation pools",
+      "Hazardous area",
+      "Finding Hidden Compartments",
+      "Navigating a Collapsed Mine",
+      "Reading Maps and instructions",
+      "Activating generator"
+    ]}
+  ];
 
+  function generateBonusRoom() {
+    const catIdx = Math.floor(Math.random() * bonusRoomData.length);
+    const actionIdx = Math.floor(Math.random() * 6);
+    const cat = bonusRoomData[catIdx];
+    const action = cat.actions[actionIdx];
+    document.getElementById("bonus-room-display").textContent = `Bonus Room: ${cat.req} — ${action}`;
+  }
+
+  // === Loot Table ===
+  const lootTable = [
+    // 1-2: ALIEN TECH + ARTIFACT
+    {
+      type: "ALIEN TECH + ARTIFACT",
+      desc: "Alien device that transforms items. Roll 2d6 for categories, INT save to know transformation outcome. Accepts up to 10 stackables of any item from category. Bulky <-> stackable converts at 3 / D. Converted items are based on original items, weapons become mutated. Powered by a random artifact that can be extracted instead of using tech.",
+      categories: ["Weapon","Armor","Food","Water","Scrap","Ammo"],
+      artifact: true
+    },
+    // Duplicate for 2 (same weight)
+    {
+      type: "ALIEN TECH + ARTIFACT",
+      desc: "Alien device that transforms items. Roll 2d6 for categories, INT save to know transformation outcome. Accepts up to 10 stackables of any item from category. Bulky <-> stackable converts at 3 / D. Converted items are based on original items, weapons become mutated. Powered by a random artifact that can be extracted instead of using tech.",
+      categories: ["Weapon","Armor","Food","Water","Scrap","Ammo"],
+      artifact: true
+    },
+    // 3-4: PLANTS + RECIPE
+    {
+      type: "PLANTS + RECIPE",
+      desc: "Generates a resource every time you level up, bulky, 50c",
+      options: [
+        "Potted Sludgeflower: Generates 2 fuel",
+        "Potted Fleshroom: Generates 4 clean flesh",
+        "Potted Mutfruit: Generates 4 water",
+        "Potted Radovera: Generates 2 biogel",
+        "Potted Scraptus: Generates 5 omniscrap (can be used as any scrap)",
+        "Potted Tobacoca: Generates 2 cigar"
+      ],
+      artifact: false
+    },
+    // Duplicate for 4
+    {
+      type: "PLANTS + RECIPE",
+      desc: "Generates a resource every time you level up, bulky, 50c",
+      options: [
+        "Potted Sludgeflower: Generates 2 fuel",
+        "Potted Fleshroom: Generates 4 clean flesh",
+        "Potted Mutfruit: Generates 4 water",
+        "Potted Radovera: Generates 2 biogel",
+        "Potted Scraptus: Generates 5 omniscrap (can be used as any scrap)",
+        "Potted Tobacoca: Generates 2 cigar"
+      ],
+      artifact: false
+    },
+    // 5-6: EQUIPMENT + RECIPE
+    {
+      type: "EQUIPMENT + RECIPE",
+      desc: "Each player can only benefit from one of each equipment, bulky, 50c",
+      options: [
+        "Backpack: Split 1 inventory slot into 3 bulky-only slots",
+        "Helmet: +10 max HP",
+        "Binoculars: learn weapon+armor of 1 enemy before initiative",
+        "Sleeping Bag: +10% HP when sleeping in ruins",
+        "Boots: gain 1 shield when rolling initiative",
+        "Gloves: Take an additional turn after your first action in initiative"
+      ],
+      artifact: false
+    },
+    {
+      type: "EQUIPMENT + RECIPE",
+      desc: "Each player can only benefit from one of each equipment, bulky, 50c",
+      options: [
+        "Backpack: Split 1 inventory slot into 3 bulky-only slots",
+        "Helmet: +10 max HP",
+        "Binoculars: learn weapon+armor of 1 enemy before initiative",
+        "Sleeping Bag: +10% HP when sleeping in ruins",
+        "Boots: gain 1 shield when rolling initiative",
+        "Gloves: Take an additional turn after your first action in initiative"
+      ],
+      artifact: false
+    }
+  ];
+
+  const artifacts = [
+    "Earth: cripple a limb, 3 HP, mid",
+    "Water: clear a tile, 3 HP, mid",
+    "Fire: generate rubble tile, 3 HP, mid",
+    "Dark: generate cover tile, 3 HP, mid",
+    "Wind: move creature 1 space, 3 HP, mid",
+    "Light: give a player defend, 3 HP, mid"
+  ];
+
+  function generateLoot() {
+    const roll = Math.floor(Math.random() * 6) + 1; // 1-6
+    let entry;
+
+    if (roll <= 2) {
+      entry = lootTable[0]; // both 1 and 2 use the first entry
+    } else {
+      entry = lootTable[roll - 1];
+    }
+
+    let text = `${entry.type}`;
+	
+    if (entry.categories) {
+	  // Pick two different categories (X → Y)
+	  let idx1 = Math.floor(Math.random() * entry.categories.length);
+	  let idx2 = Math.floor(Math.random() * entry.categories.length);
+	  while (idx2 === idx1) {
+		idx2 = Math.floor(Math.random() * entry.categories.length);
+	  }
+	  const fromCat = entry.categories[idx1];
+	  const toCat = entry.categories[idx2];
+	  text += ` → Transforms: ${fromCat} → ${toCat}`;
+	}
+
+    if (entry.options) {
+      const optIdx = Math.floor(Math.random() * entry.options.length);
+      text += ` → ${entry.options[optIdx]}`;
+    }
+
+    if (entry.artifact) {
+      const artIdx = Math.floor(Math.random() * artifacts.length);
+      text += `, Powered by Artifact: ${artifacts[artIdx]}`;
+    }
+
+    document.getElementById("loot-display").textContent = `Loot: ${text}`;
+  }
+
+  // === Generate Everything ===
+  function generateAll() {
+    generateGrid();
+    generateZone();
+    generateMonsters();
+    generateBonusRoom();
+    generateLoot();
+  }
+
+  document.getElementById("generate").addEventListener("click", generateAll);
+
+  // Initial generation
+  generateAll();
 </script>
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
