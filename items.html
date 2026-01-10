@@ -330,15 +330,15 @@ window.addEventListener('load', distribute);
   { roll: 5, text: "Chain armor: +12 def, 90c" },
   { roll: 6, text: "Metal armor: +13 def, 100c" },
   { roll: 7, text: "Synth armor: +14 def, 110c" },
-  { roll: 8, text: "Mutant armor: +16 def, 120c" },
-  { roll: 9, text: "Rugged armor: +18 def, 130c" },
-  { roll: 10, text: "Combat armor: +20 def, 140c" },
-  { roll: 11, text: "Infantry armor: +22 def, 150c" },
-  { roll: 12, text: "Assault armor: +24 def, 160c" },
-  { roll: 13, text: "Ranger armor: +26 def, 170c" },
-  { roll: 14, text: "Salvaged power armor: +28 def, 180c" },
-  { roll: 15, text: "Power armor: +30 def, +190c" },
-  { roll: 16, text: "Advanced power armor: +32 def, 200c" }
+  { roll: 8, text: "Mutant armor: +15 def, 120c" },
+  { roll: 9, text: "Rugged armor: +16 def, 130c" },
+  { roll: 10, text: "Combat armor: +18 def, 140c" },
+  { roll: 11, text: "Infantry armor: +20 def, 150c" },
+  { roll: 12, text: "Assault armor: +22 def, 160c" },
+  { roll: 13, text: "Ranger armor: +24 def, 170c" },
+  { roll: 14, text: "Salvaged power armor: +26 def, 180c" },
+  { roll: 15, text: "Power armor: +28 def, +190c" },
+  { roll: 16, text: "Advanced power armor: +30 def, 200c" }
 ];
 
 // helper for single die roll
@@ -584,7 +584,7 @@ function generateComplications() {
   const c1 = complications[Math.floor(Math.random() * complications.length)];
   
   document.getElementById("ComplicationOutput").innerHTML =
-    ` ${c1[0]} | Save: ${c1[1]}<br><i>${c1[2]}</i>`;
+    ` ${c1[0]} | Skill: ${c1[1]}<br><i>${c1[2]}</i>`;
 }
 
 // ===== RATION GENERATOR =====
@@ -818,7 +818,7 @@ const townQuests = [
   { roll: 43, text: `"The Guilty Innocent" – A beloved hero is secretly guilty; expose or protect them.` },
   { roll: 44, text: `"Psycho Circus" – A chem dealer’s new formula turns people feral.` },
   { roll: 45, text: `"The Arena" – A raider warband has built a combat arena in town.` },
-  { roll: 46, text: `Negotiate Peace – Two rival factions are at odds; broker peace.` },
+  { roll: 46, text: `Flesh for Flesh – Nearby X faction needs to trade citizens for genetic diversity, but something isnt quite right.` },
 
   { roll: 51, text: `"The Price of Freedom" – A nearby town will release captives… for a price.` },
   { roll: 52, text: `Investigate the Ruins – Strange activity reported in nearby ruins, it is currently being looted by X faction who do not want to share.` },
@@ -830,7 +830,7 @@ const townQuests = [
   { roll: 61, text: `Protect the Caravan – Escort a caravan to a nearby settlement.` },
   { roll: 62, text: `"New Gods of the Old World" – A cult worships a nuclear bomb.` },
   { roll: 63, text: `Rescue the Captives – A faction kidnapped townsfolk; infiltrate and rescue them.` },
-  { roll: 64, text: `Hostile Neighbors – A nearby faction terrorizes the town; eliminate or negotiate.` },
+  { roll: 64, text: `Hostile Neighbors – A nearby X faction settlement terrorizes the town; eliminate or negotiate.` },
   { roll: 65, text: `Uncover the Legend – Rumors of an old legend spread; uncover the truth.` },
   { roll: 66, text: `Find the Missing Civilian – A key figure is missing; track them down.` }
 ];
@@ -1107,3 +1107,4 @@ switch (shop.name) {
 </script>
 </body>
 </html>
+
