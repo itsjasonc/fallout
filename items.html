@@ -651,13 +651,25 @@ function rollGrenadeByLevel(level) {
 function rollDice(diceStr) {
   const match = diceStr.match(/(\d*)d(\d+)([+-]\d+)?/i);
   if (!match) return 0;
-  const count = parseInt(match[1]) || 1;
-  const sides = parseInt(match[2]);
-  const modifier = parseInt(match[3]) || 0;
+
+  const count = parseInt(match[1], 10) || 1;
+  const sides = parseInt(match[2], 10);
+  const modifier = parseInt(match[3], 10) || 0;
+
   let total = 0;
-  for (let i = 0; i < count; i++) total += Math.floor(Math.random() * sides) + 1;
-  return total + modifier;
+  for (let i = 0; i < count; i++) {
+    total += Math.floor(Math.random() * sides) + 1;
+  }
+
+  const result = total + modifier;
+
+  // 🔒 HARD CLAMP TO VALID RANGE
+  const min = count + modifier;
+  const max = count * sides + modifier;
+
+  return Math.max(min, Math.min(result, max));
 }
+
 
 function generateAmmo() {
   const selected = ammoTable[Math.floor(Math.random() * ammoTable.length)];
@@ -681,6 +693,7 @@ function generateAmmo() {
 </script>
 </body>
 </html>
+
 
 
 
