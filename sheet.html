@@ -715,18 +715,6 @@
   line-height: 1;
 }
 
-.slot.dragging {
-  opacity: 0.6;
-  box-shadow: 0 0 12px #2cff2c;
-}
-
-.slot.drag-placeholder {
-  height: 4.5em;
-  border: 1px dashed #2cff2c;
-  margin: 6px 0;
-}
-
-
 
 
   </style>
@@ -1156,83 +1144,6 @@ function chgCounter(i, c, d) {
   const el = document.getElementById(`count${i}_${c}`);
   if (el) el.innerText = state.inventory[i].counters[c].value;
 }
-
-let dragSlot = null;
-let dragIndex = null;
-let dragTimer = null;
-let placeholder = null;
-
-function enableInventoryDrag() {
-  const inventory = document.getElementById("inventory");
-  if (!inventory) return;
-
-  inventory.querySelectorAll(".dropdown-toggle").forEach((handle, index) => {
-    handle.addEventListener("pointerdown", e => {
-      e.preventDefault();
-      dragTimer = setTimeout(() => startDrag(index), 300);
-    });
-
-    handle.addEventListener("pointerup", cancelDrag);
-    handle.addEventListener("pointerleave", cancelDrag);
-  });
-
-  document.addEventListener("pointermove", onDragMove);
-  document.addEventListener("pointerup", endDrag);
-}
-
-function cancelDrag() {
-  clearTimeout(dragTimer);
-  dragTimer = null;
-}
-
-function startDrag(index) {
-  dragIndex = index;
-  dragSlot = document.querySelectorAll(".slot")[index];
-  if (!dragSlot) return;
-
-  dragSlot.classList.add("dragging");
-
-  placeholder = document.createElement("div");
-  placeholder.className = "slot drag-placeholder";
-  dragSlot.after(placeholder);
-}
-
-function onDragMove(e) {
-  if (!dragSlot) return;
-
-  const inventory = document.getElementById("inventory");
-  const slots = [...inventory.querySelectorAll(".slot:not(.dragging)")];
-  const y = e.clientY;
-
-  for (const slot of slots) {
-    const rect = slot.getBoundingClientRect();
-    if (y < rect.top + rect.height / 2) {
-      inventory.insertBefore(placeholder, slot);
-      return;
-    }
-  }
-  inventory.appendChild(placeholder);
-}
-
-function endDrag() {
-  if (!dragSlot) return;
-
-  const inventory = document.getElementById("inventory");
-  const newIndex = [...inventory.children].indexOf(placeholder);
-
-  dragSlot.classList.remove("dragging");
-  inventory.insertBefore(dragSlot, placeholder);
-  placeholder.remove();
-
-  const moved = state.inventory.splice(dragIndex, 1)[0];
-  state.inventory.splice(newIndex, 0, moved);
-  save();
-
-  dragSlot = null;
-  dragIndex = null;
-  placeholder = null;
-}
-
 
 // ---------- ARMOR DAMAGE ----------
 
@@ -1815,9 +1726,6 @@ negNames.forEach(n => {
          </div>`;
     });
   });
-  
-  enableInventoryDrag();
-
 
   // Uses
   ["skill","luck","resist"].forEach(k => {
@@ -1980,11 +1888,6 @@ document.querySelector(".taken-toggle .perk-box").textContent =
 
 
 document.addEventListener("DOMContentLoaded", init);
-
-
-
-
-
 </script>
 
 
