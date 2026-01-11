@@ -603,9 +603,9 @@ if (isHeavy) {
     return;
   }
 
-  out.innerHTML = `<span Style="font-size: 18px;">${isHeavy ? "<span style='color:red; font-weight:bold;'>(H)</span> " : ""}${chosen[1]}</span>
-                   <div Style="font-size: 18px;">Damage: ${damageText}&nbsp;&nbsp;&nbsp;&nbsp;Ammo: ${chosen[3]}</div>
-                   <div Style="font-size: 18px;">Range: ${chosen[4]}&nbsp;&nbsp;&nbsp;&nbsp;Stat: ${chosen[5]}&nbsp;&nbsp;&nbsp;&nbsp;Value:${chosen[6]}</div>`;
+  out.innerHTML = `<span style="font-size:1.25em; font-weight:bold;">${isHeavy ? "<span style='color:red; font-weight:bold;'>(H)</span> " : ""}${chosen[1]}</span><br>
+                 Damage: ${damageText}  •  Ammo: ${chosen[3]}<br>
+                 Range: ${chosen[4]}  •  Stat: ${chosen[5]}  •  Value: ${chosen[6]}`;
 }
 // ===== COMPLICATION GENERATOR =====
 const complications = [
@@ -1065,7 +1065,7 @@ function generateTown() {
 	output += `<i>${faction.desc}</i><br><br>`;
 	
 	
-	// ===== NPCs (3 total) =====
+	// ===== NOTABLE NPCs (3 total) =====
 	output += `<b>Notable NPCs:</b><br>`;
 
 	for (let i = 0; i < 3; i++) {
@@ -1076,7 +1076,7 @@ function generateTown() {
 	  const npc = npcTable.find(n => n.roll === nRoll);
 
 	  output += `<div style="margin-left:10px; margin-bottom:6px;">
-				   <b>${npc?.name || "Unknown NPC"}</b><br>
+				   <b>${npc?.name || "Unknown NPC"}:</b>
 				   <i>${npc?.desc || ""}</i>
 				 </div>`;
 	}
@@ -1098,7 +1098,7 @@ function generateTown() {
 	  quest = quest.replace(/X faction|X enemy/g, rival.name);
 	}
 
-	output += `<b>Main Quest:</b><br>${quest}<br><br>`;
+	output += `<b>Main Quest:</b> ${quest}<br><br>`;
 
 
   // ===== SIDEQUEST (Profession Quest) =====
@@ -1106,7 +1106,7 @@ function generateTown() {
   const chosenProf = professions[Math.floor(Math.random() * professions.length)];
   const sidequest = professionQuests[chosenProf][Math.floor(Math.random() * 3)];
 
-  output += `<b>Sidequest (${chosenProf}):</b><br>${sidequest}<br><br>`;
+  output += `<b>Sidequest (${chosenProf}):</b> ${sidequest}<br><br>`;
 
 
   // ===== SHOPS =====
