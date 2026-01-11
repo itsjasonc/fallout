@@ -168,7 +168,49 @@ button:hover { background:#2a6ce2; }
   background: #222;
   color: #fff;
 }
+/* Make town output more compact on small screens */
+#townOutput {
+  font-size: 0.92rem;           /* slightly smaller base text */
+  line-height: 1.28;            /* tighter line spacing */
+  padding: 0.5rem;
+  margin-top: 0.4rem;
+}
 
+#townOutput b {
+  font-size: 1.05rem;           /* headings still stand out a bit */
+}
+
+#townOutput i {
+  font-size: 0.86rem;           /* flavor text smaller */
+  opacity: 0.9;
+  line-height: 1.25;
+}
+
+/* Reduce vertical spacing everywhere in town output */
+#townOutput > * {
+  margin: 0.35rem 0;            /* was probably ~0.8–1rem */
+}
+
+#townOutput div[style*="margin-left"] {
+  margin: 0.3rem 0 0.3rem 12px !important;  /* tighter indent & spacing */
+  font-size: 0.9rem;
+}
+
+/* Make shop items more compact */
+#townOutput b + br + div {
+  margin-bottom: 0.4rem !important;
+}
+
+/* Optional: even smaller on very narrow screens */
+@media (max-width: 420px) {
+  #townOutput {
+    font-size: 0.88rem;
+    line-height: 1.25;
+  }
+  #townOutput b {
+    font-size: 1rem;
+  }
+}
 
 </style>
 </head>
@@ -1152,4 +1194,5 @@ for (let i = 0; i < shopSlots.length; i++) {
 </script>
 </body>
 </html>
+
 
