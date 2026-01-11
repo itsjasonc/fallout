@@ -349,15 +349,15 @@ window.addEventListener('load', distribute);
   { roll: 5, text: "Chain armor: +12 def, 90c" },
   { roll: 6, text: "Metal armor: +13 def, 100c" },
   { roll: 7, text: "Synth armor: +14 def, 110c" },
-  { roll: 8, text: "Mutant armor: +16 def, 120c" },
-  { roll: 9, text: "Rugged armor: +18 def, 130c" },
-  { roll: 10, text: "Combat armor: +20 def, 140c" },
-  { roll: 11, text: "Infantry armor: +22 def, 150c" },
-  { roll: 12, text: "Assault armor: +24 def, 160c" },
-  { roll: 13, text: "Ranger armor: +26 def, 170c" },
-  { roll: 14, text: "Salvaged power armor: +28 def, 180c" },
-  { roll: 15, text: "Power armor: +30 def, +190c" },
-  { roll: 16, text: "Advanced power armor: +32 def, 200c" }
+  { roll: 8, text: "Mutant armor: +15 def, 120c" },
+  { roll: 9, text: "Rugged armor: +16 def, 130c" },
+  { roll: 10, text: "Combat armor: +18 def, 140c" },
+  { roll: 11, text: "Infantry armor: +20 def, 150c" },
+  { roll: 12, text: "Assault armor: +22 def, 160c" },
+  { roll: 13, text: "Ranger armor: +24 def, 170c" },
+  { roll: 14, text: "Salvaged power armor: +26 def, 180c" },
+  { roll: 15, text: "Power armor: +28 def, +190c" },
+  { roll: 16, text: "Advanced power armor: +30 def, 200c" }
 ];
 
 // helper for single die roll
@@ -741,7 +741,7 @@ const techTable = [
   { name: "Hammerator", effect: "Hand jackhammer used to expand openings or clear rubble" },
   { name: "Breatherator", effect: "Allows exploration of low oxygen or underwater areas" },
   { name: "Flashlight", effect: "Allows exploration of dark or foggy areas" },
-  { name: "Hackerator", effect: "Opens locks and hacks computers" }
+  { name: "Hackerator", effect: "Opens electronic locks and hacks computers" }
 ];
 
 function generateTech() {
@@ -791,7 +791,7 @@ const townDescriptors = [
   { roll: 41, name: "Canyon Settlement", desc: "A community built within a canyon, using the natural formations for defense and shelter." },
   { roll: 42, name: "Deserted School Campus", desc: "An old school repurposed into a settlement, with classrooms and gyms turned into living spaces." },
   { roll: 43, name: "Oil Rig Community", desc: "An old, once ocean-based oil rig now houses a small, industrious settlement." },
-  { roll: 44, name: "Ruined Church", desc: "The remains of a large church now serve as a communal living space and meeting hall for settlers." },
+  { roll: 44, name: "Ruined Cathedral", desc: "The remains of a large church now serve as a communal living space and meeting hall for settlers." },
   { roll: 45, name: "Old Gas Station", desc: "A small settlement has formed around an old gas station, using its infrastructure for trade and repair." },
   { roll: 46, name: "Desert Market Town", desc: "A town built around a central market square, where traders and settlers gather to exchange goods." },
 
@@ -922,7 +922,7 @@ const factions = [
   {
     name: "Metallion",
     tag: "Armor",
-    desc: "Hoard tech, meritocracy, hate tickers (mutants), hateful"
+    desc: "Hoard tech and hate the weak and tickers (mutants), meritocracy, hateful"
   },
   {
     name: "The Institute",
@@ -937,7 +937,7 @@ const factions = [
   {
     name: "New Country Republic",
     tag: "Weapons",
-    desc: "Bureaucratic, republic, weary"
+    desc: "Bureaucratic progressive society, republic, weary"
   },
   {
     name: "The Legion Solis Empire",
@@ -1152,3 +1152,4 @@ for (let i = 0; i < shopSlots.length; i++) {
 </script>
 </body>
 </html>
+
