@@ -678,12 +678,12 @@ function generateRations() {
 }
 function generateMeds() {
   const medTable = [
-    { name: "Bandage", effect: "-1 Injury, +10% HP" },
-    { name: "Rad-X", effect: "-1 Rads, +10% HP" },
-    { name: "Adrenaline", effect: "-1 Fatigue, +10% HP" },
-    { name: "Stimpak", effect: "-2 Injury, +20% HP (Addictive)" },
-    { name: "Rad-Away", effect: "-2 Rads, +20% HP (Addictive)" },
-    { name: "Addictol", effect: "Removes addictions, +10% HP" }
+    { name: "Bandage", effect: "-1 Injury, +10% HP, 20c" },
+    { name: "Rad-X", effect: "-1 Rads, +10% HP, 20c" },
+    { name: "Adrenaline", effect: "-1 Fatigue, +10% HP, 20c" },
+    { name: "Stimpak", effect: "-2 Injury, +20% HP (Addictive), 20c" },
+    { name: "Rad-Away", effect: "-2 Rads, +20% HP (Addictive), 20c" },
+    { name: "Addictol", effect: "Removes addictions, +10% HP, 20c" }
   ];
 
   const med = medTable[Math.floor(Math.random() * medTable.length)];
@@ -696,12 +696,12 @@ function generateMeds() {
 }
 function generateChems() {
   const chemTable = [
-    { name: "Jet", effect: "Next turn take 2 turns with +1 speed & all rolls (Addictive)" },
-    { name: "Psycho", effect: "+1 damage for 1 day (Addictive)" },
-    { name: "Rocket", effect: "+1 movement distance for 1 day (Addictive)" },
-    { name: "Mentats", effect: "+1 INT, +1 AGI for 1 day (Addictive)" },
-    { name: "Buffout", effect: "+1 STR, +1 END for 1 day (Addictive)" },
-    { name: "Beer", effect: "+1 CHA for 1 day, -1 thirst (Addictive)" }
+    { name: "Jet", effect: "Next turn take 2 turns with +1 speed & all rolls (Addictive), 20c" },
+    { name: "Psycho", effect: "+1 damage for 1 day (Addictive), 20c" },
+    { name: "Rocket", effect: "+1 movement distance for 1 day (Addictive), 20c" },
+    { name: "Mentats", effect: "+1 INT, +1 AGI for 1 day (Addictive), 20c" },
+    { name: "Buffout", effect: "+1 STR, +1 END for 1 day (Addictive), 20c" },
+    { name: "Beer", effect: "+1 CHA for 1 day, -1 thirst (Addictive), 20c" }
   ];
 
   const chem = chemTable[Math.floor(Math.random() * chemTable.length)];
@@ -716,12 +716,12 @@ function generateChems() {
 
 
 const ammoTable = [
-  { type: "Small rounds", roll: "1d6+4", cost: 5 },
-  { type: "E-cell", roll: "1d6+3", cost: 10 },
+  { type: "Small rounds", roll: "1d6+4", cost: 5c },
+  { type: "E-cell", roll: "1d6+3", cost: 10c },
   { type: "Grenades", roll: "1d6", cost: 0 },
-  { type: "Fuel", roll: "1d6", cost: 20 },
-  { type: "Large rounds", roll: "1d6+2", cost: 10 },
-  { type: "MF-cell", roll: "1d6+1", cost: 15 }
+  { type: "Fuel", roll: "1d6", cost: 20c },
+  { type: "Large rounds", roll: "1d6+2", cost: 10c },
+  { type: "MF-cell", roll: "1d6+1", cost: 15c }
 ];
 const grenadeTable = [
   { max: 6,  name: "Scrap Grenade", dmg: "11 X splash", cost: "15c" },
@@ -781,12 +781,12 @@ function generateAmmo() {
 
 // ===== TECHNOLOGY GENERATOR =====
 const techTable = [
-  { name: "Generator", effect: "Provides temporary power for electronics" },
-  { name: "Autojacker", effect: "Portable jack to move heavy objects or jammed doors" },
-  { name: "Hammerator", effect: "Hand jackhammer used to expand openings or clear rubble" },
-  { name: "Breatherator", effect: "Allows exploration of low oxygen or underwater areas" },
-  { name: "Flashlight", effect: "Allows exploration of dark or foggy areas" },
-  { name: "Hackerator", effect: "Opens electronic locks and hacks computers" }
+  { name: "Generator", effect: "Provides temporary power for electronics, 50c" },
+  { name: "Autojacker", effect: "Portable jack to move heavy objects or jammed doors, 50c" },
+  { name: "Hammerator", effect: "Hand jackhammer used to expand openings or clear rubble, 50c" },
+  { name: "Breatherator", effect: "Allows exploration of low oxygen or underwater areas, 50c" },
+  { name: "Flashlight", effect: "Allows exploration of dark or foggy areas, 50c" },
+  { name: "Hackerator", effect: "Opens electronic locks and hacks computers, 50c" }
 ];
 
 function generateTech() {
@@ -1197,4 +1197,5 @@ for (let i = 0; i < shopSlots.length; i++) {
 </script>
 </body>
 </html>
+
 
