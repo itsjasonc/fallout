@@ -207,20 +207,20 @@
   // === Monster Data (unchanged) ===
 const monsterData = {
   E1: { label: "Raiders", notes: "special: hidden land mines. Loot: broken equipment, mines, human flesh", subs: [
-    { name: "Scout", hp: 7, notes: "scaled weapons, 10x mines" }, // 1-6
-    { name: "Tweaker", hp: 11, notes: "scaled weapons, 11x mines" }, // 7-8
-    { name: "Scavenger", hp: 15, notes: "scaled weapons, 12x mines" }, // 9-10
-    { name: "Juicer", hp: 19, notes: "scaled weapons, 13x mines" }, // 11-12
-    { name: "Elite", hp: 23, notes: "scaled weapons, 14x mines" }, // 13-14
-    { name: "Chemlord", hp: 27, notes: "scaled weapons, 15x mines" } // 15+
+    { name: "Scout", hp: 7, notes: "scaled weapons, 11x mines" }, // 1-6
+    { name: "Tweaker", hp: 11, notes: "scaled weapons, 12x mines" }, // 7-8
+    { name: "Scavenger", hp: 15, notes: "scaled weapons, 13x mines" }, // 9-10
+    { name: "Juicer", hp: 19, notes: "scaled weapons, 14x mines" }, // 11-12
+    { name: "Elite", hp: 23, notes: "scaled weapons, 15x mines" }, // 13-14
+    { name: "Chemlord", hp: 27, notes: "scaled weapons, 16x mines" } // 15+
   ]},
   E2: { label: "Beasts", notes: "on death: allies can immediately attack. Loot: animal flesh", subs: [
-    { name: "Bloatfly", hp: 6, notes: "5 R short thrown" },
+    { name: "Bloatfly", hp: 6, notes: "6 R mid" },
     { name: "Wild Dog", hp: 10, notes: "8 P melee + poison, grapples on 6" },
-    { name: "Radstag", hp: 14, notes: "10 P melee, shove on 6, +1 spd, +2 dmg if moved 2 distance" },
-    { name: "Yao Guai", hp: 18, notes: "2x9 P melee, +1 spd, grapple on 6" },
-    { name: "Deathclaw", hp: 22, notes: "2x11 P melee + bleed, +1 spd, shove on 6" },
-    { name: "Radragon", hp: 26, notes: "12 X+R splash + poison + burn, short, hovers, -1 mob" }
+    { name: "Radstag", hp: 14, notes: " 9 P melee, shove on 6, +1 spd, +2 dmg if moved 2 distance" },
+    { name: "Yao Guai", hp: 18, notes: "2x9 P melee, grapple on 6" },
+    { name: "Deathclaw", hp: 22, notes: "2x10 P melee + bleed, +1 spd, shove on 6" },
+    { name: "Radragon", hp: 26, notes: "11 X+R splash + poison + burn, short, hovers, -1 mob" }
   ]},
   E3: { label: "Nesters", notes: "special: eggs, 50% to hatch into swarmers each round. Loot: animal flesh", subs: [
     { name: "Gecko", hp: 5, notes: "6 P + bleed, melee" },
@@ -228,15 +228,15 @@ const monsterData = {
     { name: "Fire Gecko", hp: 13, notes: "8 X + burn, short" },
     { name: "Lakelurk", hp: 17, notes: "9 E + disorient, mid" },
     { name: "Cazadores", hp: 21, notes: "10 P melee + poison+2, hover, +1 spd" },
-    { name: "Nightstalker", hp: 25, notes: "2x9 P melee + poison + bleed" }
+    { name: "Nightstalker", hp: 25, notes: "2x11 P melee + poison, grapples on 6" }
   ]},
   E4: { label: "Burrowers", notes: "special: burrow. Loot: animal flesh", subs: [
     { name: "Radroach", hp: 4, notes: "5 P+R melee" },
-    { name: "Molerat", hp: 8, notes: "2x6 P melee, +1 spd" },
-    { name: "Radscorpion", hp: 12, notes: "10 P melee + poison" },
-    { name: "Fire Ant", hp: 16, notes: "11 X splash + burn, short" },
-    { name: "Gulper", hp: 20, notes: "2x9 P + grapple, +1 spd" },
-    { name: "Tunneler", hp: 24, notes: "13 P melee + poison + grapples on 6" }
+    { name: "Molerat", hp: 8, notes: "2x6 P melee" },
+    { name: "Radscorpion", hp: 12, notes: "7 P melee + poison" },
+    { name: "Fire Ant", hp: 16, notes: "9 X splash + burn, short" },
+    { name: "Gulper", hp: 20, notes: "2x10 P + grapple, +1 spd" },
+    { name: "Tunneler", hp: 24, notes: "3x11 P melee + poison" }
   ]},
   E5: { label: "Robots", notes: "explode end of turn when killed 50% HP X splash . Loot: armor scraps", subs: [
     { name: "Protectron", hp: 8, notes: "8 E melee" },
@@ -287,20 +287,20 @@ const monsterData = {
     { name: "Cybermutant", hp: 30, notes: "12 E + random ailment, very long, -1 mob" }
   ]},
   O5: { label: "Super Mutants", notes: "Xrad, special: rad pools, 1 suicider. Loot: broken weapons, mutant flesh", subs: [
-    { name: "Skirmisher", hp: 9, notes: "scaled heavy weapons, 15 X splash melee suicider" },
-    { name: "Brute", hp: 13, notes: "scaled heavy weapons, 16 X splash melee suicider" },
-    { name: "Enforcer", hp: 17, notes: "scaled heavy weapons, 17 X splash melee suicider" },
-    { name: "Leader", hp: 21, notes: "scaled heavy weapons, 18 X splash melee suicider" },
-    { name: "Overlord", hp: 25, notes: "scaled heavy weapons, 19 X splash melee suicider" },
-    { name: "Mastermind", hp: 29, notes: "scaled heavy weapons, 20 X splash melee suicider" }
+    { name: "Skirmisher", hp: 9, notes: "scaled heavy guns, 15 X splash melee suicider" },
+    { name: "Brute", hp: 13, notes: "scaled heavy guns, 16 X splash melee suicider" },
+    { name: "Enforcer", hp: 17, notes: "scaled heavy guns, 17 X splash melee suicider" },
+    { name: "Leader", hp: 21, notes: "scaled heavy guns, 18 X splash melee suicider" },
+    { name: "Overlord", hp: 25, notes: "scaled heavy guns, 19 X splash melee suicider" },
+    { name: "Mastermind", hp: 29, notes: "scaled heavy guns, 20 X splash melee suicider" }
   ]},
   O6: { label: "Nightkin", notes: "Xrad, special: hidden bear traps, ½ stealthed, Shove on 6, Loot: mutant flesh", subs: [
-    { name: "Rogue", hp: 9, notes: "8 P melee" },
-    { name: "Scoundrel", hp: 13, notes: "2x7 P melee" },
-    { name: "Brigand", hp: 17, notes: "10 P melee" },
-    { name: "Saboteur", hp: 21, notes: "2x9 P melee" },
-    { name: "Ninja", hp: 25, notes: "12 P melee" },
-    { name: "Assassin", hp: 29, notes: "2x11 P melee" }
+    { name: "Rogue", hp: 9, notes: "scaled heavy melee" },
+    { name: "Scoundrel", hp: 13, notes: "scaled heavy melee" },
+    { name: "Brigand", hp: 17, notes: "scaled heavy melee" },
+    { name: "Saboteur", hp: 21, notes: "scaled heavy melee" },
+    { name: "Ninja", hp: 25, notes: "scaled heavy melee" },
+    { name: "Assassin", hp: 29, notes: "scaled heavy melee" }
   ]}
 };
 
@@ -533,6 +533,7 @@ const monsterData = {
 </script>
 </body>
 </html>
+
 
 
 
