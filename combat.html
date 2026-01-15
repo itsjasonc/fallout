@@ -164,7 +164,7 @@
     14: "Graveyard: Contains map to legendary loot 3 random hexes away. Use Hammerator to add +2 to scavenge roll.",
     15: "School: Contains 3 special rooms instead of 1, each requires a different technology.",
     16: "Factory: Contains a random tech, Use Flashlight to add +2 to scavenge roll.",
-    21: "Museum: Contains 1 artifact. Use Hammerator for heavy relic worth 1d6x30c.",
+    21: "Museum: Contains 1 artifact. Use Hammerator for heavy relic worth 1d6x20c.",
     22: "Prison: +1 enemy. Contains a random military equipment item.",
     23: "Park: Contains a random potted plant. Plants planted here give +100% yield if left for the whole level.",
     24: "Railyard: Contains 1d6 flares (20c). Flares reduce enemies by 1 in Ruins.",
@@ -177,8 +177,8 @@
     35: "Armory: Spend 5 gun scrap to upgrade any gun with +1 damage.",
     36: "Bank: Deposit caps, gain 20% on level up. Withdraw at any bank.",
     41: "Military Base: Scavenging items with durability here gives +1 to rolls with no multi-scavenge penalty.",
-    42: "Farm: Contains a brahmin. CHA/AGI(fatigue) to scavenge 1d6 milk/flesh (-2 thirst/hunger, +20% HP, 30c). Crit: 3× yield.",
-    43: "Quarry: Use autojacker or grenades/explosive weapons to excavate heavy ore worth 1d6×30c.",
+    42: "Farm: Contains a brahmin. CHA/AGI(fatigue) to scavenge 1d6 milk/flesh (-2 thirst/hunger, +10% HP, 30c). Crit: 3× yield.",
+    43: "Quarry: Use grenades/explosive weapons to excavate heavy ore worth 1d6×20c.",
     44: "Crash Site: Contains a anything -> mutated weapon alien tech, powered by 1D artifact",
     45: "Campsite: Can scavenge for 1d6 flares. Crit: find 3×.",
     46: "Foundry: Spend 5 armor scrap to upgrade any melee/fist weapon with +1 damage",
@@ -216,14 +216,14 @@ const monsterData = {
   ]},
   E2: { label: "Beasts", notes: "on death: allies can immediately attack. Loot: animal flesh", subs: [
     { name: "Bloatfly", hp: 6, notes: "6 R mid" },
-    { name: "Wild Dog", hp: 10, notes: "8 P melee + poison, grapples on 6" },
-    { name: "Radstag", hp: 14, notes: " 9 P melee, shove on 6, +1 spd, +2 dmg if moved 2 distance" },
+    { name: "Wild Dog", hp: 10, notes: "7 P melee + poison, grapples on 6" },
+    { name: "Radstag", hp: 14, notes: " 8 P melee, shove on 6, +1 spd, +2 dmg if moved 2 distance" },
     { name: "Yao Guai", hp: 18, notes: "2x9 P melee, grapple on 6" },
-    { name: "Deathclaw", hp: 22, notes: "2x10 P melee + bleed, +1 spd, shove on 6" },
+    { name: "Deathclaw", hp: 22, notes: "2x10 P melee + bleed, +1 spd" },
     { name: "Radragon", hp: 26, notes: "11 X+R splash + poison + burn, short, hovers, -1 mob" }
   ]},
   E3: { label: "Nesters", notes: "special: eggs, 50% to hatch into swarmers each round. Loot: animal flesh", subs: [
-    { name: "Gecko", hp: 5, notes: "6 P + bleed, melee" },
+    { name: "Gecko", hp: 5, notes: "6 P + bleed, +1 speed, melee" },
     { name: "Mirelurk", hp: 9, notes: "7 P melee, 2x armor, aim head ignores armor" },
     { name: "Fire Gecko", hp: 13, notes: "8 X + burn, short" },
     { name: "Lakelurk", hp: 17, notes: "9 E + disorient, mid" },
@@ -232,27 +232,27 @@ const monsterData = {
   ]},
   E4: { label: "Burrowers", notes: "special: burrow. Loot: animal flesh", subs: [
     { name: "Radroach", hp: 4, notes: "5 P+R melee" },
-    { name: "Molerat", hp: 8, notes: "2x6 P melee" },
-    { name: "Radscorpion", hp: 12, notes: "7 P melee + poison" },
+    { name: "Molerat", hp: 8, notes: "2x7 P melee, grapples on 6" },
+    { name: "Radscorpion", hp: 12, notes: "8 P melee + poison" },
     { name: "Fire Ant", hp: 16, notes: "9 X splash + burn, short" },
-    { name: "Gulper", hp: 20, notes: "2x10 P + grapple, +1 spd" },
+    { name: "Gulper", hp: 20, notes: "2x10 P, grapples on 6, +1 spd" },
     { name: "Tunneler", hp: 24, notes: "3x11 P melee + poison" }
   ]},
-  E5: { label: "Robots", notes: "explode end of turn when killed 50% HP X splash . Loot: armor scraps", subs: [
-    { name: "Protectron", hp: 8, notes: "8 E melee" },
-    { name: "Cyberdog", hp: 12, notes: "9 P melee, +1 spd" },
-    { name: "Robobrain", hp: 16, notes: "10 E + disorient, short" },
-    { name: "Securitron", hp: 20, notes: "11 X long" },
-    { name: "Sentry Bot", hp: 24, notes: "3x9 P mid" },
-    { name: "Assaultron", hp: 28, notes: "14 E+R melee, charge 1, +1 spd" }
+  E5: { label: "Robots", notes: "2x HP, each cripple = 1/6 ignore armor., -1 mob. Loot: armor scraps", subs: [
+    { name: "Protectron", hp: 8, notes: "9 E melee" },
+    { name: "Cyberdog", hp: 12, notes: "10 P melee, +1 spd" },
+    { name: "Robobrain", hp: 16, notes: "11 E + disorient, short" },
+    { name: "Securitron", hp: 20, notes: "12 X long, 2x hp, " },
+    { name: "Sentry Bot", hp: 24, notes: "2x10 P+E mid" },
+    { name: "Assaultron", hp: 28, notes: "15 E+R melee, recharge 1, +1 spd" }
   ]},
   E6: { label: "Synths", notes: "terrain 4-5: hidden pulse mines. Loot: tech scrap", subs: [
-    { name: "Sentry", hp: 7, notes: "scaled energy weapons + 10E mines" },
-    { name: "Patroller", hp: 11, notes: "scaled energy weapons + 11E mines" },
-    { name: "Trooper", hp: 15, notes: "scaled energy weapons + 12E mines" },
-    { name: "Eradicator", hp: 19, notes: "scaled energy weapons +13E mines" },
-    { name: "Assassin", hp: 23, notes: "scaled energy weapons +14E mines" },
-    { name: "Courser", hp: 27, notes: "scaled energy weapons +15E mines" }
+    { name: "Sentry", hp: 7, notes: "scaled energy weapons + 11E mines" },
+    { name: "Patroller", hp: 11, notes: "scaled energy weapons + 12E mines" },
+    { name: "Trooper", hp: 15, notes: "scaled energy weapons + 13E mines" },
+    { name: "Eradicator", hp: 19, notes: "scaled energy weapons +14E mines" },
+    { name: "Assassin", hp: 23, notes: "scaled energy weapons +15E mines" },
+    { name: "Courser", hp: 27, notes: "scaled energy weapons +16E mines" }
   ]},
   O1: { label: "Cultist", notes: "⅓ to use random artifact, mutated weapons. Loot: broken weapons, 1D artifacts, human flesh", subs: [
     { name: "Initiate", hp: 7, notes: "scaled weapons" },
@@ -262,7 +262,7 @@ const monsterData = {
     { name: "Fanatic", hp: 23, notes: "scaled weapons" },
     { name: "Leader", hp: 27, notes: "scaled weapons" }
   ]},
-  O2: { label: "Hoverbots", notes: "all hover; gain shield when ally dies. Loot: gun scraps", subs: [
+  O2: { label: "Hoverbots", notes: "all hover; explode end of turn when killed 50% HP X splash. Loot: gun scraps", subs: [
     { name: "Eyebot", hp: 5, notes: "2x5 E, mid" },
     { name: "Mr. Handy", hp: 9, notes: "2x6 P, mid" },
     { name: "Battle Drone", hp: 13, notes: "3x7 X, short" },
@@ -533,6 +533,7 @@ const monsterData = {
 </script>
 </body>
 </html>
+
 
 
 
