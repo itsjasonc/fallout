@@ -166,7 +166,7 @@
     16: "Factory: Contains a random tech, Use Flashlight to add +2 to scavenge roll.",
     21: "Museum: Contains 1 artifact. Use Hammerator for heavy relic worth 1d6x20c.",
     22: "Prison: +1 enemy. Contains a random military equipment item.",
-    23: "Park: Contains a random potted plant. Plants planted here give +100% yield if left for the whole level.",
+    23: "Park: Contains a random potted plant. Plants planted here give +100% yield.",
     24: "Railyard: Contains 1d6 flares (20c). Flares reduce enemies by 1 in Ruins.",
     25: "Library: Order a random recipe that arrives on level up",
     26: "Warehouse: Ship yourselves or your items to any cleared hex; Use hackerator for +2 to scavenge roll",
@@ -193,7 +193,7 @@
     63: "Hotel: Sleeping here grants 'Well Rested' and refreshes all skill/luck/resist.",
     64: "Construction Yard: Copies the effect of any ruins you have encountered.",
     65: "Supermarket: Scavenging stackables gives +1 to rolls with no multi-scavenge penalty.",
-    66: "Church: No battle. Friendly merchant with 2 bodyguards has random loot + random crit loot."
+    66: "Church: No battle. Friendly merchant with 2 bodyguards sells 2 random special items."
   };
 
   function generateZone() {
@@ -226,7 +226,7 @@ const monsterData = {
     { name: "Gecko", hp: 5, notes: "6 P + bleed, +1 speed, melee" },
     { name: "Mirelurk", hp: 9, notes: "7 P melee, 2x armor, aim head ignores armor" },
     { name: "Fire Gecko", hp: 13, notes: "8 X + burn, short" },
-    { name: "Lakelurk", hp: 17, notes: "9 E + disorient, mid" },
+    { name: "Lakelurk", hp: 17, notes: "9 E + freeze, mid" },
     { name: "Cazadores", hp: 21, notes: "10 P melee + poison+2, hover, +1 spd" },
     { name: "Nightstalker", hp: 25, notes: "2x11 P melee + poison, grapples on 6" }
   ]},
@@ -235,13 +235,13 @@ const monsterData = {
     { name: "Molerat", hp: 8, notes: "2x7 P melee, grapples on 6" },
     { name: "Radscorpion", hp: 12, notes: "8 P melee + poison" },
     { name: "Fire Ant", hp: 16, notes: "9 X splash + burn, short" },
-    { name: "Gulper", hp: 20, notes: "2x10 P, grapples on 6, +1 spd" },
+    { name: "Gulper", hp: 20, notes: "2x10 P + freeze, grapples on 6, +1 spd" },
     { name: "Tunneler", hp: 24, notes: "3x11 P melee + poison" }
   ]},
   E5: { label: "Robots", notes: "2x HP, each cripple = 1/6 ignore armor., -1 mob. Loot: armor scraps", subs: [
     { name: "Protectron", hp: 8, notes: "9 E melee" },
     { name: "Cyberdog", hp: 12, notes: "10 P melee, +1 spd" },
-    { name: "Robobrain", hp: 16, notes: "11 E + disorient, short" },
+    { name: "Robobrain", hp: 16, notes: "11 E + freeze, short" },
     { name: "Securitron", hp: 20, notes: "12 X long, 2x hp, " },
     { name: "Sentry Bot", hp: 24, notes: "2x10 P+E mid" },
     { name: "Assaultron", hp: 28, notes: "15 E+R melee, recharge 1, +1 spd" }
@@ -254,34 +254,34 @@ const monsterData = {
     { name: "Assassin", hp: 23, notes: "scaled energy weapons +15E mines" },
     { name: "Courser", hp: 27, notes: "scaled energy weapons +16E mines" }
   ]},
-  O1: { label: "Cultist", notes: "⅓ to use random artifact, mutated weapons. Loot: broken weapons, 1D artifacts, human flesh", subs: [
-    { name: "Initiate", hp: 7, notes: "scaled weapons" },
-    { name: "Acolyte", hp: 11, notes: "scaled weapons" },
-    { name: "Disciple", hp: 15, notes: "scaled weapons" },
-    { name: "Priest", hp: 19, notes: "scaled weapons" },
-    { name: "Fanatic", hp: 23, notes: "scaled weapons" },
-    { name: "Leader", hp: 27, notes: "scaled weapons" }
+  O1: { label: "Cultist", notes: "⅓ to use random artifact. Loot: broken weapons/artifacts, human flesh", subs: [
+    { name: "Initiate", hp: 7, notes: "scaled mutated weapons" },
+    { name: "Acolyte", hp: 11, notes: "scaled mutated weapons" },
+    { name: "Disciple", hp: 15, notes: "scaled mutated weapons" },
+    { name: "Priest", hp: 19, notes: "scaled mutated weapons" },
+    { name: "Fanatic", hp: 23, notes: "scaled mutated weapons" },
+    { name: "Leader", hp: 27, notes: "scaled mutated weapons" }
   ]},
-  O2: { label: "Hoverbots", notes: "all hover; explode end of turn when killed 50% HP X splash. Loot: gun scraps", subs: [
-    { name: "Eyebot", hp: 5, notes: "2x5 E, mid" },
-    { name: "Mr. Handy", hp: 9, notes: "2x6 P, mid" },
-    { name: "Battle Drone", hp: 13, notes: "3x7 X, short" },
-    { name: "Mr. Gutsy", hp: 17, notes: "10 X splash, mid" },
-    { name: "Think Tank", hp: 21, notes: "2x9 E + disorient, mid" },
-    { name: "UFO", hp: 25, notes: "12 R splash+burn, long" }
+  O2: { label: "Hoverbots", notes: "all hover; explode end of turn when killed 50% HP X splash, Loot: gun scraps", subs: [
+    { name: "Eyebot", hp: 6, notes: "2x5 E, mid" },
+    { name: "Mr. Handy", hp: 10, notes: "2x6 P, mid" },
+    { name: "Battle Drone", hp: 14, notes: "3x7 X, short" },
+    { name: "Mr. Gutsy", hp: 18, notes: "10 X splash, mid" },
+    { name: "Think Tank", hp: 22, notes: "2x9 E + freeze, mid" },
+    { name: "UFO", hp: 26, notes: "12 R splash+burn, long" }
   ]},
   O3: { label: "Feral Ghouls", notes: "Xrad, special: hidden bear traps, +1 spd, ignore hazards, +1 mob Loot: mutant flesh, junk item", subs: [
     { name: "Roamer", hp: 5, notes: "5 P+R melee, grapples on 6" },
     { name: "Stalker", hp: 9, notes: "6 P+R melee, grapples on 6" },
-    { name: "Glowing One", hp: 13, notes: "8 R splash, melee" },
+    { name: "Glowing One", hp: 13, notes: "9 R splash, melee" },
     { name: "Reaver", hp: 17, notes: "8 P+R melee, grapples on 6" },
-    { name: "Molten One", hp: 21, notes: "10 X splash+burn, short" },
-    { name: "Frozen One", hp: 25, notes: "12 E splash+disorient, short" }
+    { name: "Molten One", hp: 21, notes: "11 X splash+burn, short" },
+    { name: "Frozen One", hp: 25, notes: "12 E splash+freeze, short" }
   ]},
   O4: { label: "Aberrations", notes: "Xrad, special: rad pools. Loot: mutant flesh", subs: [
     { name: "Mutant Plant", hp: 5, notes: "7 P melee, immobile" },
     { name: "Centaur", hp: 10, notes: "8 R, short" },
-    { name: "Floater", hp: 15, notes: "9 R, melee+disorient, hover, +1 spd" },
+    { name: "Floater", hp: 15, notes: "9 R, melee+freeze, hover, +1 spd" },
     { name: "Putrid Bloat", hp: 20, notes: "10 P melee, explodes 12R splash on death" },
     { name: "Wanamingo", hp: 25, notes: "9 P+R+psn melee, +1 spd" },
     { name: "Cybermutant", hp: 30, notes: "12 E + random ailment, very long, -1 mob" }
@@ -417,7 +417,7 @@ const monsterData = {
     // 3-4: PLANTS + RECIPE
     {
       type: "PLANTS + RECIPE",
-      desc: "Generates a resource every time you level up, bulky, 50c",
+      desc: "Generates a resource every time you level up, bulky, 100c",
       options: [
         "Potted Sludgeflower: Generates 2 fuel",
         "Potted Fleshroom: Generates 4 clean flesh",
@@ -431,7 +431,7 @@ const monsterData = {
     // Duplicate for 4
     {
       type: "PLANTS + RECIPE",
-      desc: "Generates a resource every time you level up, bulky, 50c",
+      desc: "Generates a resource every time you level up, bulky, 100c",
       options: [
         "Potted Sludgeflower: Generates 2 fuel",
         "Potted Fleshroom: Generates 4 clean flesh",
@@ -445,7 +445,7 @@ const monsterData = {
     // 5-6: EQUIPMENT + RECIPE
     {
       type: "EQUIPMENT + RECIPE",
-      desc: "Each player can only benefit from one of each equipment, bulky, 50c",
+      desc: "Each player can only benefit from one of each equipment, bulky, 100c",
       options: [
         "Backpack: Can store up to 5 bulky items in this slot",
         "Helmet: +10 max HP",
@@ -458,7 +458,7 @@ const monsterData = {
     },
     {
       type: "EQUIPMENT + RECIPE",
-      desc: "Each player can only benefit from one of each equipment, bulky, 50c",
+      desc: "Each player can only benefit from one of each equipment, bulky, 100c",
       options: [
         "Backpack: Can store up to 5 bulky items in this slot",
         "Helmet: +10 max HP",
@@ -472,12 +472,12 @@ const monsterData = {
   ];
 
   const artifacts = [
-    "Earth: cripple a limb, 3 HP, mid",
-    "Water: clear a tile, 3 HP, mid",
-    "Fire: generate rubble tile, 3 HP, mid",
-    "Dark: generate cover tile, 3 HP, mid",
-    "Wind: move creature 1 space, 3 HP, mid",
-    "Light: give a player defend, 3 HP, mid"
+    "Earth: cripple a limb, 3 HP, mid, 100c",
+    "Water: clear a tile, 3 HP, mid, 100c",
+    "Fire: generate rubble tile, 3 HP, mid, 100c",
+    "Dark: generate cover tile, 3 HP, mid, 100c",
+    "Wind: move creature 1 space, 3 HP, mid, 100c",
+    "Light: give a player defend, 3 HP, mid, 100c"
   ];
 
   function generateLoot() {
@@ -533,6 +533,7 @@ const monsterData = {
 </script>
 </body>
 </html>
+
 
 
 
