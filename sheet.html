@@ -1015,8 +1015,9 @@ capsInput.addEventListener("blur", applyCapsChange);
 
 capsInput.addEventListener("keydown", e => {
   if (e.key === "Enter") {
+    e.preventDefault();           // ← stops form submit / focus jump
     applyCapsChange();
-    capsInput.blur();
+    capsInput.blur();             // hides keyboard & commits
   }
 });
 
