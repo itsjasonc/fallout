@@ -831,7 +831,7 @@ let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
   perkSections: {},   // perk section open/closed
   stats: Object.fromEntries(statNames.map(s => [s, ""])),
   specialStats: Object.fromEntries(statNames.map(s => [s, false])),
-  armor: { Physical:"", Energy:"", Explosive:"", Radiation:"" },
+  armor: { Physical:"0", Energy:"0", Explosive:"0", Radiation:"0" },
   neg: Object.fromEntries(negNames.map(n => [n, 0])),
   inventory: Array.from({length:12}, () => ({
     name: "",
