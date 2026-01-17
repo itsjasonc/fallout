@@ -942,6 +942,46 @@ function chgNeg(n, d) {
   save();
 }
 
+function evaluateCapsExpression(expr, currentTotal) {
+
+  let cleaned = expr.replace(/,/g, "").trim();
+  if (!cleaned) return null;
+
+  cleaned = cleaned.replace(/\s+/g, "");
+
+  // Case 1: trailing operator like "250+" or "400-"
+  if (/^\d+[+-]$/.test(cleaned)) {
+    const amt = parseInt(cleaned.slice(0, -1), 10);
+    const op = cleaned.slice(-1);
+    return currentTotal + (op === "+" ? amt : -amt);
+  }
+
+  // Case 2: starts with + or - → relative change
+  if (/^[+-]\d+$/.test(cleaned)) {
+    const delta = parseInt(cleaned, 10);
+    return currentTotal + delta;
+  }
+
+  // Case 3: contains + or - inside → try to evaluate simple chain
+  // For now we support only one operation (most common use-case)
+  const opMatch = cleaned.match(/^(\d+)([+-])(\d+)$/);
+  if (opMatch) {
+    const base = parseInt(opMatch[1], 10);
+    const op = opMatch[2];
+    const addend = parseInt(opMatch[3], 10);
+    const result = op === "+" ? base + addend : base - addend;
+    return result;
+  }
+
+  // Case 4: just a plain number → set absolute value
+  if (/^\d+$/.test(cleaned)) {
+    return parseInt(cleaned, 10);
+  }
+
+  // Anything else → invalid
+  return null;
+}	
+
 ////// CAPS CALCULATOR //////
 
 // Internal value is always a number
