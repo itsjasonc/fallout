@@ -942,41 +942,45 @@ function chgNeg(n, d) {
   save();
 }
 
-//////CAPS CALCULATOR//////
-	
+////// CAPS CALCULATOR //////
 
-// ─────────────────────────────────────────────
-// Caps handling – show blank when zero/empty
-// ─────────────────────────────────────────────
+// Load or initialize (internal value is always number)
+state.caps = Number.isFinite(state.caps) ? Number(state.caps) : 0;
 
-// Load or initialize caps (treat missing/invalid as 0 internally)
-state.caps = Number.isFinite(state.caps) ? state.caps : 0;
-
-// Get the input element
 const capsInput = document.getElementById("caps");
 
-// Helper: update visible value — hide 0, show actual number otherwise
+// Show empty string when 0, otherwise the number
 function updateCapsDisplay() {
-  capsInput.value = (state.caps === 0) ? "" : state.caps;
+  capsInput.value = (state.caps === 0) ? "" : String(state.caps);
 }
 
-// Set initial display state
+// Apply correct display on page load
 updateCapsDisplay();
 
-// ─── Event listeners ────────────────────────────────────────
-capsInput.addEventListener("blur", applyCapsChange);
+// Live typing → keep state in sync (accept only digits or empty)
+capsInput.addEventListener("input", e => {
+  const val = e.target.value.trim();
+  if (val === "" || /^\d+$/.test(val)) {
+    state.caps = val === "" ? 0 : Number(val);
+    save();
+  } else {
+    // Optional: revert invalid typing immediately
+    // e.target.value = state.caps === 0 ? "" : String(state.caps);
+  }
+});
 
-capsInput.addEventListener("keydown", (e) => {
+// Blur / Enter → full expression parsing
+capsInput.addEventListener("blur", applyCapsChange);
+capsInput.addEventListener("keydown", e => {
   if (e.key === "Enter") {
     applyCapsChange();
-    capsInput.blur(); // optional – good for mobile / cleaner UX
+    capsInput.blur();
   }
 });
 
 function applyCapsChange() {
-  const raw = (capsInput.value || "").trim();
+  const raw = capsInput.value.trim();
 
-  // User cleared the field → treat as 0 and show empty
   if (!raw) {
     state.caps = 0;
     updateCapsDisplay();
@@ -984,106 +988,18 @@ function applyCapsChange() {
     return;
   }
 
-  // Try to parse the expression
   const result = evaluateCapsExpression(raw, state.caps);
 
-  if (result == null) {
-    // Invalid input → revert display to current valid value
+  if (result === null) {
+    // Invalid → revert to previous
     updateCapsDisplay();
     return;
   }
 
-  // Valid result → update state and display
   state.caps = result;
   updateCapsDisplay();
   save();
 }
-
-/**
- * Evaluates a "caps expression" with support for:
- * - Base number (sets the total), e.g., "200"
- * - Suffix ops: "300+" or "200-"
- * - Leading ops: "+300" or "-200"
- * - Chained ops: "100+50-20" or "200 300+ 50-"
- * - Spaces allowed between tokens
- * If no base number is present, operations are relative to currentTotal.
- * Returns a number or null on invalid input.
- */
-function evaluateCapsExpression(expr, currentTotal) {
-  const cleaned = expr.replace(/,/g, "").trim();
-  if (!cleaned) return null;
-
-  const tokens = [];
-  let i = 0;
-  while (i < cleaned.length) {
-    if (/\s/.test(cleaned[i])) { i++; continue; }
-
-    const m = cleaned.slice(i).match(/^([+\-]?\d+)([+\-])?/);
-    if (m) {
-      tokens.push(m[1]);
-      if (m[2]) tokens.push(m[2]);
-      i += m[0].length;
-      continue;
-    }
-
-    const op = cleaned[i];
-    if (op === '+' || op === '-') {
-      tokens.push(op);
-      i++;
-      continue;
-    }
-
-    // Unknown character
-    return null;
-  }
-
-  if (tokens.length === 0) return null;
-
-  let total = null;
-  let expectingOp = false;
-
-  for (let t = 0; t < tokens.length; t++) {
-    const token = tokens[t];
-
-    if (token === '+' || token === '-') {
-      if (!expectingOp || t === tokens.length - 1) return null;
-      const next = tokens[++t];
-      if (!/^[+\-]?\d+$/.test(next)) return null;
-      const amount = parseInt(next, 10);
-      total = (total == null ? currentTotal : total) + (token === '+' ? amount : -amount);
-      expectingOp = false;
-      continue;
-    }
-
-    if (/^[+\-]?\d+$/.test(token)) {
-      const num = parseInt(token, 10);
-      if (total == null) {
-        if (/^[+\-]/.test(token)) {
-          total = currentTotal + num;
-        } else {
-          total = num;
-        }
-      } else {
-        return null; // number without preceding operator after base is set
-      }
-      expectingOp = true;
-      continue;
-    }
-
-    return null;
-  }
-
-  // Special case: trailing operator like "300+"
-  const suffixMatch = cleaned.match(/^(\d+)([+\-])$/);
-  if (suffixMatch) {
-    const amt = parseInt(suffixMatch[1], 10);
-    const op = suffixMatch[2];
-    total = currentTotal + (op === '+' ? amt : -amt);
-  }
-
-  return total;
-}
-
 
 
 // ---------- INVENTORY ----------
@@ -1546,7 +1462,7 @@ function init() {
 	nameInput.value = state.name;
 	skillInput.value = state.skillName;
 	levelInput.value = state.level;
-	capsInput.value = state.caps;
+	updateCapsDisplay();
 
 	nameInput.addEventListener("input", e => {
 	  state.name = e.target.value;
@@ -1564,9 +1480,14 @@ function init() {
 	});
 
 	capsInput.addEventListener("input", e => {
-	  state.caps = e.target.value;
-	  save();
-	});
+  const val = e.target.value.trim();
+  // Only update state if it's a valid number or empty
+  if (val === "" || /^\d+$/.test(val)) {
+    state.caps = val === "" ? 0 : Number(val);
+    save();
+  }
+  // Note: we don't call updateCapsDisplay() here — it's not needed during typing
+});
  
 
   updateHPDisplay();
