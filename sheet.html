@@ -944,49 +944,45 @@ function chgNeg(n, d) {
 
 ////// CAPS CALCULATOR //////
 
-// Always store caps as a number internally (0 when blank/empty/unset)
+// Internal value is always a number
 state.caps = Number.isFinite(state.caps) ? Number(state.caps) : 0;
 
 const capsInput = document.getElementById("caps");
 
-// Display: blank when 0, otherwise the number as string
 function updateCapsDisplay() {
   capsInput.value = (state.caps === 0) ? "" : String(state.caps);
 }
 
-// Set correct initial appearance
+// Apply on load
 updateCapsDisplay();
 
-// ─── Live typing ────────────────────────────────────────────
-// Only allow digits (no letters/symbols during typing)
-// But do NOT update state.caps yet — wait for blur/Enter
+// Allow typing expressions (+ - digits spaces)
 capsInput.addEventListener("input", e => {
   const val = e.target.value;
 
-  // Revert immediately if invalid characters appear
-  if (!/^[+-]?\d*$/.test(val)) {
+  // Very permissive filter: only digits, +, -, and spaces
+  // (we do real validation on blur/Enter)
+  if (/^[0-9+\-\s]*$/.test(val)) {
+    // ok
+  } else {
+    // revert
     e.target.value = state.caps === 0 ? "" : String(state.caps);
-    return;
   }
-
-  // Optional: you could preview partial numbers here, but we keep it simple
-  // state.caps is only updated on commit (blur/Enter)
 });
 
-// ─── Commit (blur or Enter) ─────────────────────────────────
+// Commit changes only on blur or Enter
 capsInput.addEventListener("blur", applyCapsChange);
 
 capsInput.addEventListener("keydown", e => {
   if (e.key === "Enter") {
     applyCapsChange();
-    capsInput.blur(); // hide keyboard / commit
+    capsInput.blur();
   }
 });
 
 function applyCapsChange() {
-  const raw = capsInput.value.trim();
+  let raw = capsInput.value.trim();
 
-  // Empty field → set to 0 and show blank
   if (!raw) {
     state.caps = 0;
     updateCapsDisplay();
@@ -994,12 +990,10 @@ function applyCapsChange() {
     return;
   }
 
-  // Try to parse as expression relative to current state.caps
   const result = evaluateCapsExpression(raw, state.caps);
 
   if (result === null) {
-    // Invalid → revert visual to previous good value
-    updateCapsDisplay();
+    updateCapsDisplay(); // revert
     return;
   }
 
@@ -1007,7 +1001,6 @@ function applyCapsChange() {
   updateCapsDisplay();
   save();
 }
-
 
 // ---------- INVENTORY ----------
 
