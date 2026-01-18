@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Integer & Weapon Generator</title>
+<style>
+/* Ensure padding doesn't break widths */
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #1e1e2f;
+  color: #eee;
+  margin: 0;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+h1,h2 { text-align:center; margin:.5rem 0; }
+
+.container {
+  background: #2a2a40;
+  padding: 1rem;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+}
+
+/* form controls */
+input[type=number], input[type=range], select, button {
+  width:100%;
+  padding:.5rem;
+  border-radius:.5rem;
+  border:none;
+  text-align:center;
+  margin-bottom:.6rem;
+  font-size:1rem;
+  box-sizing: border-box;
+}
+button { background:#4e8cff; color:#fff; font-weight:bold; }
+button:hover { background:#2a6ce2; }
+
+.bars{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  height:120px; /* prevents overlap with button */
+  margin-top:1rem; /* gap under the button */
+}
+.bar-container{ display:flex; flex-direction:column; align-items:center; width:22%; }
+.bar{
+  width:100%;
+  border-radius:.3rem;
+  min-height:5px;
+  transition:height .3s ease;
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  color:#fff;
+  font-size:1rem;
+  font-weight:bold;
+  text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;
+  overflow:hidden;
+}
+#bar1{ background:linear-gradient(180deg,#ff5e5e,#d43e3e); } /* Physical - red */
+#bar2{ background:linear-gradient(180deg,#5ec8ff,#2e9ed4); } /* Energy - blue */
+#bar3{ background:linear-gradient(180deg,#ffbd5e,#e68b2e); } /* Explosive - orange */
+#bar4{ background:linear-gradient(180deg,#5eff7d,#2ed451); } /* Rad - green */
+
+.label{ margin-top:.3rem; font-size:.8rem; color:#ccc; text-align:center; }
+
+.weapon-output{
+  background:#1e1e2f;
+  border-radius:.5rem;
+  padding:.3rem;
+  text-align:center;
+  margin-top:.5rem;
+  line-height:1.3;
+  font-size:.95rem;
+}
+.weapon-output span{ color:#4e8cff; font-weight:700; }
+.small { font-size:0.85rem; color:#bbb; }
+
+#ComplicationOutput {
+  background:#1e1e2f;
+  border-radius:.5rem;
+  padding:.6rem;
+  text-align:center;
+  margin-top:.5rem;
+  line-height:1.3;
+  font-size:.95rem;
+}
+	#ammoOutput {
+  background:#1e1e2f;
+  border-radius:.5rem;
+  padding:.6rem;
+  text-align:center;
+  margin-top:.5rem;
+  line-height:1.3;
+  font-size:.95rem;
+}
+
+#RationWaterOutput {
+  background:#1e1e2f;
+  border-radius:.5rem;
+  padding:.6rem;
+  text-align:center;
+  margin-top:.5rem;
+  line-height:1.3;
+  font-size:.95rem;
+}
+	#medsOnlyOutput {
+  background:#1e1e2f;
+  border-radius:.5rem;
+  padding:.6rem;
+  text-align:center;
+  margin-top:.5rem;
+  line-height:1.3;
+  font-size:.95rem;
+}
+	#chemsOnlyOutput {
+  background:#1e1e2f;
+  border-radius:.5rem;
+  padding:.6rem;
+  text-align:center;
+  margin-top:.5rem;
+  line-height:1.3;
+  font-size:.95rem;
+}
+
+	#techOutput {
+  background:#1e1e2f;
+  border-radius:.5rem;
+  padding:.6rem;
+  text-align:center;
+  margin-top:.5rem;
+  line-height:1.3;
+  font-size:.95rem;
+}
+
+.filter-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.filter-box {
+  flex: 1;
+}
+
+.filter-box label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.filter-box select {
+  width: 100%;
+  padding: 4px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #555;
+  background: #222;
+  color: #fff;
+}
+/* Make town output more compact on small screens */
+#townOutput {
+  font-size: 0.92rem;           /* slightly smaller base text */
+  line-height: 1.28;            /* tighter line spacing */
+  padding: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+#townOutput b {
+  font-size: 1.05rem;           /* headings still stand out a bit */
+}
+
+#townOutput i {
+  font-size: 0.86rem;           /* flavor text smaller */
+  opacity: 0.9;
+  line-height: 1.25;
+}
+
+/* Reduce vertical spacing everywhere in town output */
+#townOutput > * {
+  margin: 0.35rem 0;            /* was probably ~0.8–1rem */
+}
+
+#townOutput div[style*="margin-left"] {
+  margin: 0.3rem 0 0.3rem 12px !important;  /* tighter indent & spacing */
+  font-size: 0.9rem;
+}
+
+/* Make shop items more compact */
+#townOutput b + div {
+  margin-bottom: 0.4rem !important;
+}
+
+/* Optional: even smaller on very narrow screens */
+@media (max-width: 420px) {
+  #townOutput {
+    font-size: 0.88rem;
+    line-height: 1.25;
+  }
+  #townOutput b {
+    font-size: 1rem;
+  }
+}
+.section-spacer {
+  height: 0rem;       /* ← adjust this value — 0.3 to 0.6rem feels good on mobile */
+  width: 100%;
+}
+</style>
+</head>
+<body>
+
+
+<div class="container">
+<h2>🎲 Armor Distributor</h2>
+  <input type="number" id="inputValue" min="0" value="10" placeholder="Enter integer">
+
+  <!-- Hidden evenness slider (kept so JS can reference it; value remains 0.5 by default) -->
+  <input type="range" id="evennessSlider" min="0" max="1" step="0.01" value="0.5" style="display:none;">
+
+  <button onclick="distribute()">Distribute</button>
+
+  <div class="bars">
+    <div class="bar-container">
+      <div class="bar" id="bar1"><span></span></div>
+      <div class="label">Physical</div>
+    </div>
+    <div class="bar-container">
+      <div class="bar" id="bar2"><span></span></div>
+      <div class="label">Energy</div>
+    </div>
+    <div class="bar-container">
+      <div class="bar" id="bar3"><span></span></div>
+      <div class="label">Explosive</div>
+    </div>
+    <div class="bar-container">
+      <div class="bar" id="bar4"><span></span></div>
+      <div class="label">Rad</div>
+    </div>
+  </div>
+</div>
+<div class="container">
+<h2>🎚️ Party Level</h2>
+<input type="number" id="partyLevel" min="1" value="5" placeholder="Party Level">
+<h2>🛡️ Armor Generator</h2>
+<div id="armorTitle"  style="font-size: 18px; text-align: center; margin-bottom: 10px;">No armor generated yet</div>
+<button id="generateArmorBtn" onclick="generateArmor()">Generate Armor</button>
+
+
+
+<h2>⚔️ Weapon Generator</h2>
+
+  <div class="filter-row">
+	  <div class="filter-box">
+	  <select id="damageFilter">
+		<option value="all">All Damage Types</option>
+		<option value="P">Physical (P)</option>
+		<option value="E">Energy (E)</option>
+		<option value="X">Explosive (X)</option>
+		<option value="R">Rad (R)</option>
+	  </select>
+	  </div>
+	   <div class="filter-box">
+	  <select id="typeFilter">
+		<option value="all">All Weapon Types</option>
+		<option value="melee">Melee</option>
+		<option value="range">Ranged</option>
+	  </select>
+	  
+		</div>
+
+	</div>
+<button onclick="generateWeapon()">Generate Weapon</button>
+  <div id="weaponResult" class="weapon-output small"></div>
+</div> 
+
+<div class="container">  
+  <h2>⚠️ Complications </h2>
+  <button onclick="generateComplications()">Generate Complications</button>
+  <div id="ComplicationOutput" class="output"></div>
+</div>
+	
+<div class="container">
+	<div class="generator-box">
+  	<h2>💥 Ammo</h2>
+ 	 <button onclick="generateAmmo()">Generate Ammo</button>
+  	<div id="ammoOutput" class="output"></div>
+</div></div>  
+
+
+	
+<div class="container">		
+<h2>🍞 Scrap/Rations/Water </h2>
+<button onclick="generateRations()">Generate Items</button>
+<div id="RationWaterOutput" style="margin-top: 10px;"></div>
+</div>
+
+<div class="container">
+  <h2>💉 Meds</h2>
+  <button onclick="generateMeds()">Generate Meds</button>
+  <div id="medsOnlyOutput" class="output"></div>
+</div>
+
+<div class="container">
+  <h2>☣️ Chems</h2>
+  <button onclick="generateChems()">Generate Chems</button>
+  <div id="chemsOnlyOutput" class="output"></div>
+</div>
+
+
+<div class="container">
+  <div class="generator-box">
+    <h2>🧰 Technology</h2>
+    <button onclick="generateTech()">Generate Technology</button>
+    <div id="techOutput" class="output"></div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="generator-box">
+    <h2>🏘️ Town Generator</h2>
+    <button onclick="generateTown()">Generate Town</button>
+    <div id="townOutput" class="output"></div>
+  </div>
+</div>
+
+
+
+<script>
+/* ---------- Integer Distributor ---------- */
+function rollDie(sides){ return Math.floor(Math.random()*sides)+1; }
+
+/* Keep same variable name the rest of the code expects */
+const slider = document.getElementById('evennessSlider');
+
+function generateDistribution(total) {
+  const evenness = parseFloat(slider.value) || 0;
+  const base = total / 4;
+  let parts = [];
+
+  if (evenness === 0) {
+    parts = [base, base, base, base];
+  } else {
+    let devs = Array.from({ length: 4 }, () => (Math.random() * 2 - 1) * evenness);
+    const sumDev = devs.reduce((a, b) => a + b, 0);
+    devs = devs.map(d => d - sumDev / 4);
+
+    parts = devs.map(d => base + base * d);
+
+    const factor = total / parts.reduce((a, b) => a + b, 0);
+    parts = parts.map(p => Math.round(p * factor));
+
+    let diff = total - parts.reduce((a, b) => a + b, 0);
+    for (let i = 0; i < Math.abs(diff); i++) {
+      parts[i % 4] += diff > 0 ? 1 : -1;
+    }
+  }
+
+  return parts;
+}
+	function distribute() {
+  const total = parseInt(document.getElementById('inputValue').value) || 0;
+  const parts = generateDistribution(total);
+
+  const maxVal = Math.max(...parts, 1);
+  const containerH = 120;
+
+  parts.forEach((p, i) => {
+    const bar = document.getElementById('bar' + (i + 1));
+    bar.style.height = (p / maxVal * containerH) + 'px';
+    bar.querySelector('span').textContent = p;
+  });
+}
+	
+	
+/* initialize on load */
+window.addEventListener('load', distribute);
+
+// ===== ARMOR GENERATOR =====
+
+	const armorTable = [
+  { roll: 2, text: "Junk armor: +9 def, 60c" },
+  { roll: 3, text: "Raider armor: +10 def, 70c" },
+  { roll: 4, text: "Leather armor: +11 def, 80c" },
+  { roll: 5, text: "Chain armor: +12 def, 90c" },
+  { roll: 6, text: "Metal armor: +13 def, 100c" },
+  { roll: 7, text: "Synth armor: +14 def, 110c" },
+  { roll: 8, text: "Mutant armor: +15 def, 120c" },
+  { roll: 9, text: "Rugged armor: +16 def, 130c" },
+  { roll: 10, text: "Combat armor: +18 def, 140c" },
+  { roll: 11, text: "Infantry armor: +20 def, 150c" },
+  { roll: 12, text: "Assault armor: +22 def, 160c" },
+  { roll: 13, text: "Ranger armor: +24 def, 170c" },
+  { roll: 14, text: "Salvaged power armor: +26 def, 180c" },
+  { roll: 15, text: "Power armor: +28 def, +190c" },
+  { roll: 16, text: "Advanced power armor: +30 def, 200c" }
+];
+
+// helper for single die roll
+function rollDie(sides){ return Math.floor(Math.random() * sides) + 1; }
+
+function generateArmor() {
+  const level = parseInt(document.getElementById("partyLevel").value) || 0;
+  const roll = Math.min(16, rollDie(6) + level);
+
+  const armorEntry = armorTable.find(a => a.roll === roll);
+  if (!armorEntry) return;
+
+  let armorText = armorEntry.text;
+
+  // Extract DEF value from text (number after "+X def")
+  const defMatch = armorText.match(/\+(\d+)\s*def/i);
+  if (!defMatch) {
+    console.error("No DEF value found in armor text:", armorText);
+    return;
+  }
+
+  let defValue = parseInt(defMatch[1], 10);
+
+  // Handle Heavy logic
+  let isHeavy = /heavy/i.test(armorText);
+  if (!isHeavy && rollDie(6) <= 2) {
+    isHeavy = true;
+    defValue += 4;	
+	armorText = armorText.replace(/\+\d+\s*def/i, `+${defValue} def`);
+  }
+
+  // Distribute DEF using existing logic
+   const distribution = generateDistribution(defValue);
+	if (typeof updateBars === "function") {
+    updateBars(values);
+  }
+
+  // Output armor text + distribution
+  const distText = `(${distribution.join(", ")})`;
+	
+	// Split armor name from the rest of the text
+
+const nameMatch = armorText.match(/^([^:]+):\s*(.*)$/);
+
+let armorName = armorText;
+let armorStats = "";
+
+if (nameMatch) {
+  armorName = nameMatch[1];
+  armorStats = nameMatch[2];
+}
+if (isHeavy) {
+  armorName = `<span style="color:red; font-weight:bold;">(H)</span> ${armorName}`;
+}
+	
+// Output with name on first line, stats on second
+document.getElementById("armorTitle").innerHTML = `
+  <b>${armorName}</b><br>
+  ${armorStats} ${distText}
+`;
+}
+
+/* ---------- Weapon data & generator (unchanged logic) ---------- */
+/* Note: ammo field uses "-" for no-ammo entries so indexes stay consistent */
+const weapons = {
+  E1:[ [6,"Pipe Pistol","5 P","small rounds","mid","AGI","30c"],
+       [8,"Revolver","6 P","small rounds","mid","AGI","40c"],
+       [10,"Combat Pistol","7 P","small rounds","mid","AGI","50c"],
+       [12,"Magnum","8 P","small rounds","mid","AGI","60c"],
+       [14,"Big Iron","9 P","small rounds","mid","AGI","70c"],
+       [99,"Purifier","10 P","small rounds","mid","AGI","80c"] ],
+  E2:[ [6,"Laser Pistol","6 E","E-cell","mid","INT","40c"],
+       [8,"Plasma Pistol","7 E","E-cell","mid","INT","50c"],
+       [10,"Sonic Pistol","8 E","E-cell","mid","INT","60c"],
+       [12,"Tesla Pistol","9 E","E-cell","mid","INT","70c"],
+       [14,"Gauss Pistol","10 E","E-cell","mid","INT","80c"],
+       [99,"Valanyr","11 E","E-cell","mid","INT","90c"] ],
+  E3:[ [6,"Pipe Rifle","7 P","large rounds","long","AGI","50c"],
+       [8,"Service Rifle","8 P","large rounds","long","AGI","70c"],
+       [10,"Hunting Rifle","9 P","large rounds","long","AGI","90c"],
+       [12,"Combat Rifle","10 P","large rounds","long","AGI","110c"],
+       [14,"Assault Rifle","11 P","large rounds","long","AGI","130c"],
+       [99,"Thoridal","12 P","large rounds","long","AGI","150c"] ],
+  E4:[ [6,"Laser Rifle","8 E","MF-cell","long","INT","60c"],
+       [8,"Plasma Rifle","9 E","MF-cell","long","INT","80c"],
+       [10,"Sonic Rifle","10 E","MF-cell","long","INT","100c"],
+       [12,"Tesla Rifle","11 E","MF-cell","long","INT","120c"],
+       [14,"Gauss Rifle","12 E","MF-cell","long","INT","140c"],
+       [99,"Atiesh","13 E","MF-cell","long","INT","160c"] ],
+  E5:[ [6,"Sawed-Off SG","3x3 P","small","short","AGI","50c"],
+       [8,"Hunting SG","3x4 P","small","short","AGI","60c"],
+       [10,"Caravan SG","3x5 P","small","short","AGI","70c"],
+       [12,"Combat SG","3x6 P","small","short","AGI","80c"],
+       [14,"Riot SG","3x7 P","small","short","AGI","90c"],
+       [99,"Gorehowl","3x8 P","small","short","AGI","100c"] ],
+  E6:[ [6,"Laser Shotgun","3x4 E","E-cell","short","INT","60c"],
+       [8,"Plasma Shotgun","3x5 E","E-cell","short","INT","70c"],
+       [10,"Gauss Shotgun","3x6 E","E-cell","short","INT","80c"],
+       [12,"Gatling Laser","3x7 E","E-cell","short","INT","90c"],
+       [14,"Tesla Cannon","3x8 E","E-cell","short","INT","100c"],
+       [99,"Doomhammer","3x9 E","E-cell","short","INT","110c"] ],
+  O1:[ [6,"Hand Mortar","10 X splash X","fuel","long","AGI","80c"],
+       [8,"Nade Launcher","11 X splash","fuel","long","AGI","110c"],
+       [10,"Nade Cannon","12 X splash","fuel","long","AGI","140c"],
+       [12,"Missile Launcher","13 X splash","fuel","long","AGI","170c"],
+       [14,"Fat Man","14 X splash","fuel","long","AGI","200c"],
+       [99,"Ashbringer","15 X splash","fuel","long","AGI","230c"] ],
+  O2:[ [6,"Flamer","9 X splash+burn","fuel","mid","AGI","70c"],
+       [8,"Napalmer","10 X splash+burn","fuel","mid","AGI","100c"],
+       [10,"Incinerator","11 X splash+burn","fuel","mid","AGI","130c"],
+       [12,"Liquifier","12 X splash+burn","fuel","mid","AGI","160c"],
+       [14,"Hellfire Inc","13 X splash+burn","fuel","mid","AGI","190c"],
+       [99,"Sulfuras","14 X splash+burn","fuel","short","AGI","220c"] ],
+  O3:[ [6,"Weak Melee","6 P","-","melee","STR","30c"],
+       [8,"Medium Melee","7 P","-","melee","STR","50c"],
+       [10,"Strong Melee","8 P","-","melee","STR","70c"],
+       [12,"Powerful Melee","9 P","-","melee","STR","90c"],
+       [14,"Ultimate Melee","10 P","-","melee","STR","110c"],
+       [99,"Shadowmourne","11 P","-","melee","STR","130c"] ],
+  O4:[ [6,"Brass Knuckles","2x4 P","-","melee","END","30c"],
+       [8,"Bladed Gauntlet","2x5 P","-","melee","END","50c"],
+       [10,"Yao Guai Gauntlet","2x6 P","-","melee","END","70c"],
+       [12,"Power Fist","2x7 P","-","melee","END","90c"],
+       [14,"Deathclaw Gauntlet","2x8 P","-","melee","END","110c"],
+       [99,"Godhand","2x9 P","-","melee","END","130c"] ],
+  O5:[ [6,"Shock Baton","2x4 E","-","melee","STR","50c"],
+       [8,"Welding Torch","2x5 X","-","melee","STR","70c"],
+       [10,"Tesla Coil","2x6 E","-","melee","STR","90c"],
+       [12,"Thermic Lance","2x7 X","-","melee","STR","110c"],
+       [14,"Shishkebab","2x8 E","-","melee","STR","130c"],
+       [99,"Thunderfury","2x9 X","-","melee","STR","150c"] ],
+  O6:[ [6,"Shock Glove","6 E","-","melee","END","50c"],
+       [8,"Whalloper","7 X","-","melee","END","70c"],
+       [10,"Plasma Glove","8 E","-","melee","END","90c"],
+       [12,"Kinetic Fist","9 X","-","melee","END","110c"],
+       [14,"Saturnite Fist","10 E","-","melee","END","130c"],
+       [99,"Infinity Gauntlet","11 X","-","melee","END","150c"] ]
+};
+
+/* Weapon generator with filters */
+function generateWeapon(){
+  const level = parseInt(document.getElementById('partyLevel').value) || 1;
+  const dmgFilter = document.getElementById('damageFilter').value;
+  const typeFilter = document.getElementById('typeFilter').value;
+  const out = document.getElementById('weaponResult');
+
+  let attempt=0, chosen=null, category="", tierRoll=0;
+  while(attempt<50){
+    attempt++;
+    const d1 = rollDie(6), d2 = rollDie(6);
+    category = (d1 % 2 === 0 ? 'E' : 'O') + d2;
+    tierRoll = rollDie(6) + level;
+    const table = weapons[category];
+    if(!table) continue;
+    const weapon = table.find(e=>tierRoll<=e[0]) || table[table.length-1];
+
+    // determine damage letter: first letter from damage string that matches P, E, X, R
+    const dmgMatch = (weapon[2] || "").match(/[PEXR]/);
+    const dmgType = dmgMatch ? dmgMatch[0] : "P";
+
+    // weapon type: treat "melee" string as melee, everything else as range
+    const wepType = (weapon[4] === "melee") ? "melee" : "range";
+
+    if((dmgFilter==="all" || dmgFilter===dmgType) &&
+       (typeFilter==="all" || typeFilter===wepType)){
+      chosen = weapon;
+      break;
+    }
+  }
+  // 🎯 Heavy mechanic (1/3 chance)
+let isHeavy = Math.random() < 1 / 3;
+
+// Copy damage text so we can modify it safely
+let damageText = chosen[2];
+
+if (isHeavy) {
+  // AxB weapons (e.g. 3x6 P, 2x4 E)
+  const axbMatch = damageText.match(/^(\d+)x(\d+)\s*(.*)$/i);
+
+  if (axbMatch) {
+    const a = axbMatch[1]; // first number stays the same
+    const b = parseInt(axbMatch[2], 10) + 1; // ONLY increase second number
+    const rest = axbMatch[3] || "";
+
+    damageText = `${a}x${b} ${rest}`.trim();
+  } else {
+    // Flat damage (e.g. 7 P, 10 X splash)
+    const flatMatch = damageText.match(/^(\d+)\s*(.*)$/i);
+    if (flatMatch) {
+      const base = parseInt(flatMatch[1], 10) + 1;
+      const rest = flatMatch[2] || "";
+
+      damageText = `${base} ${rest}`.trim();
+    }
+  }
+}
+
+   
+  if(!chosen){
+    out.innerHTML = `<span>No weapon matches your filters.</span>`;
+    return;
+  }
+
+  out.innerHTML = `<span style="font-size:1.25em; font-weight:bold;">${isHeavy ? "<span style='color:red; font-weight:bold;'>(H)</span> " : ""}${chosen[1]}</span><br>
+                 Damage: ${damageText}  •  Ammo: ${chosen[3]}<br>
+                 Range: ${chosen[4]}  •  Stat: ${chosen[5]}  •  Value: ${chosen[6]}`;
+}
+// ===== COMPLICATION GENERATOR =====
+const complications = [
+  ["+1/2 Thirst","END","Sweating from hot area"],
+  ["+1/2 Hunger","CHA","Puking from terrible smell"],
+  ["+1/2 Thirst","INT","Diarrhea from unidentified environmental toxins"],
+  ["+1/2 Hunger","STR","Burning calories from prolongued heavy lifting"],
+  ["+1/2 Thirst","AGI","Stuck in an overly dehumidified area"],
+  ["+1/2 Hunger","END","Burning calories for prolongued cardio"],
+  ["Lose 5/10 HP","CHA","Witnesses a gruesomely disturbing scene"],
+  ["Lose 5/10 HP","INT","Chemicals cause hallucination"],
+  ["Lose 5/10 HP","CHA","An explosion rattles the player"],
+  ["Lose 5/10 HP","AGI","Fired on by automated defenses"],
+  ["Lose 5/10 HP","INT","Get lost in a confined space"],
+  ["Lose 5/10 HP","CHA","Hears sounds of nearby deadly animals"],
+  ["+1/2 Fatigue","STR","Overexertion from lift/sprint/jump"],
+  ["+1/2 Fatigue","AGI","Running from defenses"],
+  ["+1/2 Fatigue","INT","Getting lost in confusing area"],
+  ["+1/2 Fatigue","END","Exposure to extreme cold"],
+  ["+1/2 Fatigue","END","Low oxygen area"],
+  ["+1/2 Fatigue","STR","Exhaustion from clearing obstacles"],
+  ["+1/2 Rads","STR","Scavenge through heavy toxic waste barrel dump"],
+  ["+1/2 Rads","END","Treks through irradiated water"],
+  ["+1/2 Rads","AGI","Long winding paths full of radiation"],
+  ["+1/2 Rads","CHA","Irradiated shelters full of dead families"],
+  ["+1/2 Rads","END","Broken technology leaking radiation"],
+  ["+1/2 Rads","INT","Disable safety system for radioactive source"],
+  ["+1/2 Injury","INT","Able to hack and disable a security turret"],
+  ["+1/2 Injury","AGI","Ignites an explosive causing explosion"],
+  ["+1/2 Injury","STR","Heavy objects fall on you"],
+  ["+1/2 Injury","STR","A muscle is strained moving something heavy"],
+  ["+1/2 Injury","CHA","Attacked by roaming security robots"],
+  ["+1/2 Injury","AGI","Avoid gunfire from defenses"]
+];
+
+function generateComplications() {
+  const c1 = complications[Math.floor(Math.random() * complications.length)];
+  
+  document.getElementById("ComplicationOutput").innerHTML =
+    ` ${c1[0]} | Save: ${c1[1]}<br><i>${c1[2]}</i>`;
+}
+
+// ===== RATION GENERATOR =====
+function generateRations() {
+  const rationTypes = ["Armor/Clean", "Gun/Dirty", "Tech/Irradiated"];
+  const rolls = rollDie(6) + rollDie(6);
+
+  const counts = {
+    "Armor/Clean": 0,
+    "Gun/Dirty": 0,
+    "Tech/Irradiated": 0
+  };
+
+  for (let i = 0; i < rolls; i++) {
+    const type = rationTypes[Math.floor(Math.random() * rationTypes.length)];
+    counts[type]++;
+  }
+
+  let output = `<b>Total Items:</b> ${rolls}<br>`;
+  for (const type in counts) {
+    if (counts[type] > 0) {
+      output += `${type}: ${counts[type]}<br>`;
+    }
+  }
+
+  document.getElementById("RationWaterOutput").innerHTML = output;
+}
+function generateMeds() {
+  const medTable = [
+    { name: "Bandage", effect: "-1 Injury, +10% HP" },
+    { name: "Rad-X", effect: "-1 Rads, +10% HP" },
+    { name: "Adrenaline", effect: "-1 Fatigue, +10% HP" },
+    { name: "Stimpak", effect: "-2 Injury, +20% HP (Addictive)" },
+    { name: "Rad-Away", effect: "-2 Rads, +20% HP (Addictive)" },
+    { name: "Addictol", effect: "Removes addictions, +10% HP" }
+  ];
+
+  const med = medTable[Math.floor(Math.random() * medTable.length)];
+  const count = rollDie(6) + 1;
+
+  document.getElementById("medsOnlyOutput").innerHTML = `
+    <b>${med.name} x${count}</b><br>
+    <i>${med.effect}</i>
+  `;
+}
+function generateChems() {
+  const chemTable = [
+    { name: "Jet", effect: "Next turn take 2 turns with +1 speed & all rolls (Addictive)" },
+    { name: "Psycho", effect: "+1 damage for 1 day (Addictive)" },
+    { name: "Rocket", effect: "+1 movement distance for 1 day (Addictive)" },
+    { name: "Mentats", effect: "+1 INT, +1 AGI for 1 day (Addictive)" },
+    { name: "Buffout", effect: "+1 STR, +1 END for 1 day (Addictive)" },
+    { name: "Beer", effect: "+1 CHA for 1 day, -1 thirst (Addictive)" }
+  ];
+
+  const chem = chemTable[Math.floor(Math.random() * chemTable.length)];
+  const count = rollDie(6) + 1;
+
+  document.getElementById("chemsOnlyOutput").innerHTML = `
+    <b>${chem.name} x${count}</b><br>
+    <i>${chem.effect}</i>
+  `;
+}
+
+
+
+const ammoTable = [
+  { type: "Small rounds", roll: "1d6+4", cost: 5 },
+  { type: "E-cell", roll: "1d6+3", cost: 10 },
+  { type: "Grenades", roll: "1d6", cost: 0 },
+  { type: "Fuel", roll: "1d6", cost: 20 },
+  { type: "Large rounds", roll: "1d6+2", cost: 10 },
+  { type: "MF-cell", roll: "1d6+1", cost: 15 }
+];
+const grenadeTable = [
+  { max: 6,  name: "Scrap Grenade", dmg: "11 X splash", cost: "15c" },
+  { max: 8,  name: "Bottlecap Grenade", dmg: "12 X splash", cost: "20c" },
+  { max: 10, name: "Frag Grenade", dmg: "13 X splash", cost: "25c" },
+  { max: 12, name: "Plasma Grenade", dmg: "14 X splash", cost: "30c" },
+  { max: 14, name: "Nuka Grenade", dmg: "15 X splash", cost: "35c" },
+  { max: Infinity, name: "Mini Nuke", dmg: "16 X splash", cost: "40c" }
+];
+function rollGrenadeByLevel(level) {
+  const roll = rollDie(6) + level;
+  return grenadeTable.find(g => roll <= g.max);
+}
+
+// Simple dice roller helper
+function rollDice(diceStr) {
+  const match = diceStr.match(/(\d*)d(\d+)([+-]\d+)?/i);
+  if (!match) return 0;
+
+  const count = parseInt(match[1], 10) || 1;
+  const sides = parseInt(match[2], 10);
+  const modifier = parseInt(match[3], 10) || 0;
+
+  let total = 0;
+  for (let i = 0; i < count; i++) {
+    total += Math.floor(Math.random() * sides) + 1;
+  }
+
+  const result = total + modifier;
+
+  // 🔒 HARD CLAMP TO VALID RANGE
+  const min = count + modifier;
+  const max = count * sides + modifier;
+
+  return Math.max(min, Math.min(result, max));
+}
+
+
+function generateAmmo() {
+  const selected = ammoTable[Math.floor(Math.random() * ammoTable.length)];
+  const quantity = rollDice(selected.roll);
+  const level = parseInt(document.getElementById("partyLevel").value) || 0;
+
+  // Special grenade handling
+  if (selected.type === "Grenades") {
+    const grenade = rollGrenadeByLevel(level);
+    document.getElementById("ammoOutput").innerHTML =
+      `${quantity} x ${grenade.name}<br>` +
+      `${grenade.dmg}, thrown, STR, ${grenade.cost}`;
+    return;
+  }
+  // Normal ammo output
+  const costText = selected.cost > 0 ? `${selected.cost}c each` : "";
+  document.getElementById("ammoOutput").innerHTML =
+    `${quantity} x ${selected.type} ${costText}`;
+}
+
+// ===== TECHNOLOGY GENERATOR =====
+const techTable = [
+  { name: "Generator", effect: "Provides temporary power for electronics" },
+  { name: "Autojacker", effect: "Portable jack to move heavy objects or jammed doors" },
+  { name: "Hammerator", effect: "Hand jackhammer used to expand openings or clear rubble" },
+  { name: "Breatherator", effect: "Allows exploration of low oxygen or underwater areas" },
+  { name: "Flashlight", effect: "Allows exploration of dark or foggy areas" },
+  { name: "Hackerator", effect: "Opens electronic locks and hacks computers" }
+];
+
+function generateTech() {
+  const tech = techTable[Math.floor(Math.random() * techTable.length)];
+
+  document.getElementById("techOutput").innerHTML = `
+    <b>${tech.name}</b><br>
+    <i>${tech.effect}</i>
+  `;
+}
+
+// ===== TOWN GENERATOR =====
+
+// Shop types and their corresponding generator functions
+const shopTypes = [
+  { name: "Weapons", func: generateWeapon },
+  { name: "Armor", func: generateArmor },
+  { name: "Meds", func: generateMeds }, 
+  { name: "Chems", func: generateChems },
+  { name: "Tech", func: generateTech },
+  { name: "Food & Water", func: generateRations }
+];
+
+// ===== TOWN DESCRIPTORS =====
+const townDescriptors = [
+  { roll: 11, name: "Old Fort", desc: "A pre-war military fort repurposed by settlers for defense and shelter, complete with makeshift barracks and watchtowers." },
+  { roll: 12, name: "Western Town", desc: "An abandoned western town brought back to life by settlers who have repaired and occupied its buildings." },
+  { roll: 13, name: "Mining Camp", desc: "A community built around an old mine, extracting valuable minerals and using them to trade for other necessities." },
+  { roll: 14, name: "Train Station", desc: "An old train station turned into a central hub for a small settlement, with train cars repurposed as homes." },
+  { roll: 15, name: "Wind Farm", desc: "Settlers have established a community around an old wind farm, using the remaining turbines to generate power." },
+  { roll: 16, name: "Abandoned Airport", desc: "The terminal and hangars have been turned into living spaces and workshops by a group of settlers." },
+
+  { roll: 21, name: "Deserted Factory Town", desc: "An old factory complex repurposed into a settlement, with the factory buildings serving as homes and workshops." },
+  { roll: 22, name: "Ruined Hotel", desc: "A large, partially collapsed hotel now houses a community, with rooms turned into living quarters." },
+  { roll: 23, name: "Fishing Village", desc: "Located near a dried-up lakebed, settlers rely on small-scale farming and trade for survival." },
+  { roll: 24, name: "Cliffside Dwellings", desc: "Homes built into the sides of cliffs, offering natural defense and a unique living environment." },
+  { roll: 25, name: "Desert Outpost", desc: "A small, fortified settlement built around a well or water source, serving as a rest stop for travelers." },
+  { roll: 26, name: "Abandoned Theme Park", desc: "The remains of an old amusement park now house a quirky community that has repurposed the attractions." },
+
+  { roll: 31, name: "Scrap Yard", desc: "A large junkyard turned settlement, with homes and workshops built from scavenged materials." },
+  { roll: 32, name: "Power Plant Village", desc: "A small community has formed around the ruins of a power plant, using its resources for energy and shelter." },
+  { roll: 33, name: "Desert Monastery", desc: "An old religious site now inhabited by settlers who maintain the buildings and gardens." },
+  { roll: 34, name: "Deserted Prison", desc: "The cells and facilities of an old prison now house a community, providing a secure and fortified location." },
+  { roll: 35, name: "Abandoned Mall", desc: "The remains of a shopping mall now serve as a large, communal living space for settlers." },
+  { roll: 36, name: "Water Tower Town", desc: "A settlement has formed around a large water tower, with homes and farms benefiting from the stored water." },
+
+  { roll: 41, name: "Canyon Settlement", desc: "A community built within a canyon, using the natural formations for defense and shelter." },
+  { roll: 42, name: "Deserted School Campus", desc: "An old school repurposed into a settlement, with classrooms and gyms turned into living spaces." },
+  { roll: 43, name: "Oil Rig Community", desc: "An old, once ocean-based oil rig now houses a small, industrious settlement." },
+  { roll: 44, name: "Ruined Cathedral", desc: "The remains of a large church now serve as a communal living space and meeting hall for settlers." },
+  { roll: 45, name: "Old Gas Station", desc: "A small settlement has formed around an old gas station, using its infrastructure for trade and repair." },
+  { roll: 46, name: "Desert Market Town", desc: "A town built around a central market square, where traders and settlers gather to exchange goods." },
+
+  { roll: 51, name: "Fallen Bridge Camp", desc: "A settlement has formed beneath the remains of a large collapsed bridge, using the structure for shelter." },
+  { roll: 52, name: "Drive-In Theater", desc: "The old projection booth and concession stands have been repurposed into homes and shops for a small community." },
+  { roll: 53, name: "Airplane Graveyard", desc: "Settlers have turned old, grounded planes into homes and workshops in a sprawling community." },
+  { roll: 54, name: "Shipping Container Village", desc: "A settlement made from repurposed shipping containers, providing sturdy and modular living spaces." },
+  { roll: 55, name: "Ruined Observatory", desc: "An old observatory turned into a fortified settlement, using the high ground for defense." },
+  { roll: 56, name: "Desert Commune", desc: "A community with an unexploded nuclear bomb in the center." },
+
+  { roll: 61, name: "Small Farmstead", desc: "A group of settlers is attempting to grow crops and raise livestock, using irrigation systems and old farming techniques." },
+  { roll: 62, name: "Shanty Town", desc: "A collection of makeshift homes built from scrap metal and other scavenged materials, housing a small community." },
+  { roll: 63, name: "Trading Post", desc: "A bustling hub where traders from various parts of the wasteland come to barter goods and services." },
+  { roll: 64, name: "Ranch", desc: "A larger-scale farm with fields and animal pens, providing food and supplies for a small settlement." },
+  { roll: 65, name: "Ruined Suburb", desc: "An old suburban neighborhood being repurposed by settlers, with houses turned into communal living spaces." },
+  { roll: 66, name: "Vault", desc: "A vault that allows visitors and trades with outsiders." }
+];
+// ===== MAIN QUEST TABLE =====
+const townQuests = [
+  { roll: 11, text: `"Rot from Within" – A trusted town member of X faction is secretly poisoning food supplies to ‘thin the weak.’ Expose them, join them, or take their place.` },
+  { roll: 12, text: `"Election Day" – An election is being held to decide if they want to continue on their current faction or convert to another after being visited by an envoy.` },
+  { roll: 13, text: `Retrieve the Stolen Goods – Thieves from X faction have stolen valuable supplies from the town, and the player must recover them.` },
+  { roll: 14, text: `Investigate the Sabotage – Someone from X faction is sabotaging the town's equipment; find and stop them.` },
+  { roll: 15, text: `Secure the Power Source – The town's power source is failing; find a new one or repair the existing one involving X faction.` },
+  { roll: 16, text: `"The Price of Safety" – A settlement wants a massive wall built, but the only materials are sacred to a nearby X faction settlement.` },
+
+  { roll: 21, text: `Help the Farmers – Crops are failing; determine the cause and fix it.` },
+  { roll: 22, text: `Recruit New Settlers – The town needs more people; recruit settlers from other areas.` },
+  { roll: 23, text: `Resolve a Dispute – Two important town members are in conflict; mediate a resolution.` },
+  { roll: 24, text: `Feed the Hunger – The town hides a secret: they are reluctant cannibals suffering withdrawal.` },
+  { roll: 25, text: `"The Hardest Goodbye" – A survivor asks you to put down their feral ghoul spouse… unless they can be saved.` },
+  { roll: 26, text: `Escort the Diplomat – Safely escort a diplomat to a neighboring settlement.` },
+
+  { roll: 31, text: `Uprising – A slaver town faces a slave rebellion. Choose a side.` },
+  { roll: 32, text: `Establish Trade Routes – Make contact with nearby settlements to open trade.` },
+  { roll: 33, text: `Recover Lost Technology – Rumors say a nearby X faction settlement has valuable pre-war tech they arent using. help retrieve it or activate it for the others.` },
+  { roll: 34, text: `Stolen GECK" – Raiders from X faction stole a GECK needed to terraform barren fields. Infiltrate and recover, or help them create a new life` },
+  { roll: 35, text: `Investigate the Crime – A crime has occurred; find the culprit.` },
+  { roll: 36, text: `"The Ghoulfather" – A ghoul crime lord wants one last score against X faction.` },
+
+  { roll: 41, text: `Convince the Skeptics – Some townsfolk doubt an important discovery; win them over.` },
+  { roll: 42, text: `Reclaim the Outpost – A nearby outpost has been taken by X enemy; reclaim it.` },
+  { roll: 43, text: `"The Guilty Innocent" – A beloved hero is secretly guilty; expose or protect them.` },
+  { roll: 44, text: `"Psycho Circus" – A chem dealer’s new formula turns people feral.` },
+  { roll: 45, text: `"The Arena" – A raider warband has built a combat arena in town.` },
+  { roll: 46, text: `Flesh for Flesh – Nearby X faction needs to trade citizens for genetic diversity, but something isnt quite right.` },
+
+  { roll: 51, text: `"The Price of Freedom" – A nearby town will release captives… for a price.` },
+  { roll: 52, text: `Investigate the Ruins – Strange activity reported in nearby ruins, it is currently being looted by X faction who do not want to share.` },
+  { roll: 53, text: `"AI Overlord" – An AI controls a town and won’t let workers take breaks or leave. Find a way to stop the AI from ruining the town.` },
+  { roll: 54, text: `Quell the Rebellion – A group of townsfolk plan a rebellion; some want to stay with the current leaders and some want to splinter to X faction. Choose a side.` },
+  { roll: 55, text: `The Disappearing – Many townsfolk exploring near X faction settlement nearby never come back. find out why. ` },
+  { roll: 56, text: `Heal the Injured – Several citizens need medical supplies urgently. There is a nearby settlement of X faction that may be able to help` },
+
+  { roll: 61, text: `Protect the Scavengers – Escort a scavenger party to a nearby ruins inhabited by a difficult enemy.` },
+  { roll: 62, text: `"New Gods of the Old World" – The town worships a nuclear bomb that sits unexploded and unstable in the middle of town. It may not be completely dormant...` },
+  { roll: 63, text: `Rescue the Captives – X faction kidnapped townsfolk; infiltrate and rescue them.` },
+  { roll: 64, text: `Hostile Neighbors – A nearby X faction settlement terrorizes the town; eliminate or negotiate.` },
+  { roll: 65, text: `Refugee Crisis - Several refugees have come to the town but are not being accepted in due to lack of resources. resolve the conflict. ` },
+  { roll: 66, text: `Find the Missing Civilian – A key figure has gone missing in a maze-like network of sewer tunnels under the town. Find them without getting lost or learn the truth.` }
+];
+// ===== PROFESSION QUESTS =====
+const professionQuests = {
+  Technician: [
+    "Dead Signal – Restore a dead radio relay using a salvaged comm tower part.",
+    "Gun Show – Upgrade a scavenger’s sentimental weapon.",
+    "Cold Steel – Repair one of each: weapon, armor, and tech."
+  ],
+  Mechanic: [
+    "Steel & Silence – Upgrade a stealth merc’s armor.",
+    "Harden the Hide – Restore riot gear using ceramic plates.",
+    "Overhaul – Reinforce a caravan’s busted armor."
+  ],
+  Farmer: [
+    "Tainted Crop – Cure a fungal infection in irradiated melons.",
+    "Dig Deep – Convert an old garden into a viable plot.",
+    "The Root Problem – Track mutated vines destroying a well."
+  ],
+  Chef: [
+    "Thirsty Business – Convert meat into fuel for town tech.",
+    "Kitchen Sink Science – Recreate a legendary morale‑boosting stew.",
+    "Grill Master – Produce exotic‑meat fuel for a merchant."
+  ],
+  Exterminator: [
+    "Rats in the Walls – Clear a mole‑rat infestation.",
+    "Big Game Hunt – Kill a mutant alpha predator.",
+    "Pest Control – Clear bloatflies from a junkyard."
+  ],
+  Police: [
+    "Gun Balance – Convert small ammo to large for guards.",
+    "Hold the Line – Arm and organize a civilian watch.",
+    "Order in the Wastes – Retrieve stolen ammo crates."
+  ],
+  Plumber: [
+    "Pipe Dream – Repair a vault’s sludge‑clogged plumbing.",
+    "Backflow – Fix upstream contamination of clean water.",
+    "Thirst Trap – Purify a dirty desert pool."
+  ],
+  Doctor: [
+    "Wounded Pride – Convert wrong meds into life‑saving ones.",
+    "First Do Harm – Replace swapped placebos before riots start.",
+    "Curative Measures – Synthesize medicine for a rare plague."
+  ],
+  Scientist: [
+    "Happy Accidents – Combine random chems safely.",
+    "Stimulant Shortage – Reclaim hoarded chems from raiders.",
+    "Bad Batch – Stabilize an unstable chem supply."
+  ],
+  Engineer: [
+    "Arc Spark – Repair a malfunctioning tech turret.",
+    "Linebreaker – Rebuild a settlement’s power fence.",
+    "Mind the Gap – Restore a failing bridge lift system."
+  ],
+  Tailor: [
+    "Patch It Up – Craft protective clothing for wasteland kids.",
+    "Fashion Statement – Create an outfit to impress a faction.",
+    "The Disguise – Make a fake uniform for a spy."
+  ],
+  Electrician: [
+    "Overload – Convert a broken fusion cell into usable energy.",
+    "Power Play – Restore power to a Nuka‑Cola billboard.",
+    "Mission Impossible – Disable an unstable bomb guarded by threats."
+  ]
+};
+
+// ===== FACTIONS =====
+const factions = [
+  {
+    name: "Metallion",
+    tag: "Armor",
+    desc: "Hoard tech and hate the weak and tickers (mutants), meritocracy, hateful"
+  },
+  {
+    name: "The Institute",
+    tag: "Meds",
+    desc: "Trying to rebuild society with science, democracy, weary"
+  },
+  {
+    name: "Children of Atom",
+    tag: "Water",
+    desc: "Simple-life Amish, theocracy, friendly"
+  },
+  {
+    name: "New Country Republic",
+    tag: "Weapons",
+    desc: "Bureaucratic progressive society, republic, weary"
+  },
+  {
+    name: "The Legion Solis Empire",
+    tag: "Chems",
+    desc: "Communist monarchy, slavers, hateful"
+  },
+  {
+    name: "Commonwealth",
+    tag: "Technology",
+    desc: "Small town commune, anarchy, friendly"
+  }
+];
+
+function getRivalFaction(mainFactionName) {
+  const rivals = factions.filter(f => f.name !== mainFactionName);
+  return rivals[Math.floor(Math.random() * rivals.length)];
+}
+
+// ===== NPC TABLE =====
+const npcTable = [
+  { roll: 11, name: "Bitter War Veteran", desc: "Gruff, one-eyed, tells long stories of battles no one remembers. Distrusts outsiders." },
+  { roll: 12, name: "Cheerful Merchant", desc: "Overly optimistic, insists every item is 'a steal,' even junk." },
+  { roll: 13, name: "Paranoid Scavenger", desc: "Constantly scanning the horizon, mutters about being followed." },
+  { roll: 14, name: "Wandering Bard", desc: "Plays a battered guitar, trades songs for food. Knows odd rumors." },
+  { roll: 15, name: "Cynical Medic", desc: "Skilled healer but mocks patients for getting hurt in the first place." },
+  { roll: 16, name: "Soft-Spoken Farmer", desc: "Avoids conflict, loves talking about soil and crops." },
+
+  { roll: 21, name: "Scrap Artist", desc: "Creates sculptures from junk, values beauty over practicality." },
+  { roll: 22, name: "Cold Bounty Hunter", desc: "Says little, eyes everyone as a potential target." },
+  { roll: 23, name: "Story-Hoarding Elder", desc: "Collects tales like treasure, trades them for supplies." },
+  { roll: 24, name: "Outcast Mutant", desc: "Mistrustful but surprisingly gentle; hides disfigurements." },
+  { roll: 25, name: "Disgraced Officer", desc: "Still wears a faded uniform, insists on strict protocol." },
+  { roll: 26, name: "Gambling Addict", desc: "Always shuffling a deck, willing to bet on anything." },
+
+  { roll: 31, name: "Feral Child", desc: "Skittish and dirty, communicates with whistles and hand signals." },
+  { roll: 32, name: "Smooth-Talking Swindler", desc: "Can make junk sound valuable and lies sound sweet." },
+  { roll: 33, name: "Inventive Tinkerer", desc: "Constantly fiddling with devices, absent-minded in conversation." },
+  { roll: 34, name: "Runaway Cultist", desc: "Avoids eye contact, refuses to talk about their past faith." },
+  { roll: 35, name: "Grumpy Fisherman", desc: "Complains about everything except fishing." },
+  { roll: 36, name: "Nomadic Trader", desc: "Has goods from distant places, shares strange slang." },
+
+  { roll: 41, name: "Desert Hermit", desc: "Lives alone by choice, mutters about 'the old ways.'" },
+  { roll: 42, name: "Overzealous Guard", desc: "Takes rules way too seriously, even in casual conversation." },
+  { roll: 43, name: "Scarred Pit Fighter", desc: "Proud of every scar, constantly seeks challenges." },
+  { roll: 44, name: "Lovesick Drunk", desc: "Always talking about a lost lover, drinks to remember." },
+  { roll: 45, name: "Animal Whisperer", desc: "Talks to animals as if they respond, claims they do." },
+  { roll: 46, name: "Irradiated Prophet", desc: "Speaks in riddles, claims visions come from 'the Glow.'" },
+
+  { roll: 51, name: "Hoarder", desc: "Collects anything shiny or unusual, highly territorial." },
+  { roll: 52, name: "Traveling Preacher", desc: "Preaches hope in the wasteland but hides deep doubt." },
+  { roll: 53, name: "Retired Raider", desc: "Calm now, but still has a dangerous glint in their eye." },
+  { roll: 54, name: "Wanderlust Explorer", desc: "Maps everything, constantly seeks 'what’s over that hill.'" },
+  { roll: 55, name: "Charismatic Drifter", desc: "Always has a story, usually half true." },
+  { roll: 56, name: "Grinning Bodyguard", desc: "Enjoys their work a little too much." },
+
+  { roll: 61, name: "Silent Gunslinger", desc: "Answers with nods, lets their weapon do the talking." },
+  { roll: 62, name: "Bitter Widow/Widower", desc: "Blames the wasteland for everything lost." },
+  { roll: 63, name: "Scavenger Kid", desc: "Tiny, bold, and far too street-smart for their age." },
+  { roll: 64, name: "Flamboyant Trader", desc: "Dresses extravagantly, announces every sale dramatically." },
+  { roll: 65, name: "Fortune Teller", desc: "Uses cards, bones, or bottle caps to 'see' the future." },
+  { roll: 66, name: "Sleepless Night Watchman", desc: "Stares into the dark like they’re waiting for something awful." }
+];
+
+
+
+function generateTown() {
+  let output = "";
+
+  // ===== TOWN TYPE =====
+  const d1 = rollDie(6);
+  const d2 = rollDie(6);
+  const roll = d1 * 10 + d2;
+
+  const descriptor = townDescriptors.find(t => t.roll === roll);
+
+  output += `<b>Town Type:</b> ${descriptor?.name || "Unknown Settlement"}<br>`;
+  output += `<i>${descriptor?.desc || ""}</i><div class="section-spacer"></div>`;
+  
+    // ===== FACTION =====
+	const faction = factions[Math.floor(Math.random() * factions.length)];
+
+	output += `<b>Faction:</b> ${faction.name} <br>`;
+	output += `<i>${faction.desc}</i><div class="section-spacer"></div>`;
+	
+	
+	// ===== NOTABLE NPCs (3 total) =====
+	output += `<b>Notable NPCs:</b><br>`;
+
+	for (let i = 0; i < 3; i++) {
+	  const n1 = rollDie(6);
+	  const n2 = rollDie(6);
+	  const nRoll = n1 * 10 + n2;
+
+	  const npc = npcTable.find(n => n.roll === nRoll);
+
+	  output += `<div style="margin-left:10px; margin-bottom:6px;">
+				   <b>${npc?.name || "Unknown NPC"}:</b>
+				   <i>${npc?.desc || ""}</i>
+				 <div class="section-spacer"></div></div>`;
+	}
+
+	
+
+
+
+	// ===== MAIN QUEST =====
+	const q1 = rollDie(6);
+	const q2 = rollDie(6);
+	const qRoll = q1 * 10 + q2;
+
+	let quest = townQuests.find(q => q.roll === qRoll)?.text || "Unknown Quest";
+
+	// If the quest references "X faction", insert a rival faction
+	if (quest.includes("X faction") || quest.includes("X enemy")) {
+	  const rival = getRivalFaction(faction.name);
+	  quest = quest.replace(/X faction|X enemy/g, rival.name);
+	}
+
+	output += `<b>Main Quest:</b> ${quest}<div class="section-spacer"></div>`;
+
+
+  // ===== SIDEQUEST (Profession Quest) =====
+  const professions = Object.keys(professionQuests);
+  const chosenProf = professions[Math.floor(Math.random() * professions.length)];
+  const sidequest = professionQuests[chosenProf][Math.floor(Math.random() * 3)];
+
+  output += `<b>Sidequest (${chosenProf}):</b> ${sidequest}<div class="section-spacer"></div>`;
+
+
+  // ===== SHOPS =====
+output += "";
+
+// 1. Find the faction's signature shop
+const signatureShop = shopTypes.find(shop => shop.name.toLowerCase().includes(faction.tag.toLowerCase())) 
+                     || shopTypes.find(shop => shop.name === "Weapons"); // fallback
+
+// 2. We'll display 3 shops total
+const shopSlots = [1, 2, 3];
+
+// We want the signature shop to appear exactly once → we'll place it randomly among the 3 slots
+const signatureSlotIndex = Math.floor(Math.random() * 3); // 0, 1 or 2
+
+for (let i = 0; i < shopSlots.length; i++) {
+  let chosenShop;
+
+  if (i === signatureSlotIndex) {
+    // This is the guaranteed faction shop
+    chosenShop = signatureShop;
+  } else {
+    // Random shop, but try to avoid duplicating the signature one too often
+    let attempts = 0;
+    do {
+      chosenShop = shopTypes[Math.floor(Math.random() * shopTypes.length)];
+      attempts++;
+    } while (chosenShop.name === signatureShop.name && attempts < 10);
+  }
+
+  output += `<b>Shop ${i+1}: ${chosenShop.name}</b> `;
+  
+  // Mark the faction specialty shop
+  if (chosenShop.name === signatureShop.name) {
+    output += `<span style="color:#4e8cff; font-weight:bold;">(Faction)</span><div class="section-spacer"></div>`;
+  }
+ 
+
+  // Generate 2 items for this shop
+  for (let r = 0; r < 2; r++) {
+    chosenShop.func();
+
+    let result = "";
+    switch (chosenShop.name) {
+      case "Weapons":
+        generateWeapon();
+        result = document.getElementById("weaponResult").innerHTML;
+        break;
+      case "Armor":
+        generateArmor();
+        result = document.getElementById("armorTitle").innerHTML;
+        break;
+      case "Meds":
+        generateMeds();
+        result = document.getElementById("medsOnlyOutput").innerHTML;
+        break;
+      case "Chems":
+        generateChems();
+        result = document.getElementById("chemsOnlyOutput").innerHTML;
+        break;
+      case "Tech":
+        generateTech();
+        result = document.getElementById("techOutput").innerHTML;
+        break;
+      case "Food & Water":
+        generateRations();
+        result = document.getElementById("RationWaterOutput").innerHTML;
+        break;
+      default:
+        result = "<i>(no items generated)</i>";
+    }
+
+    output += `<div style="margin-left:14px; margin-bottom:8px;">${result}</div><div class="section-spacer"></div>`;
+  }
+
+
+}
+
+  document.getElementById("townOutput").innerHTML = output;
+}
+
+
+
+	
+</script>
+</body>
+</html>
+

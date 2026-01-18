@@ -1,0 +1,41 @@
+:root {
+  --pip-bg: #0b120b;
+  --pip-panel: #0f1f0f;
+  --pip-neon: #2cff2c;
+  --pip-text: #9fef9f;
+  --pip-warn: #ff3c3c;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  background: var(--pip-bg);
+  color: var(--pip-text);
+  font-family: monospace;
+}
+
+.pip-card {
+  background: #081408;
+  border: 1px solid var(--pip-neon);
+  box-shadow: 0 0 6px var(--pip-neon);
+}
+
+.pip-btn {
+  background: #081408;
+  color: var(--pip-text);
+  border: 1px solid var(--pip-neon);
+  padding: 4px 10px;
+  cursor: pointer;
+  box-shadow: 0 0 6px var(--pip-neon);
+}
+
+.pip-input {
+  background: #081408;
+  color: var(--pip-text);
+  border: 1px solid var(--pip-neon);
+  padding: 6px;
+  box-sizing: border-box;
+  width: 100%;
+}
