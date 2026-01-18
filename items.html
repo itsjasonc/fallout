@@ -388,21 +388,21 @@ window.addEventListener('load', distribute);
 // ===== ARMOR GENERATOR =====
 
 	const armorTable = [
-  { roll: 2, text: "Junk armor: +9 def, 60c" },
-  { roll: 3, text: "Raider armor: +10 def, 70c" },
-  { roll: 4, text: "Leather armor: +11 def, 80c" },
-  { roll: 5, text: "Chain armor: +12 def, 90c" },
-  { roll: 6, text: "Metal armor: +13 def, 100c" },
-  { roll: 7, text: "Synth armor: +14 def, 110c" },
-  { roll: 8, text: "Mutant armor: +15 def, 120c" },
-  { roll: 9, text: "Rugged armor: +16 def, 130c" },
-  { roll: 10, text: "Combat armor: +18 def, 140c" },
-  { roll: 11, text: "Infantry armor: +20 def, 150c" },
-  { roll: 12, text: "Assault armor: +22 def, 160c" },
-  { roll: 13, text: "Ranger armor: +24 def, 170c" },
-  { roll: 14, text: "Salvaged power armor: +26 def, 180c" },
-  { roll: 15, text: "Power armor: +28 def, +190c" },
-  { roll: 16, text: "Advanced power armor: +30 def, 200c" }
+  { roll: 2, text: "Junk armor: +9 def, 40c" },
+  { roll: 3, text: "Raider armor: +10 def, 45c" },
+  { roll: 4, text: "Leather armor: +11 def, 50c" },
+  { roll: 5, text: "Chain armor: +12 def, 55c" },
+  { roll: 6, text: "Metal armor: +13 def, 60c" },
+  { roll: 7, text: "Synth armor: +14 def, 65c" },
+  { roll: 8, text: "Mutant armor: +15 def, 70c" },
+  { roll: 9, text: "Rugged armor: +16 def, 75c" },
+  { roll: 10, text: "Combat armor: +18 def, 80c" },
+  { roll: 11, text: "Infantry armor: +20 def, 85c" },
+  { roll: 12, text: "Assault armor: +22 def, 90c" },
+  { roll: 13, text: "Ranger armor: +24 def, 95c" },
+  { roll: 14, text: "Salvaged power armor: +26 def, 100c" },
+  { roll: 15, text: "Power armor: +28 def, +105c" },
+  { roll: 16, text: "Advanced power armor: +30 def, 110c" }
 ];
 
 // helper for single die roll
@@ -469,77 +469,77 @@ document.getElementById("armorTitle").innerHTML = `
 /* Note: ammo field uses "-" for no-ammo entries so indexes stay consistent */
 const weapons = {
   E1:[ [6,"Pipe Pistol","5 P","small rounds","mid","AGI","30c"],
-       [8,"Revolver","6 P","small rounds","mid","AGI","40c"],
-       [10,"Combat Pistol","7 P","small rounds","mid","AGI","50c"],
-       [12,"Magnum","8 P","small rounds","mid","AGI","60c"],
-       [14,"Big Iron","9 P","small rounds","mid","AGI","70c"],
-       [99,"Purifier","10 P","small rounds","mid","AGI","80c"] ],
+       [8,"Revolver","6 P","small rounds","mid","AGI","35c"],
+       [10,"Combat Pistol","7 P","small rounds","mid","AGI","40c"],
+       [12,"Magnum","8 P","small rounds","mid","AGI","45c"],
+       [14,"Big Iron","9 P","small rounds","mid","AGI","50c"],
+       [99,"Purifier","10 P","small rounds","mid","AGI","55c"] ],
   E2:[ [6,"Laser Pistol","6 E","E-cell","mid","INT","40c"],
-       [8,"Plasma Pistol","7 E","E-cell","mid","INT","50c"],
-       [10,"Sonic Pistol","8 E","E-cell","mid","INT","60c"],
-       [12,"Tesla Pistol","9 E","E-cell","mid","INT","70c"],
-       [14,"Gauss Pistol","10 E","E-cell","mid","INT","80c"],
-       [99,"Valanyr","11 E","E-cell","mid","INT","90c"] ],
+       [8,"Plasma Pistol","7 E","E-cell","mid","INT","45c"],
+       [10,"Sonic Pistol","8 E","E-cell","mid","INT","50c"],
+       [12,"Tesla Pistol","9 E","E-cell","mid","INT","55c"],
+       [14,"Gauss Pistol","10 E","E-cell","mid","INT","60c"],
+       [99,"Valanyr","11 E","E-cell","mid","INT","65c"] ],
   E3:[ [6,"Pipe Rifle","7 P","large rounds","long","AGI","50c"],
-       [8,"Service Rifle","8 P","large rounds","long","AGI","70c"],
-       [10,"Hunting Rifle","9 P","large rounds","long","AGI","90c"],
-       [12,"Combat Rifle","10 P","large rounds","long","AGI","110c"],
-       [14,"Assault Rifle","11 P","large rounds","long","AGI","130c"],
-       [99,"Thoridal","12 P","large rounds","long","AGI","150c"] ],
+       [8,"Service Rifle","8 P","large rounds","long","AGI","60c"],
+       [10,"Hunting Rifle","9 P","large rounds","long","AGI","70c"],
+       [12,"Combat Rifle","10 P","large rounds","long","AGI","80c"],
+       [14,"Assault Rifle","11 P","large rounds","long","AGI","90c"],
+       [99,"Thoridal","12 P","large rounds","long","AGI","100c"] ],
   E4:[ [6,"Laser Rifle","8 E","MF-cell","long","INT","60c"],
-       [8,"Plasma Rifle","9 E","MF-cell","long","INT","80c"],
-       [10,"Sonic Rifle","10 E","MF-cell","long","INT","100c"],
-       [12,"Tesla Rifle","11 E","MF-cell","long","INT","120c"],
-       [14,"Gauss Rifle","12 E","MF-cell","long","INT","140c"],
-       [99,"Atiesh","13 E","MF-cell","long","INT","160c"] ],
+       [8,"Plasma Rifle","9 E","MF-cell","long","INT","70c"],
+       [10,"Sonic Rifle","10 E","MF-cell","long","INT","80c"],
+       [12,"Tesla Rifle","11 E","MF-cell","long","INT","90c"],
+       [14,"Gauss Rifle","12 E","MF-cell","long","INT","100c"],
+       [99,"Atiesh","13 E","MF-cell","long","INT","110c"] ],
   E5:[ [6,"Sawed-Off SG","3x3 P","small","short","AGI","50c"],
-       [8,"Hunting SG","3x4 P","small","short","AGI","60c"],
-       [10,"Caravan SG","3x5 P","small","short","AGI","70c"],
-       [12,"Combat SG","3x6 P","small","short","AGI","80c"],
-       [14,"Riot SG","3x7 P","small","short","AGI","90c"],
-       [99,"Gorehowl","3x8 P","small","short","AGI","100c"] ],
+       [8,"Hunting SG","3x4 P","small","short","AGI","55c"],
+       [10,"Caravan SG","3x5 P","small","short","AGI","60c"],
+       [12,"Combat SG","3x6 P","small","short","AGI","65c"],
+       [14,"Riot SG","3x7 P","small","short","AGI","70c"],
+       [99,"Gorehowl","3x8 P","small","short","AGI","75c"] ],
   E6:[ [6,"Laser Shotgun","3x4 E","E-cell","short","INT","60c"],
-       [8,"Plasma Shotgun","3x5 E","E-cell","short","INT","70c"],
-       [10,"Gauss Shotgun","3x6 E","E-cell","short","INT","80c"],
-       [12,"Gatling Laser","3x7 E","E-cell","short","INT","90c"],
-       [14,"Tesla Cannon","3x8 E","E-cell","short","INT","100c"],
-       [99,"Doomhammer","3x9 E","E-cell","short","INT","110c"] ],
+       [8,"Plasma Shotgun","3x5 E","E-cell","short","INT","65c"],
+       [10,"Gauss Shotgun","3x6 E","E-cell","short","INT","70c"],
+       [12,"Gatling Laser","3x7 E","E-cell","short","INT","75c"],
+       [14,"Tesla Cannon","3x8 E","E-cell","short","INT","80c"],
+       [99,"Doomhammer","3x9 E","E-cell","short","INT","85c"] ],
   O1:[ [6,"Hand Mortar","10 X splash X","fuel","long","AGI","80c"],
-       [8,"Nade Launcher","11 X splash","fuel","long","AGI","110c"],
-       [10,"Nade Cannon","12 X splash","fuel","long","AGI","140c"],
-       [12,"Missile Launcher","13 X splash","fuel","long","AGI","170c"],
-       [14,"Fat Man","14 X splash","fuel","long","AGI","200c"],
-       [99,"Ashbringer","15 X splash","fuel","long","AGI","230c"] ],
+       [8,"Nade Launcher","11 X splash","fuel","long","AGI","90c"],
+       [10,"Nade Cannon","12 X splash","fuel","long","AGI","100c"],
+       [12,"Missile Launcher","13 X splash","fuel","long","AGI","110c"],
+       [14,"Fat Man","14 X splash","fuel","long","AGI","120c"],
+       [99,"Ashbringer","15 X splash","fuel","long","AGI","130c"] ],
   O2:[ [6,"Flamer","9 X splash+burn","fuel","mid","AGI","70c"],
-       [8,"Napalmer","10 X splash+burn","fuel","mid","AGI","100c"],
-       [10,"Incinerator","11 X splash+burn","fuel","mid","AGI","130c"],
-       [12,"Liquifier","12 X splash+burn","fuel","mid","AGI","160c"],
-       [14,"Hellfire Inc","13 X splash+burn","fuel","mid","AGI","190c"],
-       [99,"Sulfuras","14 X splash+burn","fuel","short","AGI","220c"] ],
+       [8,"Napalmer","10 X splash+burn","fuel","mid","AGI","80c"],
+       [10,"Incinerator","11 X splash+burn","fuel","mid","AGI","90c"],
+       [12,"Liquifier","12 X splash+burn","fuel","mid","AGI","100c"],
+       [14,"Hellfire Inc","13 X splash+burn","fuel","mid","AGI","110c"],
+       [99,"Sulfuras","14 X splash+burn","fuel","short","AGI","120c"] ],
   O3:[ [6,"Weak Melee","6 P","-","melee","STR","30c"],
-       [8,"Medium Melee","7 P","-","melee","STR","50c"],
-       [10,"Strong Melee","8 P","-","melee","STR","70c"],
-       [12,"Powerful Melee","9 P","-","melee","STR","90c"],
-       [14,"Ultimate Melee","10 P","-","melee","STR","110c"],
-       [99,"Shadowmourne","11 P","-","melee","STR","130c"] ],
+       [8,"Medium Melee","7 P","-","melee","STR","40c"],
+       [10,"Strong Melee","8 P","-","melee","STR","50c"],
+       [12,"Powerful Melee","9 P","-","melee","STR","60c"],
+       [14,"Ultimate Melee","10 P","-","melee","STR","70c"],
+       [99,"Shadowmourne","11 P","-","melee","STR","80c"] ],
   O4:[ [6,"Brass Knuckles","2x4 P","-","melee","END","30c"],
-       [8,"Bladed Gauntlet","2x5 P","-","melee","END","50c"],
-       [10,"Yao Guai Gauntlet","2x6 P","-","melee","END","70c"],
-       [12,"Power Fist","2x7 P","-","melee","END","90c"],
-       [14,"Deathclaw Gauntlet","2x8 P","-","melee","END","110c"],
-       [99,"Godhand","2x9 P","-","melee","END","130c"] ],
-  O5:[ [6,"Shock Baton","2x4 E","-","melee","STR","50c"],
-       [8,"Welding Torch","2x5 X","-","melee","STR","70c"],
-       [10,"Tesla Coil","2x6 E","-","melee","STR","90c"],
-       [12,"Thermic Lance","2x7 X","-","melee","STR","110c"],
-       [14,"Shishkebab","2x8 E","-","melee","STR","130c"],
-       [99,"Thunderfury","2x9 X","-","melee","STR","150c"] ],
-  O6:[ [6,"Shock Glove","6 E","-","melee","END","50c"],
-       [8,"Whalloper","7 X","-","melee","END","70c"],
-       [10,"Plasma Glove","8 E","-","melee","END","90c"],
-       [12,"Kinetic Fist","9 X","-","melee","END","110c"],
-       [14,"Saturnite Fist","10 E","-","melee","END","130c"],
-       [99,"Infinity Gauntlet","11 X","-","melee","END","150c"] ]
+       [8,"Bladed Gauntlet","2x5 P","-","melee","END","40c"],
+       [10,"Yao Guai Gauntlet","2x6 P","-","melee","END","50c"],
+       [12,"Power Fist","2x7 P","-","melee","END","60c"],
+       [14,"Deathclaw Gauntlet","2x8 P","-","melee","END","70c"],
+       [99,"Godhand","2x9 P","-","melee","END","80c"] ],
+  O5:[ [6,"Shock Baton","2x4 E","-","melee","STR","40c"],
+       [8,"Welding Torch","2x5 X","-","melee","STR","50c"],
+       [10,"Tesla Coil","2x6 E","-","melee","STR","60c"],
+       [12,"Thermic Lance","2x7 X","-","melee","STR","70c"],
+       [14,"Shishkebab","2x8 E","-","melee","STR","80c"],
+       [99,"Thunderfury","2x9 X","-","melee","STR","90c"] ],
+  O6:[ [6,"Shock Glove","6 E","-","melee","END","40c"],
+       [8,"Whalloper","7 X","-","melee","END","50c"],
+       [10,"Plasma Glove","8 E","-","melee","END","60c"],
+       [12,"Kinetic Fist","9 X","-","melee","END","70c"],
+       [14,"Saturnite Fist","10 E","-","melee","END","80c"],
+       [99,"Infinity Gauntlet","11 X","-","melee","END","90c"] ]
 };
 
 /* Weapon generator with filters */
@@ -615,12 +615,12 @@ const complications = [
   ["+1/2 Thirst","END","Sweating from hot area"],
   ["+1/2 Hunger","CHA","Puking from terrible smell"],
   ["+1/2 Thirst","INT","Diarrhea from unidentified environmental toxins"],
-  ["+1/2 Hunger","STR","Burning calories from prolongued heavy lifting"],
-  ["+1/2 Thirst","AGI","Stuck in an overly dehumidified area"],
+  ["+1/2 Hunger","STR","Burning calories from prolonged heavy lifting"],
+  ["+1/2 Thirst","AGI","searching a low humidity area"],
   ["+1/2 Hunger","END","Burning calories for prolongued cardio"],
   ["Lose 5/10 HP","CHA","Witnesses a gruesomely disturbing scene"],
   ["Lose 5/10 HP","INT","Chemicals cause hallucination"],
-  ["Lose 5/10 HP","CHA","An explosion rattles the player"],
+  ["Lose 5/10 HP","CHA","Startled by a nearby explosion"],
   ["Lose 5/10 HP","AGI","Fired on by automated defenses"],
   ["Lose 5/10 HP","INT","Get lost in a confined space"],
   ["Lose 5/10 HP","CHA","Hears sounds of nearby deadly animals"],
@@ -631,17 +631,17 @@ const complications = [
   ["+1/2 Fatigue","END","Low oxygen area"],
   ["+1/2 Fatigue","STR","Exhaustion from clearing obstacles"],
   ["+1/2 Rads","STR","Scavenge through heavy toxic waste barrel dump"],
-  ["+1/2 Rads","END","Treks through irradiated water"],
+  ["+1/2 Rads","END","Navigate through irradiated water"],
   ["+1/2 Rads","AGI","Long winding paths full of radiation"],
   ["+1/2 Rads","CHA","Irradiated shelters full of dead families"],
   ["+1/2 Rads","END","Broken technology leaking radiation"],
   ["+1/2 Rads","INT","Disable safety system for radioactive source"],
-  ["+1/2 Injury","INT","Able to hack and disable a security turret"],
+  ["+1/2 Injury","INT","Able to navigate through laser defense system"],
   ["+1/2 Injury","AGI","Ignites an explosive causing explosion"],
   ["+1/2 Injury","STR","Heavy objects fall on you"],
   ["+1/2 Injury","STR","A muscle is strained moving something heavy"],
-  ["+1/2 Injury","CHA","Attacked by roaming security robots"],
-  ["+1/2 Injury","AGI","Avoid gunfire from defenses"]
+  ["+1/2 Injury","CHA","Attacked by roaming robots/animals"],
+  ["+1/2 Injury","AGI","Avoid gunfire from defense turrets"]
 ];
 
 function generateComplications() {
@@ -678,12 +678,12 @@ function generateRations() {
 }
 function generateMeds() {
   const medTable = [
-    { name: "Bandage", effect: "-1 Injury, +10% HP" },
-    { name: "Rad-X", effect: "-1 Rads, +10% HP" },
-    { name: "Adrenaline", effect: "-1 Fatigue, +10% HP" },
-    { name: "Stimpak", effect: "-2 Injury, +20% HP (Addictive)" },
-    { name: "Rad-Away", effect: "-2 Rads, +20% HP (Addictive)" },
-    { name: "Addictol", effect: "Removes addictions, +10% HP" }
+    { name: "Bandage", effect: "-1 Injury, +10% HP, 10c" },
+    { name: "Rad-X", effect: "-1 Rads, +10% HP, 10c" },
+    { name: "Adrenaline", effect: "-1 Fatigue, +10% HP, 10c" },
+    { name: "Stimpak", effect: "-2 Injury, +20% HP (Addictive), 10c" },
+    { name: "Rad-Away", effect: "-2 Rads, +20% HP (Addictive), 10c" },
+    { name: "Addictol", effect: "Removes addictions, +10% HP, 10c" }
   ];
 
   const med = medTable[Math.floor(Math.random() * medTable.length)];
@@ -696,12 +696,12 @@ function generateMeds() {
 }
 function generateChems() {
   const chemTable = [
-    { name: "Jet", effect: "Next turn take 2 turns with +1 speed & all rolls (Addictive)" },
-    { name: "Psycho", effect: "+1 damage for 1 day (Addictive)" },
-    { name: "Rocket", effect: "+1 movement distance for 1 day (Addictive)" },
-    { name: "Mentats", effect: "+1 INT, +1 AGI for 1 day (Addictive)" },
-    { name: "Buffout", effect: "+1 STR, +1 END for 1 day (Addictive)" },
-    { name: "Beer", effect: "+1 CHA for 1 day, -1 thirst (Addictive)" }
+    { name: "Jet", effect: "Next turn take 2 turns with +1 speed & all rolls (Addictive), 10c" },
+    { name: "Psycho", effect: "+1 damage for 1 day (Addictive), 10c" },
+    { name: "Rocket", effect: "+1 movement distance for 1 day (Addictive), 10c" },
+    { name: "Mentats", effect: "+1 INT, +1 AGI for 1 day (Addictive), 10c" },
+    { name: "Buffout", effect: "+1 STR, +1 END for 1 day (Addictive), 10c" },
+    { name: "Beer", effect: "+1 CHA for 1 day, -1 thirst (Addictive), 10c" }
   ];
 
   const chem = chemTable[Math.floor(Math.random() * chemTable.length)];
@@ -717,11 +717,11 @@ function generateChems() {
 
 const ammoTable = [
   { type: "Small rounds", roll: "1d6+4", cost: 5 },
-  { type: "E-cell", roll: "1d6+3", cost: 10 },
+  { type: "E-cell", roll: "1d6+3", cost: 5 },
   { type: "Grenades", roll: "1d6", cost: 0 },
-  { type: "Fuel", roll: "1d6", cost: 20 },
+  { type: "Fuel", roll: "1d6", cost: 15 },
   { type: "Large rounds", roll: "1d6+2", cost: 10 },
-  { type: "MF-cell", roll: "1d6+1", cost: 15 }
+  { type: "MF-cell", roll: "1d6+1", cost: 10 }
 ];
 const grenadeTable = [
   { max: 6,  name: "Scrap Grenade", dmg: "11 X splash", cost: "15c" },
@@ -781,12 +781,12 @@ function generateAmmo() {
 
 // ===== TECHNOLOGY GENERATOR =====
 const techTable = [
-  { name: "Generator", effect: "Provides temporary power for electronics" },
-  { name: "Autojacker", effect: "Portable jack to move heavy objects or jammed doors" },
-  { name: "Hammerator", effect: "Hand jackhammer used to expand openings or clear rubble" },
-  { name: "Breatherator", effect: "Allows exploration of low oxygen or underwater areas" },
-  { name: "Flashlight", effect: "Allows exploration of dark or foggy areas" },
-  { name: "Hackerator", effect: "Opens electronic locks and hacks computers" }
+  { name: "Generator", effect: "Provides temporary power for electronics, 50c" },
+  { name: "Autojacker", effect: "Portable jack to move heavy objects or jammed doors, 50c" },
+  { name: "Hammerator", effect: "Hand jackhammer used to expand openings or clear rubble, 50c" },
+  { name: "Breatherator", effect: "Allows exploration of low oxygen or underwater areas, 50c" },
+  { name: "Flashlight", effect: "Allows exploration of dark or foggy areas, 50c" },
+  { name: "Hackerator", effect: "Opens electronic locks and hacks computers, 50c" }
 ];
 
 function generateTech() {
@@ -1197,4 +1197,5 @@ for (let i = 0; i < shopSlots.length; i++) {
 </script>
 </body>
 </html>
+
 
