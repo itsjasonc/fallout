@@ -163,20 +163,20 @@
     13: "Bunker: Scavenged durability items gives +1 to rolls with no multi-scavenge penalty.",
     14: "Graveyard: Contains map to legendary loot 3 random hexes away.",
     15: "School: Contains 3 special rooms instead of 1, each requires a different technology.",
-    16: "Factory: Contains a random dualtech (2 random techs combined).",
+    16: "Factory: Contains a random heavy dualtech (2 random techs combined).",
     21: "Museum: Contains a random artifact.",
     22: "Military Base: +1 enemy, Contains a random military equipment item.",
-    23: "Park: Contains a random potted plant. Plants planted here give +100% yield.",
+    23: "Park: Contains a random heavy potted plant with +100% yield.",
     24: "Railyard: Contains 1d6 flares (20c).",
     25: "Library: Order a random recipe that arrives on level up",
     26: "Warehouse: Ship yourselves or your items to any cleared hex",
     31: "Casino: Contains a slot machine. Spend 40c to roll 1d6×10c. can luck/resist. Crit = 120c jackpot, crit/1 = break.",
     32: "Laundromat: Spend 10c to reroll armor values.",
     33: "Workshop: Has a workbench; repairing items costs 1 less scrap.",
-    34: "Missile Silo: Spend 10 tech scrap to fire a nuclear missile at any hex (annihilates towns for -1 morale)",
+    34: "Missile Silo: Spend 10 tech scrap to fire a nuclear missile at any hex (annihilates settlement for -2 morale)",
     35: "Armory: Spend 5 gun/armor scrap to upgrade any gun/melee with +1 damage.",
     36: "Bank: Deposit caps, gain 20% on level up. Withdraw at any bank.",
-    41: "Cinema: Can recover 50% HP instead of scavenging.",
+    41: "Cinema: Can recover 50% HP instead of scavenging or sleeping.",
     42: "Farm: Contains brahmin. CHA/AGI(fatigue) to scavenge 1d6 milk/flesh (-2 thirst/hunger, +10% HP, 30c). Crit: 3× yield.",
     43: "Quarry: Use grenades/explosive weapons to excavate heavy ore worth 1d6×20c.",
     44: "Crashed Spacecraft: Contains a random mutated weapon.",
@@ -241,9 +241,9 @@ const monsterData = {
   E5: { label: "Robots", notes: "2x HP, each cripple = 1/6 ignore armor, -1 mob. Loot: armor scraps", subs: [
     { name: "Protectron", hp: 8, notes: "9 E melee" },
     { name: "Cyberdog", hp: 12, notes: "10 P melee, grapples on 6, +1 spd" },
-    { name: "Robobrain", hp: 16, notes: "11 E + freeze, short" },
-    { name: "Securitron", hp: 20, notes: "12 X long" },
-    { name: "Sentry Bot", hp: 24, notes: "2x10 P+E mid" },
+    { name: "Robobrain", hp: 16, notes: "11 E + freeze short" },
+    { name: "Securitron", hp: 20, notes: "12 X splash long" },
+    { name: "Sentry Bot", hp: 24, notes: "2x11 P+E mid" },
     { name: "Assaultron", hp: 28, notes: "15 E+R melee, recharge 1, +1 spd" }
   ]},
   E6: { label: "Synths", notes: "terrain 4-5: hidden pulse mines. Loot: tech scrap", subs: [
@@ -262,7 +262,7 @@ const monsterData = {
     { name: "Fanatic", hp: 23, notes: "scaled mutated weapons" },
     { name: "Leader", hp: 27, notes: "scaled mutated weapons" }
   ]},
-  O2: { label: "Hoverbots", notes: "all hover; explode end of turn when killed 50% HP X splash, Loot: gun scraps", subs: [
+  O2: { label: "Drones", notes: "all hover; explode end of turn when killed 50% HP X splash, Loot: gun scraps", subs: [
     { name: "Eyebot", hp: 6, notes: "2x5 E, mid" },
     { name: "Mr. Handy", hp: 10, notes: "2x6 P, mid" },
     { name: "Battle Drone", hp: 14, notes: "3x7 X, short" },
@@ -533,6 +533,7 @@ const monsterData = {
 </script>
 </body>
 </html>
+
 
 
 
