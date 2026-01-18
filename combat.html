@@ -159,31 +159,31 @@
   // === Zone Table (kept as-is) ===
   const zoneTable = {
     11: "Office: Contains 2 Vending machines with 1d6 Nuka Cola / Sunset Sarsaparilla for 10c each. Autojacker to open.",
-    12: "Mall: Scavenging allows choosing one of 2 loot rolls, rerolls apply to both options. ",
-    13: "Bunker: Scavenged items have +1 durability. Use Breatherator to add +2 to scavenge roll.",
+    12: "Mall: Scavenging allows choosing one of 2 loot rolls, rerolls apply to both options.",
+    13: "Bunker: Scavenged durability items gives +1 to rolls with no multi-scavenge penalty.",
     14: "Graveyard: Contains map to legendary loot 3 random hexes away. Use Hammerator to add +2 to scavenge roll.",
     15: "School: Contains 3 special rooms instead of 1, each requires a different technology.",
     16: "Factory: Contains a random tech, Use Flashlight to add +2 to scavenge roll.",
     21: "Museum: Contains 1 artifact. Use Hammerator for heavy relic worth 1d6x20c.",
-    22: "Prison: +1 enemy. Contains a random military equipment item.",
+    22: "Military Base: +1 enemy. Contains a random military equipment item.",
     23: "Park: Contains a random potted plant. Plants planted here give +100% yield.",
-    24: "Railyard: Contains 1d6 flares (20c). Flares reduce enemies by 1 in Ruins.",
+    24: "Railyard: Contains 1d6 flares (20c). Use autojacker to add +2 to scavenge roll.",
     25: "Library: Order a random recipe that arrives on level up",
     26: "Warehouse: Ship yourselves or your items to any cleared hex; Use hackerator for +2 to scavenge roll",
-    31: "Casino: Contains a slot machine. Spend 40c to roll 1d6×10c. can luck/resist. Crit = 120c jackpot, 1 = break.",
+    31: "Casino: Contains a slot machine. Spend 40c to roll 1d6×10c. can luck/resist. Crit = 120c jackpot, crit/1 = break.",
     32: "Laundromat: Spend 10c to reroll armor values. Use generator to also give it +1 durability",
     33: "Workshop: Has a workbench; repairing items costs 1 less scrap.",
     34: "Missile Silo: Spend 10 tech scrap to fire a nuclear missile at any hex (annihilates towns for -1 morale)",
-    35: "Armory: Spend 5 gun scrap to upgrade any gun with +1 damage.",
+    35: "Armory: Spend 5 gun/armor scrap to upgrade any gun/melee with +1 damage.",
     36: "Bank: Deposit caps, gain 20% on level up. Withdraw at any bank.",
-    41: "Military Base: Scavenging items with durability here gives +1 to rolls with no multi-scavenge penalty.",
-    42: "Farm: Contains a brahmin. CHA/AGI(fatigue) to scavenge 1d6 milk/flesh (-2 thirst/hunger, +10% HP, 30c). Crit: 3× yield.",
+    41: "Police Station: Scavenging items with durability here gives +1 to rolls with no multi-scavenge penalty.",
+    42: "Farm: Contains brahmin. CHA/AGI(fatigue) to scavenge 1d6 milk/flesh (-2 thirst/hunger, +10% HP, 30c). Crit: 3× yield.",
     43: "Quarry: Use grenades/explosive weapons to excavate heavy ore worth 1d6×20c.",
-    44: "Crash Site: Contains a anything -> mutated weapon alien tech, powered by 1D artifact",
-    45: "Campsite: Can scavenge for 1d6 flares. Crit: find 3×.",
-    46: "Foundry: Spend 5 armor scrap to upgrade any melee/fist weapon with +1 damage",
+    44: "Crashed Spacecraft: Contains a random mutated weapon. Use breatherator to add +2 to scavenge roll. ",
+    45: "Campsite: Can scavenge for 1d6 flares. crit: 3x yield. ",
+    46: "Laboratory: Contains a random implant. Use flashlight to add +2 to scavenge roll.",
     51: "Stadium: Generates any faction’s settlement 3 hexes away.",
-    52: "Laboratory: Generates a Ruins from 5 choices 3 hexes away.",
+    52: "Observatory: Generates a Ruins from 5 choices 3 hexes away.",
     53: "Airport: Generates an adjacent Subway. Contains 1 flare for each Subway.",
     54: "Resort: Generates adjacent irradiated lake (+1 rads each way) with uninhabited island (+3 to scavenging).",
     55: "Subway: Generates another Subway 5 hexes away. You can fast travel between cleared Subways.",
@@ -191,7 +191,7 @@
     61: "Hospital: When you heal or remove a status, heal +10% or remove 1 extra.",
     62: "Restaurant: Order food (1d6+10 clean rations) that arrives on level up.",
     63: "Hotel: Sleeping here grants 'Well Rested' and refreshes all skill/luck/resist.",
-    64: "Construction Yard: Copies the effect of any ruins you have encountered.",
+    64: "Construction Site: Copies the effect of any ruins you have encountered.",
     65: "Supermarket: Scavenging stackables gives +1 to rolls with no multi-scavenge penalty.",
     66: "Church: No battle. Friendly merchant with 2 bodyguards sells 2 random special items."
   };
@@ -533,6 +533,7 @@ const monsterData = {
 </script>
 </body>
 </html>
+
 
 
 
