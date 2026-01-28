@@ -173,12 +173,12 @@ export const techTable = [
 
 // Shop types and their corresponding generator functions
 export const shopTypes = [
-    { name: "Weapons", func: generateWeapon },
-    { name: "Armor", func: generateArmor },
-    { name: "Meds", func: generateMeds },
-    { name: "Chems", func: generateChems },
-    { name: "Tech", func: generateTech },
-    { name: "Food & Water", func: generateRations }
+    { name: "Weapons" },
+    { name: "Armor" },
+    { name: "Meds" },
+    { name: "Chems" },
+    { name: "Tech" },
+    { name: "Food & Water" }
 ];
 
 // ===== TOWN DESCRIPTORS =====
