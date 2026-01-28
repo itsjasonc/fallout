@@ -801,25 +801,10 @@
 </div>
 
 
+<script type="module" src="constants.js"></script>
 <script>
 
 const STORAGE_KEY = "fallout_character_v10";
-const statNames = ["STR","AGI","END","INT","CHA"];
-const armorTypes = [
-  ["Physical","p"],
-  ["Energy","n"],
-  ["Explosive","x"],
-  ["Radiation","r"]
-];
-const statAbbrev = {
-  STRENGTH: "STR",
-  AGILITY: "AGI",
-  ENDURANCE: "END",
-  INTELLIGENCE: "INT",
-  CHARISMA: "CHA"
-};
-
-const negNames = ["Hunger","Thirst","Fatigue","Rads","Injury"];
 
 let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
   name: "",
@@ -1120,99 +1105,7 @@ function applyArmorDamage(raw) {
   save();
 }
 
-// ---------- PERK DATA ----------
 
-const perkData = {
-  STRENGTH: [
-    { name: "Big Back", desc: "Gain +1 heavy limit and your limbs cannot be crippled." },
-    { name: "Juggernaut", desc: "Melee attacks do +1 damage after sprinting." },
-    { name: "Blacksmith", desc: "Repairing a broken item gives it +1 durability." },
-    { name: "Pitcher", desc: "Thrown weapons and grenades do +1 damage at max range." },
-    { name: "Karate Kid", desc: "Melee aimed shots can shove or grapple the target instead of crippling." },
-    { name: "Carnivore", desc: "Consuming flesh gives an extra -1 hunger and heals 10% HP." },
-    { name: "Big Justice", desc: "Splash damage aimed shots splash to short range." },
-    { name: "Hidden Gem", desc: "When you scavenge you also find a heavy junk item worth 1d6x10 caps." },   
-    { name: "Chiropractor", desc: "When you cripple a limb, you can cripple another different limb." },
-    { name: "Iron Man", desc: "You are immune to ailments and cannot be shoved or grappled" },
-    { name: "Boomer", desc: "Explosive guns do +1 damage and your attacks always detonate explosive tiles." },
-    { name: "Heavy Metal", desc: "Gain +1 energy armor for each heavy item slot you have." }
-  ],
-
-  AGILITY: [
-    { name: "Commando", desc: "Rifles do +1 damage when fired from special terrain." },
-    { name: "Gunslinger", desc: "Pistol attacks can spend your movement to do +1 damage." },
-    { name: "Adrenaline Rush", desc: "When you use resist on a roll and take a result below a 4, regain resist. " },
-    { name: "Gotta Go Fast", desc: "Sprint moves +1 distance and you can also move or sprint when you defend or search." },
-    { name: "Ninja", desc: "You can move while sneaking and sneak attack kills do not reveal you." },
-    { name: "Guerrilla", desc: "Special terrain also counts as cover and your attacks ignore obstructions." },
-    { name: "Sniper", desc: "Your attacks ignore cover and long range weapons gain +1 range." },
-    { name: "Perfectionist", desc: "Crits restore luck, heal 10% HP, and deal +1 damage if attacking." },
-    { name: "Jack of All Trades", desc: "Gain another skill that uses stats different from your skill." },
-    { name: "Quantum Clip", desc: "Gain an infinite ammo box that changes ammo types each round." },
-    { name: "Rivers of Blood", desc: "Physical damage aimed shots cause the target to bleed." },
-    { name: "Gun Fu", desc: "Gain +1 physical armor for each enemy in melee range." }
-  ],
-
-  ENDURANCE: [
-    { name: "Artisan", desc: "Consume one fewer scrap when you repair an item at 2 durability." },
-    { name: "Fast Metabolism", desc: "Gain +10 max HP and addiction withdrawl only lasts 1 day." },
-    { name: "Lead Belly", desc: "Treat irradiated food and drink as dirty instead." },
-    { name: "Second Wind", desc: "Removing statuses is twice as effective when the status is above 5." },
-    { name: "All-nighter", desc: "You can gain +1 fatigue to scavenge a settlement." },
-    { name: "Chromomancer", desc: "Gain the ability to harvest mutant DNA to create a mutant ally." },
-    { name: "Ghoulish", desc: "Heal 10% HP each time you gain one or more rads." },
-    { name: "Perseverance", desc: "After rolling with a stat at 0 or 1, restore skill." },
-    { name: "Rare Hunter", desc: "You can reroll scavenged crit loot 3 additional times." },
-    { name: "Guardian", desc: "You can bring an ally with you when you move and can intercept non aimed shots against allies." },
-    { name: "Shotgun Surgeon", desc: "Shotguns do +1 damage against enemies in melee range." },
-    { name: "Exposure Therapy", desc: "Rad damage aimed shots poison the target." }
-  ],
-
-  INTELLIGENCE: [
-    { name: "Scrounger", desc: "Looting killed humans always yields an extra 5 caps." },
-    { name: "Substance Enthusiast", desc: "Chems last twice as long and all addictive items heal +10% HP on use." },
-    { name: "Hoarder", desc: "You can use broken items but durability loss destroys them." },
-    { name: "Discerning Eye", desc: "You can reroll the type of scavenging roll you get once." },
-    { name: "Idiot Savant", desc: "You can treat two rolled 1s as a 6." },
-    { name: "Green Thumb", desc: "Potted plants have +100% yield if held for the whole level." },
-    { name: "Side Hustle", desc: "Gain an additional background." },
-    { name: "Test Subject", desc: "Artifacts can convert durability to or from your HP at a 1:10 ratio." },
-    { name: "Robotics Expert", desc: "Gain the ability to hack and build robots." },
-    { name: "Overclock", desc: "Energy damage aimed shots cause the target to burn." },
-    { name: "Chosen One", desc: "You always understand alien technology and can modify the input and output once each." },
-    { name: "Magnetic Field", desc: "Gain +1 rad armor for each technology you are holding." }
-  ],
-
-  CHARISMA: [
-    { name: "Animal Friend", desc: "Gain the ability to pacify and befriend wild animals." },
-    { name: "Do Not Go Gently", desc: "Luck gives 2 dice to any player rolling with a stat at 0 or 1." },
-    { name: "VIP Member", desc: "Sleeping in a settlement is free and twice as effective." },
-    { name: "True Grit", desc: "Resist always rolls at least 2 dice and can be used on other players." },
-    { name: "Good Karma", desc: "Tag an additional stat. Critical fails now count as regular fails." },
-	{ name: "Bloody Mess", desc: "Aimed shot kills cause the target to explode for half their max HP." },
-    { name: "Vampire", desc: "You can drink the blood of recently deceased creatures." },
-    { name: "I Know a Place", desc: "Chosen faction settlements provide free crit loot from their faction shop." },
-    { name: "Cyberpunk", desc: "You can have +2 maximum implants and heal +10% HP when you use a technology." },
-    { name: "Art of the Deal", desc: "Haggling is twice as effective." },
-    { name: "Oh Baby a Triple", desc: "You can treat any rolled triples as a 6." },
-    { name: "Cool Guys Don’t Look at Explosions", desc: "Gain +5 explosive armor." }
-  ]
-};
-
-const backgroundData = [
-  { name: "Technician", desc: "Repairing guns does not require a roll." },
-  { name: "Mechanic", desc: "Repairing armor and melee/fist weapons does not require a roll." },
-  { name: "Farmer", desc: "You can purify rations 2:1 (irradiated → dirty → clean)." },
-  { name: "Chef", desc: "You can convert any 2 flesh into 1 fuel." },
-  { name: "Exterminator", desc: "You can execute enemies with 3 or less HP." },
-  { name: "Guard", desc: "You can convert 2 small rounds ↔ 1 large round." },
-  { name: "Plumber", desc: "You can purify water 2:1 (irradiated → dirty → clean)." },
-  { name: "Doctor", desc: "You can convert any 2 meds into another med." },
-  { name: "Scientist", desc: "You can convert any 2 chems into another chem." },
-  { name: "Engineer", desc: "Repairing technology does not require a roll." },
-  { name: "Tailor", desc: "You can convert any 2 scrap into another scrap." },
-  { name: "Electrician", desc: "You can convert 2 E-cells ↔ 1 MF-cell." }
-];
 
 
 // ---------- PERKS UI ----------
