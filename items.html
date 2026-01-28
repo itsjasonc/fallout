@@ -645,50 +645,7 @@ function getRivalFaction(mainFactionName) {
   return rivals[Math.floor(Math.random() * rivals.length)];
 }
 
-// ===== NPC TABLE =====
-const npcTable = [
-  { roll: 11, name: "Bitter War Veteran", desc: "Gruff, one-eyed, tells long stories of battles no one remembers. Distrusts outsiders." },
-  { roll: 12, name: "Cheerful Merchant", desc: "Overly optimistic, insists every item is 'a steal,' even junk." },
-  { roll: 13, name: "Paranoid Scavenger", desc: "Constantly scanning the horizon, mutters about being followed." },
-  { roll: 14, name: "Wandering Bard", desc: "Plays a battered guitar, trades songs for food. Knows odd rumors." },
-  { roll: 15, name: "Cynical Medic", desc: "Skilled healer but mocks patients for getting hurt in the first place." },
-  { roll: 16, name: "Soft-Spoken Farmer", desc: "Avoids conflict, loves talking about soil and crops." },
 
-  { roll: 21, name: "Scrap Artist", desc: "Creates sculptures from junk, values beauty over practicality." },
-  { roll: 22, name: "Cold Bounty Hunter", desc: "Says little, eyes everyone as a potential target." },
-  { roll: 23, name: "Story-Hoarding Elder", desc: "Collects tales like treasure, trades them for supplies." },
-  { roll: 24, name: "Outcast Mutant", desc: "Mistrustful but surprisingly gentle; hides disfigurements." },
-  { roll: 25, name: "Disgraced Officer", desc: "Still wears a faded uniform, insists on strict protocol." },
-  { roll: 26, name: "Gambling Addict", desc: "Always shuffling a deck, willing to bet on anything." },
-
-  { roll: 31, name: "Feral Child", desc: "Skittish and dirty, communicates with whistles and hand signals." },
-  { roll: 32, name: "Smooth-Talking Swindler", desc: "Can make junk sound valuable and lies sound sweet." },
-  { roll: 33, name: "Inventive Tinkerer", desc: "Constantly fiddling with devices, absent-minded in conversation." },
-  { roll: 34, name: "Runaway Cultist", desc: "Avoids eye contact, refuses to talk about their past faith." },
-  { roll: 35, name: "Grumpy Fisherman", desc: "Complains about everything except fishing." },
-  { roll: 36, name: "Nomadic Trader", desc: "Has goods from distant places, shares strange slang." },
-
-  { roll: 41, name: "Desert Hermit", desc: "Lives alone by choice, mutters about 'the old ways.'" },
-  { roll: 42, name: "Overzealous Guard", desc: "Takes rules way too seriously, even in casual conversation." },
-  { roll: 43, name: "Scarred Pit Fighter", desc: "Proud of every scar, constantly seeks challenges." },
-  { roll: 44, name: "Lovesick Drunk", desc: "Always talking about a lost lover, drinks to remember." },
-  { roll: 45, name: "Animal Whisperer", desc: "Talks to animals as if they respond, claims they do." },
-  { roll: 46, name: "Irradiated Prophet", desc: "Speaks in riddles, claims visions come from 'the Glow.'" },
-
-  { roll: 51, name: "Hoarder", desc: "Collects anything shiny or unusual, highly territorial." },
-  { roll: 52, name: "Traveling Preacher", desc: "Preaches hope in the wasteland but hides deep doubt." },
-  { roll: 53, name: "Retired Raider", desc: "Calm now, but still has a dangerous glint in their eye." },
-  { roll: 54, name: "Wanderlust Explorer", desc: "Maps everything, constantly seeks 'what’s over that hill.'" },
-  { roll: 55, name: "Charismatic Drifter", desc: "Always has a story, usually half true." },
-  { roll: 56, name: "Grinning Bodyguard", desc: "Enjoys their work a little too much." },
-
-  { roll: 61, name: "Silent Gunslinger", desc: "Answers with nods, lets their weapon do the talking." },
-  { roll: 62, name: "Bitter Widow/Widower", desc: "Blames the wasteland for everything lost." },
-  { roll: 63, name: "Scavenger Kid", desc: "Tiny, bold, and far too street-smart for their age." },
-  { roll: 64, name: "Flamboyant Trader", desc: "Dresses extravagantly, announces every sale dramatically." },
-  { roll: 65, name: "Fortune Teller", desc: "Uses cards, bones, or bottle caps to 'see' the future." },
-  { roll: 66, name: "Sleepless Night Watchman", desc: "Stares into the dark like they’re waiting for something awful." }
-];
 
 
 
