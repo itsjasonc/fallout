@@ -541,7 +541,7 @@ export const fixedWeights = [1, 2, 2, 1, 3, 6]; // Explosive, Cover, Ruins, Impa
 
 // === Zone Table (kept as-is) ===
 export const zoneTable = {
-    11: "Office: Contains 2 Vending machines with 1d6 Nuka Cola / Sunset Sarsaparilla for 10c each. Autojacker to open.",
+    11: "Office: Contains 2 Vending machines with 1d6 Nuka Cola (-1 thirst, -1 fatigue, +10% HP) / Sunset Sarsaparilla (-1 thirst, -1 rads, +10% HP) for 10c each. Autojacker to open.",
     12: "Mall: Scavenging allows choosing one of 2 loot rolls, rerolls apply to both options. ",
     13: "Bunker: Scavenged items have +1 durability. Use Breatherator to add +2 to scavenge roll.",
     14: "Graveyard: Contains map to legendary loot 3 random hexes away. Use Hammerator to add +2 to scavenge roll.",
@@ -582,7 +582,7 @@ export const zoneTable = {
 // === Monster Data (unchanged) ===
 export const monsterData = {
     E1: {
-        label: "Raiders", notes: "special: hidden land mines. Loot: broken equipment, mines, human flesh", subs: [
+        label: "Raiders", notes: "special: hidden land mines. Loot: broken equipment, mines, human flesh (-1 hunger, unique addictive)", subs: [
             { name: "Scout", hp: 7, notes: "scaled weapons, 11x mines" }, // 1-6
             { name: "Tweaker", hp: 11, notes: "scaled weapons, 12x mines" }, // 7-8
             { name: "Scavenger", hp: 15, notes: "scaled weapons, 13x mines" }, // 9-10
@@ -592,7 +592,7 @@ export const monsterData = {
         ]
     },
     E2: {
-        label: "Beasts", notes: "on death: allies can immediately attack. Loot: animal flesh", subs: [
+        label: "Beasts", notes: "on death: allies can immediately attack. Loot: animal flesh (-1 hunger, dirty)", subs: [
             { name: "Bloatfly", hp: 6, notes: "6 R mid" },
             { name: "Wild Dog", hp: 10, notes: "7 P melee + poison, grapples on 6" },
             { name: "Radstag", hp: 14, notes: " 8 P melee, shove on 6, +1 spd, +2 dmg if moved 2 distance" },
@@ -642,7 +642,7 @@ export const monsterData = {
         ]
     },
     O1: {
-        label: "Cultist", notes: "⅓ to use random artifact. Loot: broken weapons/artifacts, human flesh", subs: [
+        label: "Cultist", notes: "⅓ to use random artifact. uses mutated weapons (damage converted to radiation) Loot: broken weapons/artifacts, human flesh", subs: [
             { name: "Initiate", hp: 7, notes: "scaled mutated weapons" },
             { name: "Acolyte", hp: 11, notes: "scaled mutated weapons" },
             { name: "Disciple", hp: 15, notes: "scaled mutated weapons" },
@@ -662,7 +662,7 @@ export const monsterData = {
         ]
     },
     O3: {
-        label: "Feral Ghouls", notes: "Xrad, special: hidden bear traps, +1 spd, ignore hazards, +1 mob Loot: mutant flesh, junk item", subs: [
+        label: "Feral Ghouls", notes: "Xrad (immune to radiation damage), special: hidden bear traps, +1 spd, ignore hazards, +1 mob Loot: mutant flesh (-1 hunger, -1 injury, +1 rads), junk item", subs: [
             { name: "Roamer", hp: 5, notes: "5 P+R melee, grapples on 6" },
             { name: "Stalker", hp: 9, notes: "6 P+R melee, grapples on 6" },
             { name: "Glowing One", hp: 13, notes: "9 R splash, melee" },
