@@ -789,11 +789,11 @@ export const lootTable = [
         desc: "Generates a resource every time you level up, bulky, 100c",
         options: [
             "Potted Sludgeflower: Generates 2 fuel",
-            "Potted Fleshroom: Generates 4 clean flesh",
+            "Potted Fleshroom: Generates 4 clean flesh (-1 hunger)",
             "Potted Mutfruit: Generates 4 water",
-            "Potted Radovera: Generates 2 biogel",
-            "Potted Scraptus: Generates 4 omniscrap",
-            "Potted Tobacoca: Generates 2 cigar"
+            "Potted Radovera: Generates 2 biogel (-2 injury, -2 rads, +40% HP)",
+            "Potted Scraptus: Generates 4 omniscrap (counts as any scrap)",
+            "Potted Tobacoca: Generates 2 cigar (turn any roll result into a 6)"
         ],
         artifact: false
     },
@@ -803,11 +803,11 @@ export const lootTable = [
         desc: "Generates a resource every time you level up, bulky, 100c",
         options: [
             "Potted Sludgeflower: Generates 2 fuel",
-            "Potted Fleshroom: Generates 4 clean flesh",
-            "Potted Mutfruit: Generates 4 water",
-            "Potted Radovera: Generates 2 biogel",
-            "Potted Scraptus: Generates 4 omniscrqp",
-            "Potted Tobacoca: Generates 2 cigar"
+            "Potted Fleshroom: Generates 4 clean flesh (-1 hunger)",
+            "Potted Mutfruit: Generates 4 clean water",
+            "Potted Radovera: Generates 2 biogel (-2 injury, -2 rads, +40% HP)",
+            "Potted Scraptus: Generates 4 omniscrap (counts as any scrap)",
+            "Potted Tobacoca: Generates 2 cigar (turn any roll result into a 6)"
         ],
         artifact: false
     },
