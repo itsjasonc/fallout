@@ -802,12 +802,12 @@ function generateTech() {
 
 // Shop types and their corresponding generator functions
 const shopTypes = [
-  { name: "Weapons", func: generateWeapon },
-  { name: "Armor", func: generateArmor },
-  { name: "Meds", func: generateMeds }, 
-  { name: "Chems", func: generateChems },
-  { name: "Tech", func: generateTech },
-  { name: "Food & Water", func: generateRations }
+  { name: "Weapons" },
+  { name: "Armor" },
+  { name: "Meds" }, 
+  { name: "Chems" },
+  { name: "Tech" },
+  { name: "Food & Water" }
 ];
 
 // ===== TOWN DESCRIPTORS =====
@@ -1150,8 +1150,6 @@ for (let i = 0; i < shopSlots.length; i++) {
 
   // Generate 2 items for this shop
   for (let r = 0; r < 2; r++) {
-    chosenShop.func();
-
     let result = "";
     switch (chosenShop.name) {
       case "Weapons":
