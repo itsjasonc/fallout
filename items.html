@@ -216,7 +216,7 @@ button:hover { background:#2a6ce2; }
   width: 100%;
 }
 </style>
-<script src="constants.js"></script>
+<script type="module" src="constants.js"></script>
 </head>
 <body>
 
@@ -336,7 +336,9 @@ button:hover { background:#2a6ce2; }
 
 
 
-<script>
+<script type="module">
+import { armorTable, weapons, complications, rationTypes, medTable, chemTable, ammoTable, grenadeTable, techTable, factions, townDescriptors, npcTable, townQuests, professionQuests, shopTypes } from './constants.js';
+
 /* ---------- Integer Distributor ---------- */
 function rollDie(sides){ return Math.floor(Math.random()*sides)+1; }
 
@@ -389,7 +391,6 @@ window.addEventListener('load', distribute);
 // ===== ARMOR GENERATOR =====
 
 // helper for single die roll
-function rollDie(sides){ return Math.floor(Math.random() * sides) + 1; }
 
 function generateArmor() {
   const level = parseInt(document.getElementById("partyLevel").value) || 0;
