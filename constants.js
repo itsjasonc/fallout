@@ -1,3 +1,6 @@
+
+/// ARMOR & WEAPONS ///
+
 export const armorTable = [
     { roll: 2, text: "Junk armor: +9 def, 60c" },
     { roll: 3, text: "Raider armor: +10 def, 70c" },
@@ -92,37 +95,115 @@ export /* Note: ammo field uses "-" for no-ammo entries so indexes stay consiste
         [99, "Firecracker", "11 X", "-", "melee", "END", "150c"]]
     };
 
-export const complications = [
-    ["+1/2 Thirst", "END", "Sweating from hot area"],
-    ["+1/2 Hunger", "CHA", "Puking from terrible smell"],
-    ["+1/2 Thirst", "INT", "Diarrhea from unidentified environmental toxins"],
-    ["+1/2 Hunger", "STR", "Burning calories from prolongued heavy lifting"],
-    ["+1/2 Thirst", "AGI", "Stuck in an overly dehumidified area"],
-    ["+1/2 Hunger", "END", "Burning calories for prolongued cardio"],
-    ["Lose 5/10 HP", "CHA", "Witnesses a gruesomely disturbing scene"],
-    ["Lose 5/10 HP", "INT", "Chemicals cause hallucination"],
-    ["Lose 5/10 HP", "CHA", "An explosion rattles the player"],
-    ["Lose 5/10 HP", "AGI", "Fired on by automated defenses"],
-    ["Lose 5/10 HP", "INT", "Get lost in a confined space"],
-    ["Lose 5/10 HP", "CHA", "Hears sounds of nearby deadly animals"],
-    ["+1/2 Fatigue", "STR", "Overexertion from lift/sprint/jump"],
-    ["+1/2 Fatigue", "AGI", "Running from defenses"],
-    ["+1/2 Fatigue", "INT", "Getting lost in confusing area"],
-    ["+1/2 Fatigue", "END", "Exposure to extreme cold"],
-    ["+1/2 Fatigue", "END", "Low oxygen area"],
-    ["+1/2 Fatigue", "STR", "Exhaustion from clearing obstacles"],
-    ["+1/2 Rads", "STR", "Scavenge through heavy toxic waste barrel dump"],
-    ["+1/2 Rads", "END", "Treks through irradiated water"],
-    ["+1/2 Rads", "AGI", "Long winding paths full of radiation"],
-    ["+1/2 Rads", "CHA", "Irradiated shelters full of dead families"],
-    ["+1/2 Rads", "END", "Broken technology leaking radiation"],
-    ["+1/2 Rads", "INT", "Disable safety system for radioactive source"],
-    ["+1/2 Injury", "INT", "Able to hack and disable a security turret"],
-    ["+1/2 Injury", "AGI", "Ignites an explosive causing explosion"],
-    ["+1/2 Injury", "STR", "Heavy objects fall on you"],
-    ["+1/2 Injury", "STR", "A muscle is strained moving something heavy"],
-    ["+1/2 Injury", "CHA", "Attacked by roaming security robots"],
-    ["+1/2 Injury", "AGI", "Avoid gunfire from defenses"]
+export const ammoTable = [
+    { type: "Small rounds", roll: "1d6+6", cost: 5 },
+    { type: "E-cell", roll: "1d6+4", cost: 10 },
+    { type: "Grenades", roll: "1d6", cost: 0 },
+    { type: "Fuel", roll: "1d6", cost: 20 },
+    { type: "Large rounds", roll: "1d6+4", cost: 10 },
+    { type: "MF-cell", roll: "1d6+2", cost: 15 }
+];
+export const grenadeTable = [
+    { max: 6, name: "Scrap Grenade", dmg: "11 X splash", cost: "15c" },
+    { max: 8, name: "Bottlecap Grenade", dmg: "12 X splash", cost: "20c" },
+    { max: 10, name: "Frag Grenade", dmg: "13 X splash", cost: "25c" },
+    { max: 12, name: "Plasma Grenade", dmg: "14 X splash", cost: "30c" },
+    { max: 14, name: "Nuka Grenade", dmg: "15 X splash", cost: "35c" },
+    { max: Infinity, name: "Mini Nuke", dmg: "16 X splash", cost: "40c" }
+];
+
+// ---------- PERK DATA ----------
+
+export const perkData = {
+    STRENGTH: [
+        { name: "Big Back", desc: "Gain +1 heavy limit and your limbs cannot be crippled." },
+        { name: "Wrecking Ball", desc: "Melee and thrown attacks do +1 damage after moving or sprinting." },
+        { name: "Blacksmith", desc: "Repairing a broken item gives it +1 durability." },
+        { name: "Conditioning", desc: "Remove 1 injury when you sleep while at full HP." },
+        { name: "Karate Kid", desc: "Melee aimed shots can shove or grapple the target instead of crippling." },
+        { name: "Carnivore", desc: "Consuming flesh gives an extra -1 hunger and heals 10% HP." },
+        { name: "Big Justice", desc: "Splash damage aimed shots splash to short range." },
+        { name: "Hidden Gem", desc: "When you scavenge you also find a heavy junk item worth 1d6x10 caps." },
+        { name: "Chiropractor", desc: "When you cripple a limb, you can cripple another different limb." },
+        { name: "Iron Man", desc: "You are immune to ailments and cannot be shoved or grappled." },
+        { name: "Boomer", desc: "Explosive guns do +1 damage and your attacks always detonate explosive tiles." },
+        { name: "Heavy Metal", desc: "Gain +1 energy armor for each heavy item slot you have." }
+    ],
+
+    AGILITY: [
+        { name: "Commando", desc: "Rifles do +1 damage when fired from special terrain." },
+        { name: "Gunslinger", desc: "Pistol attacks can spend your movement to do +1 damage." },
+        { name: "Adrenaline Rush", desc: "When you use resist on a roll and take a result below a 4, regain resist. " },
+        { name: "Gotta Go Fast", desc: "Sprint moves +1 distance and you can also move or sprint when you defend or search." },
+        { name: "Ninja", desc: "You ignore rubble and can move while sneaking." },
+        { name: "Guerrilla", desc: "All special terrain counts as cover and your attacks ignore obstructions." },
+        { name: "Sniper", desc: "Your attacks ignore cover and long range weapons gain +1 range." },
+        { name: "Perfectionist", desc: "Crits restore luck, heal 10% HP, and deal +1 damage if attacking." },
+        { name: "Jack of All Trades", desc: "Gain another skill that uses stats different from your skill." },
+        { name: "Quantum Clip", desc: "Gain an infinite ammo box that changes ammo types each round." },
+        { name: "Rivers of Blood", desc: "Physical damage aimed shots cause the target to bleed." },
+        { name: "Gun Fu", desc: "Gain +1 physical armor for each enemy in melee range." }
+    ],
+
+    ENDURANCE: [
+        { name: "Artisan", desc: "Consume one fewer scrap when you repair an item at 2 durability." },
+        { name: "Fast Metabolism", desc: "Gain +10 max HP and addiction withdrawl only lasts 1 day." },
+        { name: "Lead Belly", desc: "Treat irradiated food and drink as dirty instead." },
+        { name: "Second Wind", desc: "Removing statuses is twice as effective when the status is above 5." },
+        { name: "All-nighter", desc: "You can gain +1 fatigue to scavenge a settlement." },
+        { name: "Quartermaster", desc: "Item stack sizes over 10 no longer become heavy." },
+        { name: "Ghoulish", desc: "Heal 10% HP each time you gain one or more rads." },
+        { name: "Perseverance", desc: "After rolling with a stat at 0 or 1, restore skill." },
+        { name: "Rare Hunter", desc: "You can reroll scavenged crit loot 5 additional times." },
+        { name: "Guardian", desc: "You can bring an ally with you when you move and can intercept non aimed shots against allies." },
+        { name: "Shotgun Surgeon", desc: "Shotguns do +1 damage against enemies in melee range." },
+        { name: "Exposure Therapy", desc: "Rad damage aimed shots poison the target." }
+    ],
+
+    INTELLIGENCE: [
+        { name: "Scrounger", desc: "Looting killed humans always yields an extra 5 caps." },
+        { name: "Substance Enthusiast", desc: "Chems last twice as long and all addictive substances heal +10% HP on use." },
+        { name: "Hoarder", desc: "You can use broken items but durability loss destroys them." },
+        { name: "Discerning Eye", desc: "You can reroll the type of scavenging roll you get once." },
+        { name: "Idiot Savant", desc: "You can treat two rolled 1s as a 6." },
+        { name: "Green Thumb", desc: "Potted plants have +100% yield if held for the whole level." },
+        { name: "Side Hustle", desc: "Gain an additional background." },
+        { name: "Test Subject", desc: "Artifacts can convert durability to or from your HP at a 1:10 ratio." },
+        { name: "Reverse Polarity", desc: "Energy damage aimed shots apply freeze but remove burn." },
+        { name: "Overclock", desc: "Energy damage aimed shots apply burn but remove freeze." },
+        { name: "Chosen One", desc: "You always understand alien devices and can modify the input and output once each." },
+        { name: "Magnetic Field", desc: "Gain +1 rad armor for each unique technology you are holding." }
+    ],
+
+    CHARISMA: [
+        { name: "Terrifying Presence", desc: "Gain the ability to frighten and command hostile creatures." },
+        { name: "Do Not Go Gently", desc: "Luck gives 2 dice to any player rolling with a stat at 0 or 1." },
+        { name: "VIP Member", desc: "Sleeping in a settlement is free and twice as effective." },
+        { name: "True Grit", desc: "Resist always rolls at least 2 dice and can be used on other players." },
+        { name: "Good Karma", desc: "Tag an additional stat. Critical fails now count as regular fails." },
+        { name: "Bloody Mess", desc: "Aimed shot kills cause the target to explode for half their max HP." },
+        { name: "Vampire", desc: "You can drink the blood of recently deceased creatures." },
+        { name: "I Know a Place", desc: "Chosen faction settlements provide free crit loot from their faction shop." },
+        { name: "Cyberpunk", desc: "You can have +2 maximum implants and heal +10% HP when you use a technology." },
+        { name: "Art of the Deal", desc: "Haggling is twice as effective." },
+        { name: "Oh Baby a Triple", desc: "You can treat any rolled triples as a 6." },
+        { name: "Cool Guys Don’t Look at Explosions", desc: "Gain +5 explosive armor." }
+    ]
+};
+
+export const backgroundData = [
+    { name: "Technician", desc: "Repairing guns does not require a roll." },
+    { name: "Mechanic", desc: "Repairing armor and melee/fist weapons does not require a roll." },
+    { name: "Farmer", desc: "You can purify rations 2:1 (irradiated → dirty → clean)." },
+    { name: "Chef", desc: "You can convert any 2 flesh into 1 fuel." },
+    { name: "Exterminator", desc: "You know when enemies have under 5 HP and can execute them on your turn." },
+    { name: "Guard", desc: "You can convert 2 small rounds ↔ 1 large round." },
+    { name: "Plumber", desc: "You can purify water 2:1 (irradiated → dirty → clean)." },
+    { name: "Doctor", desc: "You can convert any 2 meds into another med." },
+    { name: "Scientist", desc: "You can convert any 2 chems into another chem." },
+    { name: "Engineer", desc: "Repairing technology does not require a roll." },
+    { name: "Tailor", desc: "You can convert any 2 scrap into another scrap." },
+    { name: "Electrician", desc: "You can convert 2 E-cells ↔ 1 MF-cell." }
 ];
 
 export const rationTypes = ["Armor/Clean", "Gun/Dirty", "Tech/Irradiated"];
@@ -145,22 +226,7 @@ export const chemTable = [
     { name: "Beer", effect: "+1 CHA for 1 day, -1 thirst (Addictive)" }
 ];
 
-export const ammoTable = [
-    { type: "Small rounds", roll: "1d6+6", cost: 5 },
-    { type: "E-cell", roll: "1d6+4", cost: 10 },
-    { type: "Grenades", roll: "1d6", cost: 0 },
-    { type: "Fuel", roll: "1d6", cost: 20 },
-    { type: "Large rounds", roll: "1d6+4", cost: 10 },
-    { type: "MF-cell", roll: "1d6+2", cost: 15 }
-];
-export const grenadeTable = [
-    { max: 6, name: "Scrap Grenade", dmg: "11 X splash", cost: "15c" },
-    { max: 8, name: "Bottlecap Grenade", dmg: "12 X splash", cost: "20c" },
-    { max: 10, name: "Frag Grenade", dmg: "13 X splash", cost: "25c" },
-    { max: 12, name: "Plasma Grenade", dmg: "14 X splash", cost: "30c" },
-    { max: 14, name: "Nuka Grenade", dmg: "15 X splash", cost: "35c" },
-    { max: Infinity, name: "Mini Nuke", dmg: "16 X splash", cost: "40c" }
-];
+
 
 export const techTable = [
     { name: "Generator", effect: "Provides temporary power for electronics" },
@@ -180,6 +246,42 @@ export const shopTypes = [
     { name: "Tech" },
     { name: "Food & Water" }
 ];
+
+
+
+export const complications = [
+    ["+1/2 Thirst", "END", "Sweating from hot area"],
+    ["+1/2 Hunger", "CHA", "Puking from terrible smell"],
+    ["+1/2 Thirst", "INT", "Diarrhea from unidentified environmental toxins"],
+    ["+1/2 Hunger", "STR", "Burning calories from prolongued heavy lifting"],
+    ["+1/2 Thirst", "AGI", "Stuck in an overly dehumidified area"],
+    ["+1/2 Hunger", "END", "Burning calories for prolongued cardio"],
+    ["Lose 5/10 HP", "CHA", "Witnesses a gruesomely disturbing scene"],
+    ["Lose 5/10 HP", "INT", "Chemicals cause hallucination"],
+    ["Lose 5/10 HP", "CHA", "An explosion rattles the player"],
+    ["Lose 5/10 HP", "AGI", "Fired on by automated defenses"],
+    ["Lose 5/10 HP", "INT", "Get lost in a confined space"],
+    ["Lose 5/10 HP", "CHA", "Hears sounds of nearby deadly animals"],
+    ["+1/2 Fatigue", "STR", "Overexertion from lift/sprint/jump"],
+    ["+1/2 Fatigue", "AGI", "Running from defenses"],
+    ["+1/2 Fatigue", "INT", "Getting lost in confusing area"],
+    ["+1/2 Fatigue", "END", "Exposure to extreme cold"],
+    ["+1/2 Fatigue", "END", "Low oxygen area"],
+    ["+1/2 Fatigue", "STR", "Exhaustion from clearing obstacles"],
+    ["+1/2 Rads", "STR", "Scavenge through heavy toxic waste barrel dump"],
+    ["+1/2 Rads", "END", "Treks through irradiated water"],
+    ["+1/2 Rads", "AGI", "Navigating large area full of radiation"],
+    ["+1/2 Rads", "CHA", "Irradiated shelters full of dead mutants"],
+    ["+1/2 Rads", "END", "irriadted area full of rotting corpses"],
+    ["+1/2 Rads", "INT", "Disable electronics emitting radiation"],
+    ["+1/2 Injury", "INT", "Able to hack and disable a security turret"],
+    ["+1/2 Injury", "AGI", "Ignites an explosive causing explosion"],
+    ["+1/2 Injury", "STR", "Heavy objects fall on you"],
+    ["+1/2 Injury", "STR", "A muscle is strained moving something heavy"],
+    ["+1/2 Injury", "CHA", "Attacked by roaming security robots"],
+    ["+1/2 Injury", "AGI", "Avoid gunfire from defenses"]
+];
+
 
 // ===== TOWN DESCRIPTORS =====
 export const townDescriptors = [
@@ -431,99 +533,6 @@ export const statAbbrev = {
 
 export const negNames = ["Hunger", "Thirst", "Fatigue", "Rads", "Injury"];
 
-// ---------- PERK DATA ----------
-
-export const perkData = {
-    STRENGTH: [
-        { name: "Big Back", desc: "Gain +1 heavy limit and your limbs cannot be crippled." },
-        { name: "Wrecking Ball", desc: "Melee and thrown attacks do +1 damage after moving or sprinting." },
-        { name: "Blacksmith", desc: "Repairing a broken item gives it +1 durability." },
-        { name: "Conditioning", desc: "Remove 1 injury when you sleep while at full HP." },
-        { name: "Karate Kid", desc: "Melee aimed shots can shove or grapple the target instead of crippling." },
-        { name: "Carnivore", desc: "Consuming flesh gives an extra -1 hunger and heals 10% HP." },
-        { name: "Big Justice", desc: "Splash damage aimed shots splash to short range." },
-        { name: "Hidden Gem", desc: "When you scavenge you also find a heavy junk item worth 1d6x10 caps." },
-        { name: "Chiropractor", desc: "When you cripple a limb, you can cripple another different limb." },
-        { name: "Iron Man", desc: "You are immune to ailments and cannot be shoved or grappled." },
-        { name: "Boomer", desc: "Explosive guns do +1 damage and your attacks always detonate explosive tiles." },
-        { name: "Heavy Metal", desc: "Gain +1 energy armor for each heavy item slot you have." }
-    ],
-
-    AGILITY: [
-        { name: "Commando", desc: "Rifles do +1 damage when fired from special terrain." },
-        { name: "Gunslinger", desc: "Pistol attacks can spend your movement to do +1 damage." },
-        { name: "Adrenaline Rush", desc: "When you use resist on a roll and take a result below a 4, regain resist. " },
-        { name: "Gotta Go Fast", desc: "Sprint moves +1 distance and you can also move or sprint when you defend or search." },
-        { name: "Ninja", desc: "You ignore rubble and can move while sneaking." },
-        { name: "Guerrilla", desc: "All special terrain counts as cover and your attacks ignore obstructions." },
-        { name: "Sniper", desc: "Your attacks ignore cover and long range weapons gain +1 range." },
-        { name: "Perfectionist", desc: "Crits restore luck, heal 10% HP, and deal +1 damage if attacking." },
-        { name: "Jack of All Trades", desc: "Gain another skill that uses stats different from your skill." },
-        { name: "Quantum Clip", desc: "Gain an infinite ammo box that changes ammo types each round." },
-        { name: "Rivers of Blood", desc: "Physical damage aimed shots cause the target to bleed." },
-        { name: "Gun Fu", desc: "Gain +1 physical armor for each enemy in melee range." }
-    ],
-
-    ENDURANCE: [
-        { name: "Artisan", desc: "Consume one fewer scrap when you repair an item at 2 durability." },
-        { name: "Fast Metabolism", desc: "Gain +10 max HP and addiction withdrawl only lasts 1 day." },
-        { name: "Lead Belly", desc: "Treat irradiated food and drink as dirty instead." },
-        { name: "Second Wind", desc: "Removing statuses is twice as effective when the status is above 5." },
-        { name: "All-nighter", desc: "You can gain +1 fatigue to scavenge a settlement." },
-        { name: "Quartermaster", desc: "Item stack sizes over 10 no longer become heavy." },
-        { name: "Ghoulish", desc: "Heal 10% HP each time you gain one or more rads." },
-        { name: "Perseverance", desc: "After rolling with a stat at 0 or 1, restore skill." },
-        { name: "Rare Hunter", desc: "You can reroll scavenged crit loot 5 additional times." },
-        { name: "Guardian", desc: "You can bring an ally with you when you move and can intercept non aimed shots against allies." },
-        { name: "Shotgun Surgeon", desc: "Shotguns do +1 damage against enemies in melee range." },
-        { name: "Exposure Therapy", desc: "Rad damage aimed shots poison the target." }
-    ],
-
-    INTELLIGENCE: [
-        { name: "Scrounger", desc: "Looting killed humans always yields an extra 5 caps." },
-        { name: "Substance Enthusiast", desc: "Chems last twice as long and all addictive substances heal +10% HP on use." },
-        { name: "Hoarder", desc: "You can use broken items but durability loss destroys them." },
-        { name: "Discerning Eye", desc: "You can reroll the type of scavenging roll you get once." },
-        { name: "Idiot Savant", desc: "You can treat two rolled 1s as a 6." },
-        { name: "Green Thumb", desc: "Potted plants have +100% yield if held for the whole level." },
-        { name: "Side Hustle", desc: "Gain an additional background." },
-        { name: "Test Subject", desc: "Artifacts can convert durability to or from your HP at a 1:10 ratio." },
-        { name: "Reverse Polarity", desc: "Energy damage aimed shots apply freeze but remove burn." },
-        { name: "Overclock", desc: "Energy damage aimed shots apply burn but remove freeze." },
-        { name: "Chosen One", desc: "You always understand alien devices and can modify the input and output once each." },
-        { name: "Magnetic Field", desc: "Gain +1 rad armor for each unique technology you are holding." }
-    ],
-
-    CHARISMA: [
-        { name: "Terrifying Presence", desc: "Gain the ability to frighten and command hostile creatures." },
-        { name: "Do Not Go Gently", desc: "Luck gives 2 dice to any player rolling with a stat at 0 or 1." },
-        { name: "VIP Member", desc: "Sleeping in a settlement is free and twice as effective." },
-        { name: "True Grit", desc: "Resist always rolls at least 2 dice and can be used on other players." },
-        { name: "Good Karma", desc: "Tag an additional stat. Critical fails now count as regular fails." },
-        { name: "Bloody Mess", desc: "Aimed shot kills cause the target to explode for half their max HP." },
-        { name: "Vampire", desc: "You can drink the blood of recently deceased creatures." },
-        { name: "I Know a Place", desc: "Chosen faction settlements provide free crit loot from their faction shop." },
-        { name: "Cyberpunk", desc: "You can have +2 maximum implants and heal +10% HP when you use a technology." },
-        { name: "Art of the Deal", desc: "Haggling is twice as effective." },
-        { name: "Oh Baby a Triple", desc: "You can treat any rolled triples as a 6." },
-        { name: "Cool Guys Don’t Look at Explosions", desc: "Gain +5 explosive armor." }
-    ]
-};
-
-export const backgroundData = [
-    { name: "Technician", desc: "Repairing guns does not require a roll." },
-    { name: "Mechanic", desc: "Repairing armor and melee/fist weapons does not require a roll." },
-    { name: "Farmer", desc: "You can purify rations 2:1 (irradiated → dirty → clean)." },
-    { name: "Chef", desc: "You can convert any 2 flesh into 1 fuel." },
-    { name: "Exterminator", desc: "You know when enemies have under 5 HP and can execute them on your turn." },
-    { name: "Guard", desc: "You can convert 2 small rounds ↔ 1 large round." },
-    { name: "Plumber", desc: "You can purify water 2:1 (irradiated → dirty → clean)." },
-    { name: "Doctor", desc: "You can convert any 2 meds into another med." },
-    { name: "Scientist", desc: "You can convert any 2 chems into another chem." },
-    { name: "Engineer", desc: "Repairing technology does not require a roll." },
-    { name: "Tailor", desc: "You can convert any 2 scrap into another scrap." },
-    { name: "Electrician", desc: "You can convert 2 E-cells ↔ 1 MF-cell." }
-];
 
 export const tileTypes = [
     { name: "Explosive", symbol: "💣", color: "#e25822" },
