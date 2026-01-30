@@ -974,7 +974,6 @@ function evaluateCapsExpression(expr, currentTotal) {
 state.caps = Number.isFinite(state.caps) ? Number(state.caps) : 0;
 
 const capsInput = document.getElementById("caps");
-
 function updateCapsDisplay() {
   capsInput.value = (state.caps === 0) ? "" : String(state.caps);
 }
@@ -1118,6 +1117,7 @@ function toggleSection(stat, header) {
   state.perkSections[stat] = !collapsed;
   save();
 }
+
 
 function buildPerkUI() {
   const container = document.querySelector(".perks-content");
@@ -1342,7 +1342,6 @@ function toggleNotes(header) {
   save();
 }
 
-
 function toggleBackgrounds(header) {
   const list = document.getElementById("backgroundsWrapper");
   const collapsed = list.classList.toggle("open") === false;
@@ -1380,6 +1379,7 @@ function hidePerksScreen() {
   window.scrollTo(0, 0);
 
 }
+
 
 // ---------- INIT ----------
 
@@ -1607,7 +1607,6 @@ negNames.forEach(n => {
     armorInput.value = "";
   });
 }
-
 function toggleStatStar(el) {
   const stat = el.dataset.stat;
   const box = el.parentElement.querySelector(".stat-input");
@@ -1647,6 +1646,7 @@ function withUnderlinedChar(word, ch) {
   const after = word.slice(i + 1).toUpperCase();
   return `${before}<span class="underline">${target}</span>${after}`;
 }
+
 
 
 
@@ -1736,6 +1736,39 @@ document.querySelector(".taken-toggle .perk-box").textContent =
 
 
 document.addEventListener("DOMContentLoaded", init);
+	
+	window.toggleSpecial = toggleSpecial;
+	window.save = save;
+	window.parseHP = updateHPDisplay;
+	window.updateHPDisplay = updateHPDisplay;
+	window.updateHPColor = updateHPColor;
+	window.chgHP = chgHP;
+	window.chgHP10 = chgHP10;
+	window.chgNeg = chgNeg;
+	window.evaluateCapsExpression = evaluateCapsExpression;
+	window.updateCapsDisplay = updateCapsDisplay;
+	window.applyCapsChange = applyCapsChange;
+	window.toggleHeavy = toggleHeavy;
+	window.renderHeavy = renderHeavy;
+	window.toggleDropdown = toggleDropdown;
+	window.renderDropdown = renderDropdown;
+	window.chgCounter = chgCounter;
+	window.applyArmorDamage = applyArmorDamage;
+	window.toggleSection = toggleSection;
+	window.buildPerkUI = buildPerkUI;
+	window.toggleNotes = toggleNotes;
+	window.toggleBackgrounds = toggleBackgrounds;
+	window.togglePerks = togglePerks;
+	window.showPerksScreen = showPerksScreen;
+	window.hidePerksScreen = hidePerksScreen;
+	window.init = init;
+	window.render = render;
+	window.renderAddiction = renderAddiction;
+	window.toggleStatStar = toggleStatStar;
+	window.withUnderlinedChar = withUnderlinedChar;
+	window.exportSheet = exportSheet;
+	window.importSheet = importSheet;
+	window.togglePerkFilter = togglePerkFilter;
 </script>
 
 
