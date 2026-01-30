@@ -554,7 +554,7 @@ function generateRations() {
 }
 function generateMeds() {
   const med = medTable[Math.floor(Math.random() * medTable.length)];
-  const count = rollDie(6) + 1;
+  const count = rollDie(6) + 2;
 
   document.getElementById("medsOnlyOutput").innerHTML = `
     <b>${med.name} x${count}</b><br>
@@ -563,7 +563,7 @@ function generateMeds() {
 }
 function generateChems() {
   const chem = chemTable[Math.floor(Math.random() * chemTable.length)];
-  const count = rollDie(6) + 1;
+  const count = rollDie(6) + 2;
 
   document.getElementById("chemsOnlyOutput").innerHTML = `
     <b>${chem.name} x${count}</b><br>
@@ -806,6 +806,7 @@ window.distribute = distribute;
 </script>
 </body>
 </html>
+
 
 
 
