@@ -1578,6 +1578,8 @@ negNames.forEach(n => {
     function render() {
       el.className = "use-box " + (state.uses[k] ? "use-on" : "use-off");
     }
+	  
+	window.render = render;
     el.onclick = () => { state.uses[k] = !state.uses[k]; save(); render(); };
     render();
   });
@@ -1762,7 +1764,6 @@ document.addEventListener("DOMContentLoaded", init);
 	window.showPerksScreen = showPerksScreen;
 	window.hidePerksScreen = hidePerksScreen;
 	window.init = init;
-	window.render = render;
 	window.renderAddiction = renderAddiction;
 	window.toggleStatStar = toggleStatStar;
 	window.withUnderlinedChar = withUnderlinedChar;
