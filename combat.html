@@ -188,7 +188,7 @@
     let totalEnemies = players + Math.floor(Math.random() * (players + 1));
     totalEnemies = Math.max(1, Math.min(12, totalEnemies));
 
-    const tierRoll = Math.floor(Math.random() * 6) + 1 + Math.floor(level / 3);
+    const tierRoll = Math.floor(Math.random() * 6) + 1 + Math.floor(level);
     const tierIdx = tierIndexFromRoll(tierRoll);
     const subtype = cat.subs[tierIdx] || { name: "???", hp: "?", notes: "" };
 
@@ -277,6 +277,7 @@
 </script>
 </body>
 </html>
+
 
 
 
