@@ -807,7 +807,7 @@
 
 const STORAGE_KEY = "fallout_character_v10";
 
-let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+window.state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
   name: "",
   skillName: "",
   level: "",
