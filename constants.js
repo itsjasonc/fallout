@@ -146,12 +146,12 @@ export const chemTable = [
 ];
 
 export const ammoTable = [
-    { type: "Small rounds", roll: "1d6+4", cost: 5 },
-    { type: "E-cell", roll: "1d6+3", cost: 10 },
+    { type: "Small rounds", roll: "1d6+6", cost: 5 },
+    { type: "E-cell", roll: "1d6+4", cost: 10 },
     { type: "Grenades", roll: "1d6", cost: 0 },
     { type: "Fuel", roll: "1d6", cost: 20 },
-    { type: "Large rounds", roll: "1d6+2", cost: 10 },
-    { type: "MF-cell", roll: "1d6+1", cost: 15 }
+    { type: "Large rounds", roll: "1d6+4", cost: 10 },
+    { type: "MF-cell", roll: "1d6+2", cost: 15 }
 ];
 export const grenadeTable = [
     { max: 6, name: "Scrap Grenade", dmg: "11 X splash", cost: "15c" },
@@ -356,7 +356,7 @@ export const factions = [
         desc: "Bureaucratic progressive society, republic, weary"
     },
     {
-        name: "The Legion Solis Empire",
+        name: "The Solis Empire",
         tag: "Chems",
         desc: "Communist monarchy, slavers, hateful"
     },
@@ -454,7 +454,7 @@ export const perkData = {
         { name: "Gunslinger", desc: "Pistol attacks can spend your movement to do +1 damage." },
         { name: "Adrenaline Rush", desc: "When you use resist on a roll and take a result below a 4, regain resist. " },
         { name: "Gotta Go Fast", desc: "Sprint moves +1 distance and you can also move or sprint when you defend or search." },
-        { name: "Ninja", desc: "You can move while sneaking and can attempt to sneak on clear tiles." },
+        { name: "Ninja", desc: "You ignore rubble and can move while sneaking." },
         { name: "Guerrilla", desc: "All special terrain counts as cover and your attacks ignore obstructions." },
         { name: "Sniper", desc: "Your attacks ignore cover and long range weapons gain +1 range." },
         { name: "Perfectionist", desc: "Crits restore luck, heal 10% HP, and deal +1 damage if attacking." },
@@ -470,10 +470,10 @@ export const perkData = {
         { name: "Lead Belly", desc: "Treat irradiated food and drink as dirty instead." },
         { name: "Second Wind", desc: "Removing statuses is twice as effective when the status is above 5." },
         { name: "All-nighter", desc: "You can gain +1 fatigue to scavenge a settlement." },
-        { name: "Quartermaster", desc: "Stackables can now stack up to 20 before becoming heavy." },
+        { name: "Quartermaster", desc: "Item stack sizes over 10 no longer become heavy." },
         { name: "Ghoulish", desc: "Heal 10% HP each time you gain one or more rads." },
         { name: "Perseverance", desc: "After rolling with a stat at 0 or 1, restore skill." },
-        { name: "Rare Hunter", desc: "You can reroll scavenged crit loot 3 additional times." },
+        { name: "Rare Hunter", desc: "You can reroll scavenged crit loot 5 additional times." },
         { name: "Guardian", desc: "You can bring an ally with you when you move and can intercept non aimed shots against allies." },
         { name: "Shotgun Surgeon", desc: "Shotguns do +1 damage against enemies in melee range." },
         { name: "Exposure Therapy", desc: "Rad damage aimed shots poison the target." }
@@ -488,9 +488,9 @@ export const perkData = {
         { name: "Green Thumb", desc: "Potted plants have +100% yield if held for the whole level." },
         { name: "Side Hustle", desc: "Gain an additional background." },
         { name: "Test Subject", desc: "Artifacts can convert durability to or from your HP at a 1:10 ratio." },
-        { name: "Cold Fusion", desc: "Energy damage aimed shots apply freeze but remove burn." },
+        { name: "Reverse Polarity", desc: "Energy damage aimed shots apply freeze but remove burn." },
         { name: "Overclock", desc: "Energy damage aimed shots apply burn but remove freeze." },
-        { name: "Chosen One", desc: "You always understand alien technology and can modify the input and output once each." },
+        { name: "Chosen One", desc: "You always understand alien devices and can modify the input and output once each." },
         { name: "Magnetic Field", desc: "Gain +1 rad armor for each unique technology you are holding." }
     ],
 
