@@ -438,7 +438,7 @@ export const perkData = {
         { name: "Big Back", desc: "Gain +1 heavy limit and your limbs cannot be crippled." },
         { name: "Wrecking Ball", desc: "Melee and thrown attacks do +1 damage after moving or sprinting." },
         { name: "Blacksmith", desc: "Repairing a broken item gives it +1 durability." },
-        { name: "Conditioning", desc: "Remove 1 injury when you sleep in a settlement." },
+        { name: "Conditioning", desc: "Remove 1 injury when you sleep while at full HP." },
         { name: "Karate Kid", desc: "Melee aimed shots can shove or grapple the target instead of crippling." },
         { name: "Carnivore", desc: "Consuming flesh gives an extra -1 hunger and heals 10% HP." },
         { name: "Big Justice", desc: "Splash damage aimed shots splash to short range." },
@@ -454,7 +454,7 @@ export const perkData = {
         { name: "Gunslinger", desc: "Pistol attacks can spend your movement to do +1 damage." },
         { name: "Adrenaline Rush", desc: "When you use resist on a roll and take a result below a 4, regain resist. " },
         { name: "Gotta Go Fast", desc: "Sprint moves +1 distance and you can also move or sprint when you defend or search." },
-        { name: "Ninja", desc: "You can move while sneaking and sneak attack kills do not reveal you." },
+        { name: "Ninja", desc: "You can move while sneaking and can attempt to sneak on clear tiles." },
         { name: "Guerrilla", desc: "All special terrain counts as cover and your attacks ignore obstructions." },
         { name: "Sniper", desc: "Your attacks ignore cover and long range weapons gain +1 range." },
         { name: "Perfectionist", desc: "Crits restore luck, heal 10% HP, and deal +1 damage if attacking." },
@@ -481,7 +481,7 @@ export const perkData = {
 
     INTELLIGENCE: [
         { name: "Scrounger", desc: "Looting killed humans always yields an extra 5 caps." },
-        { name: "Substance Enthusiast", desc: "Chems last twice as long and all addictive items heal +10% HP on use." },
+        { name: "Substance Enthusiast", desc: "Chems last twice as long and all addictive substances heal +10% HP on use." },
         { name: "Hoarder", desc: "You can use broken items but durability loss destroys them." },
         { name: "Discerning Eye", desc: "You can reroll the type of scavenging roll you get once." },
         { name: "Idiot Savant", desc: "You can treat two rolled 1s as a 6." },
@@ -583,12 +583,12 @@ export const zoneTable = {
 export const monsterData = {
     E1: {
         label: "Raiders", notes: "special: hidden land mines. Loot: broken equipment, mines, human flesh (-1 hunger, unique addictive)", subs: [
-            { name: "Scout", hp: 7, notes: "scaled weapons, 11x mines" }, // 1-6
-            { name: "Tweaker", hp: 11, notes: "scaled weapons, 12x mines" }, // 7-8
-            { name: "Scavenger", hp: 15, notes: "scaled weapons, 13x mines" }, // 9-10
-            { name: "Juicer", hp: 19, notes: "scaled weapons, 14x mines" }, // 11-12
-            { name: "Elite", hp: 23, notes: "scaled weapons, 15x mines" }, // 13-14
-            { name: "Chemlord", hp: 27, notes: "scaled weapons, 16x mines" } // 15+
+            { name: "Scout", hp: 6, notes: "scaled weapons, 11x mines" }, // 1-6
+            { name: "Tweaker", hp: 10, notes: "scaled weapons, 12x mines" }, // 7-8
+            { name: "Scavenger", hp: 14, notes: "scaled weapons, 13x mines" }, // 9-10
+            { name: "Juicer", hp: 18, notes: "scaled weapons, 14x mines" }, // 11-12
+            { name: "Elite", hp: 22, notes: "scaled weapons, 15x mines" }, // 13-14
+            { name: "Chemlord", hp: 26, notes: "scaled weapons, 16x mines" } // 15+
         ]
     },
     E2: {
@@ -612,7 +612,7 @@ export const monsterData = {
         ]
     },
     E4: {
-        label: "Burrowers", notes: "special: burrow. Loot: animal flesh", subs: [
+        label: "Burrowers", notes: "special: burrow. half are burrowed, Loot: animal flesh", subs: [
             { name: "Radroach", hp: 4, notes: "5 P+R melee" },
             { name: "Molerat", hp: 8, notes: "2x7 P melee, grapples on 6" },
             { name: "Radscorpion", hp: 12, notes: "8 P melee + poison" },
@@ -622,7 +622,7 @@ export const monsterData = {
         ]
     },
     E5: {
-        label: "Robots", notes: "2x HP, each cripple = 1/6 ignore armor., -1 mob. Loot: armor scraps", subs: [
+        label: "Robots", notes: "2x HP, each cripple = 1/6 ignore armor, -1 mob. Loot: armor scraps", subs: [
             { name: "Protectron", hp: 8, notes: "9 E melee" },
             { name: "Cyberdog", hp: 12, notes: "10 P melee, +1 spd" },
             { name: "Robobrain", hp: 16, notes: "11 E + freeze, short" },
@@ -633,36 +633,36 @@ export const monsterData = {
     },
     E6: {
         label: "Synths", notes: "terrain 4-5: hidden pulse mines. Loot: tech scrap", subs: [
-            { name: "Sentry", hp: 7, notes: "scaled energy weapons + 11E mines" },
-            { name: "Patroller", hp: 11, notes: "scaled energy weapons + 12E mines" },
-            { name: "Trooper", hp: 15, notes: "scaled energy weapons + 13E mines" },
-            { name: "Eradicator", hp: 19, notes: "scaled energy weapons +14E mines" },
-            { name: "Assassin", hp: 23, notes: "scaled energy weapons +15E mines" },
-            { name: "Courser", hp: 27, notes: "scaled energy weapons +16E mines" }
+            { name: "Sentry", hp: 6, notes: "scaled energy weapons + 11E mines" },
+            { name: "Patroller", hp: 10, notes: "scaled energy weapons + 12E mines" },
+            { name: "Trooper", hp: 14, notes: "scaled energy weapons + 13E mines" },
+            { name: "Eradicator", hp: 18, notes: "scaled energy weapons +14E mines" },
+            { name: "Assassin", hp: 22, notes: "scaled energy weapons +15E mines" },
+            { name: "Courser", hp: 26, notes: "scaled energy weapons +16E mines" }
         ]
     },
     O1: {
-        label: "Cultist", notes: "⅓ to use random artifact. uses mutated weapons (damage converted to radiation) Loot: broken weapons/artifacts, human flesh", subs: [
-            { name: "Initiate", hp: 7, notes: "scaled mutated weapons" },
-            { name: "Acolyte", hp: 11, notes: "scaled mutated weapons" },
-            { name: "Disciple", hp: 15, notes: "scaled mutated weapons" },
-            { name: "Priest", hp: 19, notes: "scaled mutated weapons" },
-            { name: "Fanatic", hp: 23, notes: "scaled mutated weapons" },
-            { name: "Leader", hp: 27, notes: "scaled mutated weapons" }
+        label: "Cultist", notes: "1 also has random artifact. uses mutated weapons (damage converted to radiation) Loot: broken weapons/artifacts, human flesh", subs: [
+            { name: "Initiate", hp: 6, notes: "scaled mutated weapons" },
+            { name: "Acolyte", hp: 10, notes: "scaled mutated weapons" },
+            { name: "Disciple", hp: 14, notes: "scaled mutated weapons" },
+            { name: "Priest", hp: 18, notes: "scaled mutated weapons" },
+            { name: "Fanatic", hp: 22, notes: "scaled mutated weapons" },
+            { name: "Leader", hp: 26, notes: "scaled mutated weapons" }
         ]
     },
     O2: {
-        label: "Hoverbots", notes: "all hover; explode end of turn when killed 50% HP X splash, Loot: gun scraps", subs: [
-            { name: "Eyebot", hp: 6, notes: "2x5 E, mid" },
-            { name: "Mr. Handy", hp: 10, notes: "2x6 P, mid" },
-            { name: "Battle Drone", hp: 14, notes: "3x7 X, short" },
-            { name: "Mr. Gutsy", hp: 18, notes: "10 X splash, mid" },
-            { name: "Think Tank", hp: 22, notes: "2x9 E + freeze, mid" },
-            { name: "UFO", hp: 26, notes: "12 R splash+burn, long" }
+        label: "Drones", notes: "ignore rubble, explode end of turn when killed 50% HP X splash, Loot: gun scraps", subs: [
+            { name: "Eyebot", hp: 4, notes: "2x5 E, mid" },
+            { name: "Mr. Handy", hp: 8, notes: "2x6 P, mid" },
+            { name: "Battle Drone", hp: 12, notes: "3x7 X, short" },
+            { name: "Mr. Gutsy", hp: 16, notes: "10 X splash, mid" },
+            { name: "Think Tank", hp: 20, notes: "2x9 E + freeze, mid" },
+            { name: "UFO", hp: 24, notes: "12 R splash+burn, long" }
         ]
     },
     O3: {
-        label: "Feral Ghouls", notes: "Xrad (immune to radiation damage), special: hidden bear traps, +1 spd, ignore hazards, +1 mob Loot: mutant flesh (-1 hunger, -1 injury, +1 rads), junk item", subs: [
+        label: "Feral Ghouls", notes: "immune rad, special: hidden bear traps (+1 injury, 2x cripple leg), +1 spd, ignore hazards, +1 mob Loot: mutant flesh (-1 hunger, -1 injury, +1 rads)", subs: [
             { name: "Roamer", hp: 5, notes: "5 P+R melee, grapples on 6" },
             { name: "Stalker", hp: 9, notes: "6 P+R melee, grapples on 6" },
             { name: "Glowing One", hp: 13, notes: "9 R splash, melee" },
@@ -672,33 +672,33 @@ export const monsterData = {
         ]
     },
     O4: {
-        label: "Aberrations", notes: "Xrad, special: rad pools. Loot: mutant flesh", subs: [
-            { name: "Mutant Plant", hp: 5, notes: "7 P melee, immobile" },
-            { name: "Centaur", hp: 10, notes: "8 R, short" },
-            { name: "Floater", hp: 15, notes: "9 R, melee+freeze, hover, +1 spd" },
-            { name: "Putrid Bloat", hp: 20, notes: "10 P melee, explodes 12R splash on death" },
-            { name: "Wanamingo", hp: 25, notes: "9 P+R+psn melee, +1 spd" },
-            { name: "Cybermutant", hp: 30, notes: "12 E + random ailment, very long, -1 mob" }
+        label: "Aberrations", notes: "immune rad, special: rad pools, on death: creates rad pool, Loot: mutant flesh", subs: [
+            { name: "Mutant Plant", hp: 4, notes: "7 P melee, immobile" },
+            { name: "Centaur", hp: 8, notes: "8 R, short" },
+            { name: "Floater", hp: 12, notes: "9 R, melee+freeze, hover, +1 spd" },
+            { name: "Putrid Bloat", hp: 16, notes: "10 P melee, explodes 12R splash on death" },
+            { name: "Wanamingo", hp: 20, notes: "9 P+R+psn melee, +1 spd" },
+            { name: "Cybermutant", hp: 24, notes: "12 E + random ailment, very long" }
         ]
     },
     O5: {
-        label: "Super Mutants", notes: "Xrad, special: rad pools, 1 suicider. Loot: broken weapons, mutant flesh", subs: [
-            { name: "Skirmisher", hp: 9, notes: "scaled heavy guns, 15 X splash melee suicider" },
-            { name: "Brute", hp: 13, notes: "scaled heavy guns, 16 X splash melee suicider" },
-            { name: "Enforcer", hp: 17, notes: "scaled heavy guns, 17 X splash melee suicider" },
-            { name: "Leader", hp: 21, notes: "scaled heavy guns, 18 X splash melee suicider" },
-            { name: "Overlord", hp: 25, notes: "scaled heavy guns, 19 X splash melee suicider" },
-            { name: "Mastermind", hp: 29, notes: "scaled heavy guns, 20 X splash melee suicider" }
+        label: "Super Mutants", notes: "immune rad, special: rad pools, 1 suicider. Loot: broken weapons, mutant flesh", subs: [
+            { name: "Skirmisher", hp: 8, notes: "scaled heavy guns, 15 X splash melee suicider" },
+            { name: "Brute", hp: 12, notes: "scaled heavy guns, 16 X splash melee suicider" },
+            { name: "Enforcer", hp: 16, notes: "scaled heavy guns, 17 X splash melee suicider" },
+            { name: "Leader", hp: 20, notes: "scaled heavy guns, 18 X splash melee suicider" },
+            { name: "Overlord", hp: 24, notes: "scaled heavy guns, 19 X splash melee suicider" },
+            { name: "Mastermind", hp: 28, notes: "scaled heavy guns, 20 X splash melee suicider" }
         ]
     },
     O6: {
-        label: "Nightkin", notes: "Xrad, special: hidden bear traps, ½ stealthed, Shove on 6, Loot: mutant flesh", subs: [
-            { name: "Rogue", hp: 9, notes: "scaled heavy melee" },
-            { name: "Scoundrel", hp: 13, notes: "scaled heavy melee" },
-            { name: "Brigand", hp: 17, notes: "scaled heavy melee" },
-            { name: "Saboteur", hp: 21, notes: "scaled heavy melee" },
-            { name: "Ninja", hp: 25, notes: "scaled heavy melee" },
-            { name: "Assassin", hp: 29, notes: "scaled heavy melee" }
+        label: "Nightkin", notes: "immune rad, special: hidden bear traps, half are stealthed, Shove on 6, Loot: mutant flesh", subs: [
+            { name: "Rogue", hp: 8, notes: "scaled heavy melee" },
+            { name: "Scoundrel", hp: 12, notes: "scaled heavy melee" },
+            { name: "Brigand", hp: 16, notes: "scaled heavy melee" },
+            { name: "Saboteur", hp: 20, notes: "scaled heavy melee" },
+            { name: "Ninja", hp: 24, notes: "scaled heavy melee" },
+            { name: "Assassin", hp: 28, notes: "scaled heavy melee" }
         ]
     }
 };
@@ -816,12 +816,12 @@ export const lootTable = [
         type: "EQUIPMENT + RECIPE",
         desc: "Each player can only benefit from one of each equipment, bulky, 100c",
         options: [
-            "Backpack: Can store up to 5 bulky items in this slot",
+            "Backpack: Can store up to 3 other bulky items in this slot",
             "Helmet: +10 max HP",
             "Binoculars: learn weapon+armor of 1 enemy before initiative",
             "Sleeping Bag: +10% HP when sleeping in ruins",
             "Boots: gain 1 shield when rolling initiative",
-            "Gloves: Take an additional turn after your first action in initiative"
+            "Gloves: Take an additional action after your first action in initiative"
         ],
         artifact: false
     },
@@ -829,12 +829,12 @@ export const lootTable = [
         type: "EQUIPMENT + RECIPE",
         desc: "Each player can only benefit from one of each equipment, bulky, 100c",
         options: [
-            "Backpack: Can store up to 5 bulky items in this slot",
+            "Backpack: Can store up to 3 other bulky items in this slot",
             "Helmet: +10 max HP",
             "Binoculars: learn weapon+armor of 1 enemy before initiative",
             "Sleeping Bag: +10% HP when sleeping in ruins",
             "Boots: gain 1 shield when rolling initiative",
-            "Gloves: Take an additional turn after your first action in initiative"
+            "Gloves: Take an additional action after your first action in initiative"
         ],
         artifact: false
     }
