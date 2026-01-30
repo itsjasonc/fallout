@@ -844,6 +844,8 @@ function toggleSpecial(stat, el) {
   el.classList.toggle('stat-special', state.specialStats[stat]);
   save();
 }
+	
+	window.toggleSpecial = toggleSpecial;
 
 // Ensure new keys exist even for older saves
 if (!state.perks) state.perks = {};
@@ -855,6 +857,8 @@ function save() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
+	window.save = save;
+
 // ---------- HP / NEGATIVES ----------
 
 function parseHP() {
@@ -863,10 +867,11 @@ function parseHP() {
   let max = parseInt(parts[1]) || cur;
   return { cur, max };
 }
-
+window.parseHP = parseHP;
 function updateHPDisplay() {
   hp.value = state.hp;
 }
+	window.updateHPDisplay = updateHPDisplay;
 
 function updateHPColor() {
   const hpEl = document.getElementById("hp");
@@ -887,6 +892,7 @@ function updateHPColor() {
     hpEl.style.textShadow = "0 0 6px #9fef9f";
   }
 }
+	window.updateHPColor = updateHPColor;
 
 function chgHP(d) {
   let { cur, max } = parseHP();
@@ -896,6 +902,7 @@ function chgHP(d) {
   updateHPColor();
   save();
 }
+	window.chgHP = chgHP;
 
 function chgHP10() {
   let { cur, max } = parseHP();
@@ -906,6 +913,7 @@ function chgHP10() {
   updateHPColor();
   save();
 }
+	window.chgHP10 = chgHP10;
 
 function chgNeg(n, d) {
   state.neg[n] = Math.max(0, state.neg[n] + d);
@@ -927,6 +935,7 @@ function chgNeg(n, d) {
 
   save();
 }
+	window.chgNeg = chgNeg;
 
 function evaluateCapsExpression(expr, currentTotal) {
 
@@ -967,6 +976,7 @@ function evaluateCapsExpression(expr, currentTotal) {
   // Anything else → invalid
   return null;
 }	
+	window.evaluateCapsExpression = evaluateCapsExpression;
 
 ////// CAPS CALCULATOR //////
 
@@ -977,6 +987,7 @@ const capsInput = document.getElementById("caps");
 function updateCapsDisplay() {
   capsInput.value = (state.caps === 0) ? "" : String(state.caps);
 }
+	window.updateCapsDisplay = updateCapsDisplay;
 
 // Apply on load
 updateCapsDisplay();
@@ -1027,6 +1038,7 @@ function applyCapsChange() {
   updateCapsDisplay();
   save();
 }
+	window.applyCapsChange = applyCapsChange;
 
 // ---------- INVENTORY ----------
 
@@ -1035,6 +1047,7 @@ function toggleHeavy(i) {
   save();
   renderHeavy(i);
 }
+	window.toggleHeavy = toggleHeavy;
 
 function renderHeavy(i) {
   const el = document.getElementById("heavy" + i);
@@ -1045,12 +1058,14 @@ function renderHeavy(i) {
     el.classList.remove("heavy-on");
   }
 }
+	window.renderHeavy = renderHeavy;
 
 function toggleDropdown(i) {
   state.inventory[i].dropdown = !state.inventory[i].dropdown;
   save();
   renderDropdown(i);
 }
+	window.toggleDropdown = toggleDropdown;
 
 function renderDropdown(i) {
   const area = document.getElementById("droparea" + i);
@@ -1065,6 +1080,7 @@ function renderDropdown(i) {
     toggle.innerText = "▼";
   }
 }
+	window.renderDropdown = renderDropdown;
 
 function chgCounter(i, c, d) {
   state.inventory[i].counters[c].value =
@@ -1073,6 +1089,7 @@ function chgCounter(i, c, d) {
   const el = document.getElementById(`count${i}_${c}`);
   if (el) el.innerText = state.inventory[i].counters[c].value;
 }
+	window.chgCounter = chgCounter;
 
 // ---------- ARMOR DAMAGE ----------
 
@@ -1104,6 +1121,7 @@ function applyArmorDamage(raw) {
   updateHPColor();
   save();
 }
+	window.applyArmorDamage = applyArmorDamage;
 
 
 
@@ -1117,6 +1135,7 @@ function toggleSection(stat, header) {
   state.perkSections[stat] = !collapsed;
   save();
 }
+	window.toggleSection = toggleSection;
 
 
 function buildPerkUI() {
@@ -1316,6 +1335,7 @@ bgHeader.onclick = () => toggleBackgrounds(bgHeader);
 
 
 }
+	window.buildPerkUI = buildPerkUI;
 
 document.getElementById("showTakenToggle").addEventListener("change", e => {
   state.showTakenOnly = e.target.checked;
@@ -1341,6 +1361,7 @@ function toggleNotes(header) {
   state.perkSections["NOTES"] = !collapsed;
   save();
 }
+	window.toggleNotes = toggleNotes;
 
 function toggleBackgrounds(header) {
   const list = document.getElementById("backgroundsWrapper");
@@ -1351,6 +1372,7 @@ function toggleBackgrounds(header) {
   state.perkSections["Backgrounds"] = !collapsed;
   save();
 }
+	window.toggleBackgrounds = toggleBackgrounds;
  
 
 function togglePerks() {
@@ -1364,6 +1386,7 @@ function togglePerks() {
   save();
 }
 
+	window.togglePerks = togglePerks;
 
 
 // ---------- SCREEN SWITCHING ----------
@@ -1373,12 +1396,14 @@ function showPerksScreen() {
   document.getElementById("perksScreen").style.display = "block";
   window.scrollTo(0, 0);
 }
+	window.showPerksScreen = showPerksScreen;
 
 function hidePerksScreen() {
   document.getElementById("perksScreen").style.display = "none";
   window.scrollTo(0, 0);
 
 }
+	window.hidePerksScreen = hidePerksScreen;
 
 
 // ---------- INIT ----------
@@ -1592,6 +1617,8 @@ negNames.forEach(n => {
       addictionEl.classList.add("use-off");
     }
   }
+	
+	window.renderAddiction = renderAddiction;
   addictionEl.onclick = () => {
     state.addiction = !state.addiction;
     save();
@@ -1609,6 +1636,9 @@ negNames.forEach(n => {
     armorInput.value = "";
   });
 }
+
+	
+	window.init = init;
 function toggleStatStar(el) {
   const stat = el.dataset.stat;
   const box = el.parentElement.querySelector(".stat-input");
@@ -1635,6 +1665,7 @@ function toggleStatStar(el) {
 
   save();
 }
+	window.toggleStatStar = toggleStatStar;
 
 
 function withUnderlinedChar(word, ch) {
@@ -1649,6 +1680,7 @@ function withUnderlinedChar(word, ch) {
   return `${before}<span class="underline">${target}</span>${after}`;
 }
 
+	window.withUnderlinedChar = withUnderlinedChar;
 
 
 
@@ -1693,6 +1725,7 @@ function exportSheet() {
 }
 
 
+	window.exportSheet = exportSheet;
 
 function importSheet() {
   const input = document.getElementById("fileInput");
@@ -1724,6 +1757,8 @@ function importSheet() {
     reader.readAsText(file);
   };
 }
+	
+	window.importSheet = importSheet;
 
 function togglePerkFilter() {
   state.showOnlyAllocated = !state.showOnlyAllocated;
@@ -1731,6 +1766,7 @@ function togglePerkFilter() {
   buildPerkUI();
   attachTooltips();
 }
+	window.togglePerkFilter = togglePerkFilter;
 // Restore the top toggle's checkmark
 document.querySelector(".taken-toggle .perk-box").textContent =
   state.showTakenOnly ? "✔" : "";
@@ -1738,38 +1774,6 @@ document.querySelector(".taken-toggle .perk-box").textContent =
 
 
 document.addEventListener("DOMContentLoaded", init);
-	
-	window.toggleSpecial = toggleSpecial;
-	window.save = save;
-	window.parseHP = updateHPDisplay;
-	window.updateHPDisplay = updateHPDisplay;
-	window.updateHPColor = updateHPColor;
-	window.chgHP = chgHP;
-	window.chgHP10 = chgHP10;
-	window.chgNeg = chgNeg;
-	window.evaluateCapsExpression = evaluateCapsExpression;
-	window.updateCapsDisplay = updateCapsDisplay;
-	window.applyCapsChange = applyCapsChange;
-	window.toggleHeavy = toggleHeavy;
-	window.renderHeavy = renderHeavy;
-	window.toggleDropdown = toggleDropdown;
-	window.renderDropdown = renderDropdown;
-	window.chgCounter = chgCounter;
-	window.applyArmorDamage = applyArmorDamage;
-	window.toggleSection = toggleSection;
-	window.buildPerkUI = buildPerkUI;
-	window.toggleNotes = toggleNotes;
-	window.toggleBackgrounds = toggleBackgrounds;
-	window.togglePerks = togglePerks;
-	window.showPerksScreen = showPerksScreen;
-	window.hidePerksScreen = hidePerksScreen;
-	window.init = init;
-	window.renderAddiction = renderAddiction;
-	window.toggleStatStar = toggleStatStar;
-	window.withUnderlinedChar = withUnderlinedChar;
-	window.exportSheet = exportSheet;
-	window.importSheet = importSheet;
-	window.togglePerkFilter = togglePerkFilter;
 </script>
 
 
