@@ -622,13 +622,13 @@ export const monsterData = {
         ]
     },
     E5: {
-        label: "Robots", notes: "2x HP, each cripple = 1/6 ignore armor, -1 mob. Loot: armor scraps", subs: [
-            { name: "Protectron", hp: 8, notes: "9 E melee" },
-            { name: "Cyberdog", hp: 12, notes: "10 P melee, +1 spd" },
-            { name: "Robobrain", hp: 16, notes: "11 E + freeze, short" },
-            { name: "Securitron", hp: 20, notes: "12 X long, 2x hp, " },
-            { name: "Sentry Bot", hp: 24, notes: "2x10 P+E mid" },
-            { name: "Assaultron", hp: 28, notes: "15 E+R melee, recharge 1, +1 spd" }
+        label: "Robots", notes: "2x HP, 1/6 ignore armor per cripple, -1 mob. Loot: armor scraps", subs: [
+            { name: "Protectron", hp: 7, notes: "9 E+ melee" },
+            { name: "Cyberdog", hp: 11, notes: "10 P melee, +1 spd" },
+            { name: "Robobrain", hp: 15, notes: "11 E + freeze, short" },
+            { name: "Securitron", hp: 19, notes: "12 X long, 2x hp, " },
+            { name: "Sentry Bot", hp: 23, notes: "2x10 P+E mid" },
+            { name: "Assaultron", hp: 27, notes: "15 E+R melee, recharge 1, +1 spd" }
         ]
     },
     E6: {
@@ -663,42 +663,42 @@ export const monsterData = {
     },
     O3: {
         label: "Feral Ghouls", notes: "immune rad, special: hidden bear traps (+1 injury, 2x cripple leg), +1 spd, ignore hazards, +1 mob Loot: mutant flesh (-1 hunger, -1 injury, +1 rads)", subs: [
-            { name: "Roamer", hp: 5, notes: "5 P+R melee, grapples on 6" },
-            { name: "Stalker", hp: 9, notes: "6 P+R melee, grapples on 6" },
-            { name: "Glowing One", hp: 13, notes: "9 R splash, melee" },
-            { name: "Reaver", hp: 17, notes: "8 P+R melee, grapples on 6" },
-            { name: "Molten One", hp: 21, notes: "11 X splash+burn, short" },
-            { name: "Frozen One", hp: 25, notes: "12 E splash+freeze, short" }
+            { name: "Roamer", hp: 4, notes: "5 P+R melee, grapples on 6" },
+            { name: "Stalker", hp: 8, notes: "6 P+R melee, grapples on 6" },
+            { name: "Glowing One", hp: 12, notes: "9 R splash, melee" },
+            { name: "Reaver", hp: 16, notes: "8 P+R melee, grapples on 6" },
+            { name: "Molten One", hp: 20, notes: "11 X splash+burn, short" },
+            { name: "Frozen One", hp: 24, notes: "12 E splash+freeze, short" }
         ]
     },
     O4: {
         label: "Aberrations", notes: "immune rad, special: rad pools, on death: creates rad pool, Loot: mutant flesh", subs: [
-            { name: "Mutant Plant", hp: 4, notes: "7 P melee, immobile" },
-            { name: "Centaur", hp: 8, notes: "8 R, short" },
-            { name: "Floater", hp: 12, notes: "9 R, melee+freeze, hover, +1 spd" },
-            { name: "Putrid Bloat", hp: 16, notes: "10 P melee, explodes 12R splash on death" },
-            { name: "Wanamingo", hp: 20, notes: "9 P+R+psn melee, +1 spd" },
-            { name: "Cybermutant", hp: 24, notes: "12 E + random ailment, very long" }
+            { name: "Mutant Plant", hp: 5, notes: "7 P melee, immobile" },
+            { name: "Centaur", hp: 9, notes: "8 R, short" },
+            { name: "Floater", hp: 13, notes: "9 R, melee+freeze, hover, +1 spd" },
+            { name: "Putrid Bloat", hp: 17, notes: "10 P melee, explodes 12R splash on death" },
+            { name: "Wanamingo", hp: 21, notes: "9 P+R+psn melee, +1 spd" },
+            { name: "Cybermutant", hp: 26, notes: "12 E + random ailment, very long" }
         ]
     },
     O5: {
         label: "Super Mutants", notes: "immune rad, special: rad pools, 1 suicider. Loot: broken weapons, mutant flesh", subs: [
-            { name: "Skirmisher", hp: 8, notes: "scaled heavy guns, 15 X splash melee suicider" },
-            { name: "Brute", hp: 12, notes: "scaled heavy guns, 16 X splash melee suicider" },
-            { name: "Enforcer", hp: 16, notes: "scaled heavy guns, 17 X splash melee suicider" },
-            { name: "Leader", hp: 20, notes: "scaled heavy guns, 18 X splash melee suicider" },
-            { name: "Overlord", hp: 24, notes: "scaled heavy guns, 19 X splash melee suicider" },
-            { name: "Mastermind", hp: 28, notes: "scaled heavy guns, 20 X splash melee suicider" }
+            { name: "Skirmisher", hp: 7, notes: "scaled heavy guns, 15 X splash melee suicider" },
+            { name: "Brute", hp: 11, notes: "scaled heavy guns, 16 X splash melee suicider" },
+            { name: "Enforcer", hp: 15,  notes: "scaled heavy guns, 17 X splash melee suicider" },
+            { name: "Leader", hp: 19, notes: "scaled heavy guns, 18 X splash melee suicider" },
+            { name: "Overlord", hp: 23, notes: "scaled heavy guns, 19 X splash melee suicider" },
+            { name: "Mastermind", hp: 27, notes: "scaled heavy guns, 20 X splash melee suicider" }
         ]
     },
     O6: {
         label: "Nightkin", notes: "immune rad, special: hidden bear traps, half stealthed, Shove on 6, Loot:broken weapons, mutant flesh", subs: [
-            { name: "Rogue", hp: 8, notes: "scaled heavy melee" },
-            { name: "Scoundrel", hp: 12, notes: "scaled heavy melee" },
-            { name: "Brigand", hp: 16, notes: "scaled heavy melee" },
-            { name: "Saboteur", hp: 20, notes: "scaled heavy melee" },
-            { name: "Ninja", hp: 24, notes: "scaled heavy melee" },
-            { name: "Assassin", hp: 28, notes: "scaled heavy melee" }
+            { name: "Rogue", hp: 7, notes: "scaled heavy melee" },
+            { name: "Scoundrel", hp: 11, notes: "scaled heavy melee" },
+            { name: "Brigand", hp: 15, notes: "scaled heavy melee" },
+            { name: "Saboteur", hp: 19, notes: "scaled heavy melee" },
+            { name: "Ninja", hp: 23, notes: "scaled heavy melee" },
+            { name: "Assassin", hp: 27, notes: "scaled heavy melee" }
         ]
     }
 };
