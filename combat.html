@@ -108,7 +108,6 @@
     artifacts
   } from './constants.js';
   
-
   function generateGrid() {
     const totalWeight = fixedWeights.reduce((a, b) => a + b, 0);
     const probabilities = fixedWeights.map(w => w / totalWeight);
@@ -264,9 +263,21 @@
 
   // Initial generation
   generateAll();
+
+	
+	window.generateGrid = generateGrid;
+	window.createLabel = createLabel;
+	window.weightedRandom = weightedRandom;
+	window.generateZone = generateZone;
+	window.tierIndexFromRoll = tierIndexFromRoll;
+	window.generateMonsters = generateMonsters;
+	window.generateBonusRoom = generateBonusRoom;
+	window.generateLoot = generateLoot;
+	window.generateAll = generateAll;
 </script>
 </body>
 </html>
+
 
 
 
